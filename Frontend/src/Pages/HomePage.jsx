@@ -15,13 +15,13 @@ const totalTeachers = 25;
 const director = {
   name: 'Mr. Pawan Kumar Jha Pankaj',
   contact: '+91 9801496128',
-  image: './src/assets/director.jpg',
+  image: assets.director,
 };
 
 const principal = {
   name: 'Mrs. Shadhana Kumari',
-  contact: '+91 9123456780',
-  image: './src/assets/principal.jpg',
+  contact: '+91 9006664115',
+  image: assets.principal,
 };
 
 const schoolDescription = `Central Public School is committed to excellence in education, fostering holistic development and nurturing future leaders. Our campus offers state-of-the-art facilities, a vibrant learning environment, and a dedicated faculty focused on student success.`;
@@ -100,7 +100,7 @@ const HomePage = () => {
       {/* School Description */}
       <div className="flex flex-col md:flex-row items-center max-w-5xl mx-auto my-8 bg-white rounded shadow p-6 gap-6">
         <img
-          src="./src/assets/cps3.jpg"
+          src={assets.cps3}
           alt="Central Public School"
           className="w-full md:w-1/3 h-48 object-cover rounded"
         />
