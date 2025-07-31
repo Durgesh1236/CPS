@@ -24,7 +24,9 @@ const principal = {
   image: assets.principal,
 };
 
-const schoolDescription = `Central Public School is committed to excellence in education, fostering holistic development and nurturing future leaders. Our campus offers state-of-the-art facilities, a vibrant learning environment, and a dedicated faculty focused on student success.`;
+const schoolDescription = `Established in 2009, Central Public School is a trusted name in quality education, offering classes from Nursery to Class 8. We are more than just a school — we are a nurturing family where every child is valued, encouraged, and guided to achieve their full potential.
+Our safe and welcoming campus, experienced faculty, and student-focused environment make learning a joyful journey. Along with strong academics, we focus on character-building, creativity, discipline, and values that prepare your child not just for exams, but for life.
+Join us in shaping bright futures with love, care, and excellence — because your child's growth is our greatest reward.`;
 
 const HomePage = () => {
   const [current, setCurrent] = useState(0);
