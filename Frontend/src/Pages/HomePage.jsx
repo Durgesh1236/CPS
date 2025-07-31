@@ -118,7 +118,7 @@ const HomePage = () => {
           <span className="text-gray-600">Director</span>
           <span className="text-blue-600 mt-2">{director.contact}</span>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center w-72">
+        <div className="bg-white rounded shadow p-6 flex flex-col items-center w-80">
           <img src={principal.image} alt="Principal" className="w-24 h-24 rounded-full mb-4 object-cover" />
           <span className="text-xl font-semibold">{principal.name}</span>
           <span className="text-gray-600">Principal</span>
