@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Navbar from '../components/Navbar';
+import { useEffect, useRef, useState } from 'react';
+import Layout from '../Components/Layout';
 
 const images = [
   './src/assets/cps1.jpg',
@@ -65,8 +65,8 @@ const HomePage = () => {
   }, []);
 
   return (
+    <Layout>
     <div className="w-full min-h-screen flex flex-col bg-gray-50">
-      <Navbar />
       {/* Carousel */}
       <div className="w-full max-w-5xl mx-auto mt-6 rounded-lg overflow-hidden shadow-lg">
         <img
@@ -130,6 +130,7 @@ const HomePage = () => {
         &copy; {new Date().getFullYear()} Central Public School. All rights reserved.
       </footer>
     </div>
+    </Layout>
   );
 };
 
