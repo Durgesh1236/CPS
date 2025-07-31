@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../Components/Layout';
+import { assets } from '../assets/assets';
 
 const images = [
-  './src/assets/cps1.jpg',
-  './src/assets/cps4.jpg',
-  './src/assets/cps3.jpg'
+  assets.cps1,
+  assets.cps4,
+  assets.cps3
   // '/images/school4.jpg',
 ];
 
