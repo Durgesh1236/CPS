@@ -73,7 +73,7 @@ const HomePage = () => {
         <img
           src={images[current]}
           alt={`School ${current + 1}`}
-          className="w-full h-[500px] object-cover transition-all duration-700"
+          className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[500px] object-cover transition-all duration-700"
         />
         <div className="flex justify-center gap-2 py-2 bg-white">
           {images.map((_, idx) => (
