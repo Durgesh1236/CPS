@@ -5,12 +5,12 @@ const StudentHome = () => {
   const navigate = useNavigate();
   return (
     <Layout>
-      <div className="w-full min-h-screen bg-gray-50 flex flex-col gap-6 p-4">
+      <div className="w-full pt-16 min-h-screen bg-gray-50 flex flex-col gap-6 p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div
+            <div onClick={() => navigate("/attendance")}
               className="bg-white rounded shadow p-6 cursor-pointer transition hover:shadow-lg"
             >
-             <span onClick={() => navigate("/attendance")} className="text-lg text-gray-700 font-bold mt-2">Attendance</span>
+             <span className="text-lg text-gray-700 font-bold mt-2">Attendance</span>
             </div>
 
             <div

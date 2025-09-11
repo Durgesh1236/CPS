@@ -15,11 +15,11 @@ const Sidebar = ({ sidebarOpen }) => {
     {
       sidebarOpen ? (<>
       <div
-        className={`fixed inset-0 bg-black bg-opacity-30 z-30 transition-opacity ${open ? 'block md:hidden' : 'hidden'}`}
+        className={`fixed inset-0 bg-opacity-30 z-30 transition-opacity ${open ? 'block md:hidden' : 'hidden'}`}
         // onClick={handleClose}
       />
       <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-white shadow-lg z-40 transform transition-transform ${
+        className={`fixed md:static pt-16 left-0 h-full w-64 bg-white shadow-lg z-40 transform transition-transform ${
           open ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0 flex flex-col`}
       >

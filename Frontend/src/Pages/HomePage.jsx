@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../Components/Layout';
 import { assets } from '../assets/assets';
+import ContactUs from './ContactUs';
 
 const images = [
   assets.cps1,
@@ -89,26 +90,13 @@ const HomePage = () => {
 
       {/* Stats */}
       <div className="flex flex-col md:flex-row justify-center items-center gap-8 my-8">
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center w-64">
+        <div className="bg-white rounded shadow p-6 flex flex-col items-center w-80">
           <span className="text-4xl font-bold text-blue-600">{studentCount} +</span>
           <span className="text-lg text-gray-700 mt-2">Total Students</span>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center w-64">
+        <div className="bg-white rounded shadow p-6 flex flex-col items-center w-80">
           <span className="text-4xl font-bold text-green-600">{teacherCount} +</span>
           <span className="text-lg text-gray-700 mt-2">Total Teachers</span>
-        </div>
-      </div>
-
-      {/* School Description */}
-      <div className="flex flex-col md:flex-row items-center max-w-5xl mx-auto my-8 bg-white rounded shadow p-6 gap-6">
-        <img
-          src={assets.cps3}
-          alt="Central Public School"
-          className="w-full md:w-1/3 h-48 object-cover rounded"
-        />
-        <div>
-          <h2 className="text-2xl font-bold mb-2 text-blue-700">About Central Public School</h2>
-          <p className="text-gray-700">{schoolDescription}</p>
         </div>
       </div>
 
@@ -127,6 +115,22 @@ const HomePage = () => {
           <span className="text-blue-600 mt-2">{principal.contact}</span>
         </div>
       </div>
+
+      {/* School Description */}
+      <div className="flex flex-col md:flex-row items-center max-w-5xl mx-auto my-8 bg-white rounded shadow p-6 gap-6">
+        <img
+          src={assets.cps3}
+          alt="Central Public School"
+          className="w-full md:w-1/3 h-48 object-cover rounded"
+        />
+        <div>
+          <h2 className="text-2xl font-bold mb-2 text-blue-700">About Central Public School</h2>
+          <p className="text-gray-700">{schoolDescription}</p>
+        </div>
+      </div>
+
+      {/*Contact Us */}
+      <ContactUs />
 
       {/* Footer */}
       <footer className="w-full py-4 bg-gray-800 text-center text-white mt-auto">
