@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaAppStore } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
  const Navbar = () => {
@@ -16,9 +17,11 @@ import { useNavigate } from 'react-router-dom';
         <button onClick={()=> navigate("/login")} className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition">
           Login
         </button>
-        <button className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition">
+        {/* <button className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition">
           Admission
-        </button>
+        </button> */}
+         <a href='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://warehouse.appilix.com/uploads/app-apk-68c30d6f45ceb-1757613423.apk' className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition">install app</a>
+
       </div>
       {/* Mobile menu button */}
       <div className="sm:hidden">
@@ -38,9 +41,10 @@ import { useNavigate } from 'react-router-dom';
           <button onClick={()=> navigate("/login")} className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition">
             Login
           </button>
-          <button className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition">
+          {/* <button className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600 transition">
             Admission
-          </button>
+          </button> */}
+          <a href='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://warehouse.appilix.com/uploads/app-apk-68c30d6f45ceb-1757613423.apk' className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition">install app</a>
         </div>
       )}
     </nav>
