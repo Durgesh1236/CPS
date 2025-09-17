@@ -1,4 +1,4 @@
-import { User } from "../models/UserModel.js";
+import { User } from "../models/TeacherModel.js";
 import generateToken from "../utils/generateToken.js";
 import TryCatch from "../utils/TryCatch.js";
 import bcrypt from 'bcrypt';

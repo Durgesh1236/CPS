@@ -1,44 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TeacherLayout from '../Components/TeacherLayout';
+import { UserData } from '../context/User';
 
-// Example fee history data
-const initialHistory = [
-  {
-    ledgerId: 'L001',
-    studentName: 'Amit Kumar',
-    studentClass: '10A',
-    backDues: 5000,
-    submitFees: 5000,
-    dues: 0,
-    date: '2025-08-25',
-    image: 'https://d2w7l1p59qkl0r.cloudfront.net/article/wp-content/uploads/2024/09/28191630/Alternative-Documents-for-College-Fee-Receipt-Picture1.jpg',
-  },
-  {
-    ledgerId: 'L002',
-    studentName: 'Priya Singh',
-    studentClass: '9B',
-    backDues: 3000,
-    submitFees: 2000,
-    dues: 1000,
-    date: '2025-08-24',
-    image: 'https://d2w7l1p59qkl0r.cloudfront.net/article/wp-content/uploads/2024/09/28191630/Alternative-Documents-for-College-Fee-Receipt-Picture1.jpg',
-  },
-  // Add more data as needed
-];
 
 const StudentFeeHistory = () => {
-  const [history] = useState(initialHistory);
   const [search, setSearch] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [filterDate, setFilterDate] = useState('');
   const navigate = useNavigate();
 
-  // Filter by ledgerId, studentName, and date
-  const filteredHistory = history.filter(
+  const { FeesSubmitList } = UserData();
+  const safeList = Array.isArray(FeesSubmitList) ? FeesSubmitList : [];
+  const filteredHistory = safeList.filter(
     item =>
-      (item.ledgerId.toLowerCase().includes(search.toLowerCase()) ||
-      item.studentName.toLowerCase().includes(search.toLowerCase())) &&
+      (item.ledgerId?.toLowerCase().includes(search.toLowerCase()) ||
+      item.studentName?.toLowerCase().includes(search.toLowerCase())) &&
       (filterDate ? item.date === filterDate : true)
   );
 
@@ -61,10 +38,10 @@ const StudentFeeHistory = () => {
           className="w-full md:w-1/3 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg"
         />
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600 transition w-full md:w-auto"
+          className="bg-blue-500 cursor-pointer text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-600 transition w-full md:w-auto"
           onClick={() => navigate('/teacher-home')}
         >
-          Back to Home
+          Home
         </button>
       </div>
       {/* Table Heading */}
@@ -83,35 +60,43 @@ const StudentFeeHistory = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredHistory.map((item, idx) => (
-              <tr key={idx} className="border-b">
-                <td className="py-2 px-4">
-                  <img
-                    src={item.image}
-                    alt="Fee Receipt"
-                    className="w-12 h-12 object-cover rounded-lg cursor-pointer border-2 border-blue-500"
-                    onClick={() => setSelectedImage(item.image)}
-                  />
-                </td>
-                <td className="py-2 px-4 font-bold text-gray-800">{item.studentName}</td>
-                <td className="py-2 px-4 text-gray-500">{item.studentClass}</td>
-                <td className="py-2 px-4 text-gray-500">{item.ledgerId}</td>
-                <td className="py-2 px-4 text-gray-500">{item.date}</td>
-                <td className="py-2 px-4 text-blue-700 font-semibold">₹{item.backDues}</td>
-                <td className="py-2 px-4 text-green-700 font-semibold">₹{item.submitFees}</td>
-                <td className={`py-2 px-4 font-semibold ${item.dues === 0 ? 'text-green-800' : 'text-red-700'}`}>₹{item.dues}</td>
-              </tr>
-            ))}
+              {FeesSubmitList.length > 0 ? (
+                FeesSubmitList.map((item, idx) => (
+                  <tr key={idx} className="border-b">
+                    <td className="py-2 px-4">
+                      <img
+                        src={item.receiptImage.url}
+                        alt="Fee Receipt"
+                        className="w-12 h-12 object-cover rounded-lg cursor-pointer border-2 border-blue-500"
+                        onClick={() => setSelectedImage(item.receiptImage.url)}
+                      />
+                    </td>
+                    <td className="py-2 px-4 font-bold text-gray-800">{item.studentName}</td>
+                    <td className="py-2 px-4 text-gray-500">{item.studentClass}</td>
+                    <td className="py-2 px-4 text-gray-500">{item.ledgerId}</td>
+                    <td className="py-2 px-4 text-gray-500">{item.date}</td>
+                    <td className="py-2 px-4 text-blue-700 font-semibold">₹{item.backDues}</td>
+                    <td className="py-2 px-4 text-green-700 font-semibold">₹{item.submitFees}</td>
+                    <td className={`py-2 px-4 font-semibold ${item.dues === 0 ? 'text-green-800' : 'text-red-700'}`}>₹{item.dues}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="8" className="py-12 text-center">
+                    <span className="text-lg font-semibold text-gray-500">Data not found</span>
+                  </td>
+                </tr>
+              )}
           </tbody>
         </table>
       </div>
       {/* Fullscreen Image Modal */}
       {selectedImage && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="relative">
+          <div className="relative cursor-pointer">
             <img src={selectedImage} alt="Full Receipt" className="max-w-full max-h-[80vh] rounded-xl shadow-2xl" />
             <button
-              className="absolute top-2 right-2 bg-white text-red-600 rounded-full p-2 shadow-lg text-xl font-bold"
+              className="absolute cursor-pointer top-2 right-2 bg-white text-red-600 rounded-full p-2 shadow-lg text-xl font-bold"
               onClick={() => setSelectedImage(null)}
             >
               ×

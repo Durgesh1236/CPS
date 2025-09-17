@@ -9,8 +9,7 @@ const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in 
 const TeacherHomePage = () => {
   const navigate = useNavigate();
   const { user } = UserData()
-  console.log(user);
-  
+    
   return (
     <TeacherLayout>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-yellow-50 flex flex-col items-center p-4 w-full pt-20">
@@ -59,7 +58,7 @@ const TeacherHomePage = () => {
           }
           {/* Teacher Attendance */}
           <div
-            onClick={() => navigate("/teacher-attendance")}
+            // onClick={() => navigate("/teacher-attendance")}
             className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
           >
             <FaClipboardList className="text-4xl text-purple-600" />

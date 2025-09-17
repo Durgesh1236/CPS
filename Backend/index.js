@@ -2,7 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 import { connectDB } from './database/db.js';
 import cloudinary from 'cloudinary';
-import router from './routes/userRoute.js';
+import router from './routes/TeacherRoute.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 
