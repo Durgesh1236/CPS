@@ -7,17 +7,27 @@ import { UserData } from '../context/User';
 const StudentFeeHistory = () => {
   const [search, setSearch] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
-  const [filterDate, setFilterDate] = useState('');
+  // Set default date to today
+  const getTodayInputDate = () => {
+    const today = new Date();
+    return today.toISOString().slice(0, 10);
+  };
+  const [filterDate, setFilterDate] = useState(getTodayInputDate());
   const navigate = useNavigate();
 
   const { FeesSubmitList } = UserData();
   const safeList = Array.isArray(FeesSubmitList) ? FeesSubmitList : [];
-  const filteredHistory = safeList.filter(
-    item =>
-      (item.ledgerId?.toLowerCase().includes(search.toLowerCase()) ||
-      item.studentName?.toLowerCase().includes(search.toLowerCase())) &&
-      (filterDate ? item.date === filterDate : true)
-  );
+  const filteredHistory = safeList.filter(item => {
+    const matchesSearch = item.ledgerId?.toLowerCase().includes(search.toLowerCase()) ||
+      item.studentName?.toLowerCase().includes(search.toLowerCase());
+    let matchesDate = true;
+    if (filterDate) {
+      const [yyyy, mm, dd] = filterDate.split('-');
+      const formattedDate = `${dd}-${mm}-${yyyy}`;
+      matchesDate = item.date === formattedDate;
+    }
+    return matchesSearch && matchesDate;
+  });
 
   return (
     <TeacherLayout>
@@ -38,7 +48,7 @@ const StudentFeeHistory = () => {
           className="w-full md:w-1/3 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg"
         />
         <button
-          className="bg-blue-500 cursor-pointer text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-600 transition w-full md:w-auto"
+          className="bg-gray-500 cursor-pointer text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-600 transition w-full md:w-auto"
           onClick={() => navigate('/teacher-home')}
         >
           Home
@@ -60,8 +70,8 @@ const StudentFeeHistory = () => {
             </tr>
           </thead>
           <tbody>
-              {FeesSubmitList.length > 0 ? (
-                FeesSubmitList.map((item, idx) => (
+              {filteredHistory.length > 0 ? (
+                filteredHistory.map((item, idx) => (
                   <tr key={idx} className="border-b">
                     <td className="py-2 px-4">
                       <img
