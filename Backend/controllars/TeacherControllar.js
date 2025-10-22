@@ -44,7 +44,7 @@ export const registerUser = TryCatch(async(req, res) => {
 export const loginUser = TryCatch(async(req, res) => {
     const {email, password} = req.body;
     if(!email || !password) {
-        return res.json({
+        return res.json({ 
             success: false,
             message: "All fields are required"
         })

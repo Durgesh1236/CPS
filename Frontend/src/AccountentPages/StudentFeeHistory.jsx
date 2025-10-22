@@ -7,7 +7,7 @@ import { UserData } from '../context/User';
 const StudentFeeHistory = () => {
   const [search, setSearch] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
-  // Set default date to today
+
   const getTodayInputDate = () => {
     const today = new Date();
     return today.toISOString().slice(0, 10);

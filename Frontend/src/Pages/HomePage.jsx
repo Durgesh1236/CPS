@@ -1,6 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../Components/Layout';
 import { assets } from '../assets/assets';
+// Add teacher celebration images here (replace with your actual image imports)
+const teacherImages = [
+  assets.cps1,
+  assets.cps2,
+  assets.cps3,
+  assets.cps4
+  // Add more teacher celebration images as needed
+];
 import ContactUs from './ContactUs';
 
 const images = [
@@ -31,6 +39,7 @@ Join us in shaping bright futures with love, care, and excellence — because yo
 
 const HomePage = () => {
   const [current, setCurrent] = useState(0);
+  const [teacherCurrent, setTeacherCurrent] = useState(0);
   const [studentCount, setStudentCount] = useState(0);
   const [teacherCount, setTeacherCount] = useState(0);
   const studentInterval = useRef();
@@ -41,6 +50,14 @@ const HomePage = () => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
     }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Teacher celebration carousel auto-scroll
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTeacherCurrent((prev) => (prev + 1) % teacherImages.length);
+    }, 3500);
     return () => clearInterval(interval);
   }, []);
 
@@ -71,7 +88,7 @@ const HomePage = () => {
   return (
     <Layout>
     <div className="w-full min-h-screen flex flex-col bg-gray-50">
-      {/* Carousel */}
+      {/* School Carousel */}
       <div className="w-full max-w-5xl mx-auto mt-6 rounded-lg overflow-hidden shadow-lg">
         <img
           src={images[current]}
@@ -127,6 +144,7 @@ const HomePage = () => {
           <h2 className="text-2xl font-bold mb-2 text-blue-700">About Central Public School</h2>
           <p className="text-gray-700">{schoolDescription}</p>
         </div>
+        
       </div>
 
       {/*Contact Us */}

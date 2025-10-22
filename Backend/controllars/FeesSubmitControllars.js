@@ -5,12 +5,6 @@ import cloudinary from "cloudinary";
 import sharp from "sharp";
 
 export const FeesSubmit = TryCatch(async(req, res) => {
-    // if(req.user.role !== "admin" && req.user.role !== "accountant"){
-    //     return res.status(403).json({
-    //         success: false,
-    //         message: "You are not Admin or Accountant"
-    //     })
-    // }
     const { 
         ledgerId, 
         studentName, 
@@ -65,12 +59,6 @@ export const FeesSubmit = TryCatch(async(req, res) => {
 })
 
 export const getAllFeesSubmit = TryCatch(async(req, res) => {
-    // if(req.user.role !== "admin" || req.user.role !== "accountant"){
-    //     return res.status(403).json({
-    //         success: false,
-    //         message: "You are not Admin or Accountant"
-    //     })
-    // }
     const feeSubmit = await FeeSubmit.find();
     return res.json(feeSubmit);
 })
