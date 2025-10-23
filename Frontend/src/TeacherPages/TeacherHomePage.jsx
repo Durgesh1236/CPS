@@ -3,13 +3,14 @@ import { FaMoneyCheckAlt, FaHistory, FaExclamationCircle, FaUserTie, FaClipboard
 import TeacherLayout from '../Components/TeacherLayout';
 import { useNavigate } from 'react-router-dom';
 import { UserData } from '../context/User';
+import { FaRupeeSign } from "react-icons/fa";
 
 const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in the conference hall.";
 
 const TeacherHomePage = () => {
   const navigate = useNavigate();
   const { user } = UserData()
-    
+
   return (
     <TeacherLayout>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-yellow-50 flex flex-col items-center p-4 w-full pt-20">
@@ -79,16 +80,27 @@ const TeacherHomePage = () => {
             </div>
           }
           {/* Teacher Data */}
-          { user.role === 'admin' &&
-          <div
-            onClick={() => navigate("/teacher-data")}
-            className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full border-2 border-blue-300"
-          >
-            <FaUserTie className="text-4xl text-blue-700 animate-pulse" />
-            <span className="text-xl font-bold text-blue-700">Teacher Data</span>
-            <button className="mt-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-green-600 transition">View Teacher Data</button>
-          </div>
-}
+          {user.role === 'admin' &&
+            <div
+              onClick={() => navigate("/teacher-data")}
+              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full border-2 border-blue-300"
+            >
+              <FaUserTie className="text-4xl text-blue-700 animate-pulse" />
+              <span className="text-xl font-bold text-blue-700">Teacher Data</span>
+              <button className="mt-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-green-600 transition">View Teacher Data</button>
+            </div>
+          }
+
+          {(user.role === 'accountent' || user.role === 'admin') &&
+            <div
+              onClick={() => navigate("/total-spend")}
+              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
+            >
+              <FaRupeeSign className="text-4xl text-blue-600" />
+              <span className="text-xl font-semibold text-gray-800">Spend</span>
+              <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit</button>
+            </div>
+          }
         </div>
         {/* Important Message - now on next line */}
         <div className="w-full mt-8">

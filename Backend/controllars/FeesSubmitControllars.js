@@ -22,7 +22,7 @@ export const FeesSubmit = TryCatch(async(req, res) => {
             })
         }
         const  compressedImage = await sharp(file.buffer)
-        .resize(500,500)
+        .resize(800,800)
         .jpeg({ quality: 80 })
         .png({ quality: 50 }) 
         .toBuffer();
