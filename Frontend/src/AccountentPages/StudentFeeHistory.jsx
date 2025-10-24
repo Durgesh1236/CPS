@@ -17,9 +17,9 @@ const StudentFeeHistory = () => {
   };
 
   const [filterDate, setFilterDate] = useState(getTodayInputDate());
-  useEffect(() => {
-    getAllFeesSubmit();
-  }, [])
+  // useEffect(() => {
+  //   getAllFeesSubmit();
+  // }, [])
 
   const safeList = Array.isArray(FeesSubmitList) ? FeesSubmitList : [];
   const filteredHistory = safeList.filter(item => {
