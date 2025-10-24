@@ -1,7 +1,7 @@
 import express from "express";
 import { getAllTeachers, loginUser, logoutUser, MyProfile, registerUser } from "../controllars/TeacherControllar.js";
 import { isAuth } from "../middlewares/isAuth.js";
-import { FeesSubmit, getAllFeesSubmit } from "../controllars/FeesSubmitControllars.js";
+import { FeesSubmit, getAllFeesSubmit, getAllSpend, totalSpend } from "../controllars/FeesSubmitControllars.js";
 import uploadFile from "../middlewares/multer.js";
 
 const router = express.Router();
@@ -13,5 +13,7 @@ router.get("/me", isAuth, MyProfile);
 router.get("/all-teachers", isAuth, getAllTeachers);
 router.post("/fee-submit", isAuth, uploadFile, FeesSubmit);
 router.get("/get-all-fees-submits", isAuth, getAllFeesSubmit);
+router.post("/spend-record", isAuth, totalSpend);
+router.get("/get-all-spend", isAuth, getAllSpend);
 
 export default router;

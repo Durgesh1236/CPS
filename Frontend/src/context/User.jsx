@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
     const [isAuth, setisAuth] = useState(false);
     const [teacherList, setTeacherList] = useState([]);
     const [FeesSubmitList, setFeeSubmitList] = useState([]);
+    const [spendList, setSpendList] = useState([]);
 
     async function registerTeacher(name, email, password, mobileNo, role, setForm) {
         setLoading(true);
@@ -119,6 +120,20 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    async function spendForm( name, date, totalReceived, setForm ) {
+        try {
+            const { data } = await axios.post("/api/user/spend-record", { name, date, totalReceived });
+            if(data.success) {
+                toast.success(data.message);
+                setForm([]);
+            } else {
+                toast.success(data.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
         fetchUser();
         getAllTeachers();
@@ -134,7 +149,8 @@ export const UserProvider = ({ children }) => {
         registerTeacher,
         teacherList,
         FeesSubmit,
-        FeesSubmitList
+        FeesSubmitList ,
+        getAllFeesSubmit
     }}>{children}</UserContext.Provider>
 }
 

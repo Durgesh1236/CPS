@@ -38,7 +38,7 @@ const TeacherData = () => {
                   <td className="px-2 py-3 text-blue-600 font-bold"><FaIdBadge className="inline mr-1" />CPS00{idx + 1}</td>
                   <td className="px-2 py-3 text-gray-800 font-bold"><FaUserTie className="inline mr-1" />{teacher.name}</td>
                   <td className="px-2 py-3 text-green-700"><FaEnvelope className="inline mr-1" />{teacher.email}</td>
-                  <td className="px-2 py-3 text-purple-700"><FaPhone className="inline mr-1" />{teacher.mobile}</td>
+                  <td className="px-2 py-3 text-purple-700"><FaPhone className="inline mr-1" />{teacher.mobileNo}</td>
                   <td className="px-2 py-3 font-semibold text-yellow-700">{teacher.role}</td>
                 </tr>
               ))}

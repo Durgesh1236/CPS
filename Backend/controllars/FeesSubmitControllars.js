@@ -1,4 +1,5 @@
 import { FeeSubmit } from "../models/FeeSubmitModels.js";
+import { SpendModel } from "../models/SpendModel.js";
 import TryCatch from "../utils/TryCatch.js";
 import getDataurl from "../utils/urlGenerator.js";
 import cloudinary from "cloudinary";
@@ -63,3 +64,33 @@ export const getAllFeesSubmit = TryCatch(async(req, res) => {
     return res.json(feeSubmit);
 })
 
+export const totalSpend = TryCatch(async(req, res) => {
+    const { name, date, totalReceived } = req.body;
+    if(!name || !date || !totalReceived) {
+        return res.status(400).json({
+            success: false,
+            message: "All fields are required"
+        })
+    } 
+    const totalSpend = await SpendModel.create ({
+        name,
+        date,
+        totalReceived,
+    })
+    if(!totalSpend){
+        return res.status(500).json({
+            success: false,
+            message: "Failed to record spend"
+        })
+    }
+    return res.status(200).json ({
+        totalSpend,
+        success: true,
+        message: "Spend recorded successfully"
+    })
+})
+
+export const getAllSpend = TryCatch(async(req, res) => {
+    const spend = await SpendModel.find();
+    return res.status(200).json(spend);
+})

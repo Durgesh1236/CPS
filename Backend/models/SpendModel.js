@@ -5,7 +5,7 @@ const SpendSchema = new mongoose.Schema({
         type: String, 
         required: true 
     }, 
-    total : {
+    totalReceived : {
         type: Number,
         required: true
     }, 
