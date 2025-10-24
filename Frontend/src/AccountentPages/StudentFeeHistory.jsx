@@ -9,7 +9,6 @@ const StudentFeeHistory = () => {
   const [search, setSearch] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const { getAllFeesSubmit, FeesSubmitList } = UserData();
-  const [filterDate, setFilterDate] = useState(getTodayInputDate());
   const navigate = useNavigate();
 
   const getTodayInputDate = () => {
@@ -17,6 +16,7 @@ const StudentFeeHistory = () => {
     return today.toISOString().slice(0, 10);
   };
 
+  const [filterDate, setFilterDate] = useState(getTodayInputDate());
   useEffect(() => {
     getAllFeesSubmit();
   }, [])
