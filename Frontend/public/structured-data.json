@@ -1,0 +1,32 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "School",
+      "@id": "https://centralpublicschoolkalyanpur.in#school",
+      "name": "Central Public School, Kalyanpur",
+      "url": "https://centralpublicschoolkalyanpur.in/",
+      "logo": "https://centralpublicschoolkalyanpur.in/social-preview.svg",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kalyanpur"
+      },
+      "description": "Central Public School provides quality education with experienced teachers, modern facilities and a focus on holistic development."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://centralpublicschoolkalyanpur.in#website",
+      "url": "https://centralpublicschoolkalyanpur.in/",
+      "name": "Central Public School",
+      "publisher": { "@id": "https://centralpublicschoolkalyanpur.in#school" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://centralpublicschoolkalyanpur.in/#webpage",
+      "url": "https://centralpublicschoolkalyanpur.in/",
+      "inLanguage": "en",
+      "name": "Central Public School — Kalyanpur",
+      "isPartOf": { "@id": "https://centralpublicschoolkalyanpur.in#website" }
+    }
+  ]
+}
