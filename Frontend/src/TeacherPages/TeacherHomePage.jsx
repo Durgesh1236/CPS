@@ -101,6 +101,17 @@ const TeacherHomePage = () => {
               <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit</button>
             </div>
           }
+
+          {(user.role === 'accountent' || user.role === 'admin') &&
+            <div
+              onClick={() => navigate("/spend-history")}
+              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
+            >
+              <FaRupeeSign className="text-4xl text-blue-600" />
+              <span className="text-xl font-semibold text-gray-800">Spend History</span>
+              <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit</button>
+            </div>
+          }
         </div>
         {/* Important Message - now on next line */}
         <div className="w-full mt-8">

@@ -120,17 +120,23 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function spendForm( name, date, totalReceived, setForm ) {
+    async function spendForm( name, date, totalReceived,setName, setTotal, setDate ) {
+        setLoading(true);
         try {
             const { data } = await axios.post("/api/user/spend-record", { name, date, totalReceived });
             if(data.success) {
                 toast.success(data.message);
-                setForm([]);
+                setName('');
+                setTotal();
+                setDate(new Date().toISOString().slice(0,10));
+                setLoading(false);
             } else {
                 toast.success(data.message);
+                setLoading(false);
             }
         } catch (error) {
             console.log(error);
+            setLoading(false);
         }
     }
 
@@ -150,7 +156,8 @@ export const UserProvider = ({ children }) => {
         teacherList,
         FeesSubmit,
         FeesSubmitList ,
-        getAllFeesSubmit
+        getAllFeesSubmit,
+        spendForm
     }}>{children}</UserContext.Provider>
 }
 

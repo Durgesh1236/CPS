@@ -65,7 +65,7 @@ export const getAllFeesSubmit = TryCatch(async(req, res) => {
 })
 
 export const totalSpend = TryCatch(async(req, res) => {
-    const { name, date, totalReceived } = req.body;
+    const { name, date, totalReceived,  } = req.body;
     if(!name || !date || !totalReceived) {
         return res.status(400).json({
             success: false,
@@ -76,6 +76,9 @@ export const totalSpend = TryCatch(async(req, res) => {
         name,
         date,
         totalReceived,
+        status: 'pending',
+        UserId: req.user?._id ? String(req.user._id) : undefined,
+        submittedBy: req.user?._id || undefined,
     })
     if(!totalSpend){
         return res.status(500).json({
@@ -86,11 +89,26 @@ export const totalSpend = TryCatch(async(req, res) => {
     return res.status(200).json ({
         totalSpend,
         success: true,
-        message: "Spend recorded successfully"
+        message: "record successfully Submitted"
     })
 })
 
+export const markSpendReceived = TryCatch(async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({ success: false, message: 'Missing id' });
+    }
+    const spend = await SpendModel.findById(id);
+    if (!spend) {
+        return res.status(404).json({ success: false, message: 'Spend record not found' });
+    }
+    spend.status = 'received';
+    await spend.save();
+    const updated = await SpendModel.findById(spend._id).populate('submittedBy', 'name');
+    return res.status(200).json({ success: true, spend: updated, message: 'Marked as received' });
+})
+
 export const getAllSpend = TryCatch(async(req, res) => {
-    const spend = await SpendModel.find();
+    const spend = await SpendModel.find().populate('submittedBy', 'name');
     return res.status(200).json(spend);
 })

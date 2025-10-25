@@ -13,6 +13,22 @@ const SpendSchema = new mongoose.Schema({
         type: Date,
         required: true
     }
+    ,
+    status: {
+        type: String,
+        enum: ['pending', 'received'],
+        default: 'pending'
+    },
+    UserId: {
+        type: String,
+        required: true
+    }
+    ,
+    submittedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false,
+    }
 }, { timestamps: true })
 
 export const SpendModel = mongoose.model("SpendModel", SpendSchema);

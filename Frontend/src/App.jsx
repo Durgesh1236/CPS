@@ -15,6 +15,7 @@ import { RingLoader } from "react-spinners";
 import TeacherProfile from './TeacherPages/TeacherProfile'
 import TeacherData from './TeacherPages/TeacherData'
 import Spend from './Pages/Spend'
+import SpendHistory from './Pages/SpendHistory'
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -45,6 +46,7 @@ const App = () => {
             <Route path='/teacher-profile' element={isAuth ? <TeacherProfile /> : <TeacherLoginPage />}/>
             <Route path='/teacher-data' element = {isAuth ? <TeacherData /> : <TeacherLoginPage/>}/>
             <Route path='/total-spend' element={isAuth ? <Spend/> : <TeacherLoginPage/>}/>
+            <Route path='/spend-history' element={isAuth ? <SpendHistory/> : <TeacherLoginPage/>}/>
           </Routes>
         </BrowserRouter>
       }
