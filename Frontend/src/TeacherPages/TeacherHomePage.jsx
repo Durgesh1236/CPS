@@ -4,6 +4,7 @@ import TeacherLayout from '../Components/TeacherLayout';
 import { useNavigate } from 'react-router-dom';
 import { UserData } from '../context/User';
 import { FaRupeeSign } from "react-icons/fa";
+import { MdOutlineManageHistory } from "react-icons/md";
 
 const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in the conference hall.";
 
@@ -27,7 +28,7 @@ const TeacherHomePage = () => {
             <div
               className="flex-1 flex cursor-pointer justify-end"
               onClick={() => navigate("/teacher-profile")}>
-              <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-semibold shadow">
+              <span className="bg-blue-100 cursor-pointer text-blue-700 px-4 py-2 rounded-full font-semibold shadow">
                 Teacher Profile
               </span>
             </div>
@@ -43,7 +44,7 @@ const TeacherHomePage = () => {
             >
               <FaMoneyCheckAlt className="text-4xl text-green-600" />
               <span className="text-xl font-semibold text-gray-800">Student Fees Submit</span>
-              <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View Details</button>
+              <button className="mt-2 cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View Details</button>
             </div>
           }
           {/* Student Fees History */}
@@ -53,7 +54,7 @@ const TeacherHomePage = () => {
               className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
             >
               <FaHistory className="text-4xl text-blue-600" />
-              <span className="text-xl font-semibold text-gray-800">Student Fees History</span>
+              <span className="text-xl font-semibold cursor-pointer text-gray-800">Student Fees History</span>
               <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View History</button>
             </div>
           }
@@ -63,8 +64,8 @@ const TeacherHomePage = () => {
             className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
           >
             <FaClipboardList className="text-4xl text-purple-600" />
-            <span className="text-xl font-semibold text-gray-800">Teacher Attendance</span>
-            <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View Attendance</button>
+            <span className="text-xl font-semibold  text-gray-800">Teacher Attendance</span>
+            <button className="mt-2 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View Attendance</button>
           </div>
           {/* Teacher Registration */}
           {
@@ -76,7 +77,7 @@ const TeacherHomePage = () => {
             >
               <FaUserTie className="text-4xl text-orange-500" />
               <span className="text-xl font-semibold text-gray-800">Teacher Registration</span>
-              <button className="mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">Register Now</button>
+              <button className="mt-2 px-4 cursor-pointer py-2 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">Register Now</button>
             </div>
           }
           {/* Teacher Data */}
@@ -87,7 +88,7 @@ const TeacherHomePage = () => {
             >
               <FaUserTie className="text-4xl text-blue-700 animate-pulse" />
               <span className="text-xl font-bold text-blue-700">Teacher Data</span>
-              <button className="mt-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-green-600 transition">View Teacher Data</button>
+              <button className="mt-2 px-4 cursor-pointer py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-green-600 transition">View Teacher Data</button>
             </div>
           }
 
@@ -98,7 +99,7 @@ const TeacherHomePage = () => {
             >
               <FaRupeeSign className="text-4xl text-blue-600" />
               <span className="text-xl font-semibold text-gray-800">Spend</span>
-              <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit</button>
+              <button className="mt-2 px-4 cursor-pointer py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit</button>
             </div>
           }
 
@@ -107,9 +108,9 @@ const TeacherHomePage = () => {
               onClick={() => navigate("/spend-history")}
               className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
             >
-              <FaRupeeSign className="text-4xl text-blue-600" />
+              <MdOutlineManageHistory className="text-4xl text-blue-600" />
               <span className="text-xl font-semibold text-gray-800">Spend History</span>
-              <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit</button>
+              <button className="mt-2 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit</button>
             </div>
           }
         </div>

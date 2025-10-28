@@ -34,6 +34,19 @@ const StudentFeeHistory = () => {
     return matchesSearch && matchesDate;
   });
 
+  // calculate total submitFees for the currently selected filterDate (defaults to today)
+  const totalForDate = safeList.reduce((sum, item) => {
+    if (!filterDate) return sum;
+    const [yyyy, mm, dd] = filterDate.split('-');
+    const formattedDate = `${dd}-${mm}-${yyyy}`;
+    if (item.date === formattedDate) {
+      return sum + (Number(item.submitFees) || 0);
+    }
+    return sum;
+  }, 0);
+
+  const formatCurrency = (v) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(v);
+
   return (
     <TeacherLayout>
       <div className="min-h-screen bg-gray-50 p-4 flex flex-col items-start w-full pt-20">
@@ -58,6 +71,19 @@ const StudentFeeHistory = () => {
           >
             Home
           </button>
+        </div>
+        {/* Total for selected date */}
+        <div className="w-full max-w-2xl mb-6">
+          <div className="bg-white rounded-xl shadow-md p-4 flex items-center justify-between">
+            <div>
+              <div className="text-sm text-gray-500">Total submitted on</div>
+              <div className="text-lg font-bold text-gray-800">{filterDate ? (() => { const [y,m,d]=filterDate.split('-'); return `${d}-${m}-${y}` })() : '—'}</div>
+            </div>
+            <div className="text-right">
+              <div className="text-sm text-gray-500">Amount</div>
+              <div className="text-2xl font-extrabold text-green-600">{formatCurrency(totalForDate)}</div>
+            </div>
+          </div>
         </div>
         {/* Table Heading */}
         <div className="w-full overflow-x-auto">
