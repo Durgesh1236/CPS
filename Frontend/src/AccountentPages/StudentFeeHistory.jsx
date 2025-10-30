@@ -95,6 +95,7 @@ const StudentFeeHistory = () => {
                 <th className="py-2 px-4 text-left">Class</th>
                 <th className="py-2 px-4 text-left">Ledger ID</th>
                 <th className="py-2 px-4 text-left">Date</th>
+                <th className="py-2 px-4 text-left">Teacher</th>
                 <th className="py-2 px-4 text-left">Back Dues</th>
                 <th className="py-2 px-4 text-left">Submit Fees</th>
                 <th className="py-2 px-4 text-left">Dues</th>
@@ -116,6 +117,7 @@ const StudentFeeHistory = () => {
                     <td className="py-2 px-4 text-gray-500">{item.studentClass}</td>
                     <td className="py-2 px-4 text-gray-500">{item.ledgerId}</td>
                     <td className="py-2 px-4 text-gray-500">{item.date}</td>
+                    <td className="py-2 px-4 text-gray-500">{item.submittedBy?.name || '—'}</td>
                     <td className="py-2 px-4 text-blue-700 font-semibold">₹{item.backDues}</td>
                     <td className="py-2 px-4 text-green-700 font-semibold">₹{item.submitFees}</td>
                     <td className={`py-2 px-4 font-semibold ${item.dues === 0 ? 'text-green-800' : 'text-red-700'}`}>₹{item.dues}</td>

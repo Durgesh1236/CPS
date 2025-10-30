@@ -35,5 +35,8 @@ const feeSubmitSchema = mongoose.Schema({
         url: String,
     }
 }, { timestamps: true });
+feeSubmitSchema.add({
+    submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+});
 
 export const FeeSubmit = mongoose.model("FeeSubmit", feeSubmitSchema);

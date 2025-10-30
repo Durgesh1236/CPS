@@ -16,6 +16,8 @@ import TeacherProfile from './TeacherPages/TeacherProfile'
 import TeacherData from './TeacherPages/TeacherData'
 import Spend from './Pages/Spend'
 import SpendHistory from './Pages/SpendHistory'
+import StudentDataInput from './Pages/StudentDataInput'
+import StudentDataSearch from './Pages/StudentDataSearch'
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -47,6 +49,8 @@ const App = () => {
             <Route path='/teacher-data' element = {isAuth ? <TeacherData /> : <TeacherLoginPage/>}/>
             <Route path='/total-spend' element={isAuth ? <Spend/> : <TeacherLoginPage/>}/>
             <Route path='/spend-history' element={isAuth ? <SpendHistory/> : <TeacherLoginPage/>}/>
+            <Route path='/student-data-input' element={isAuth ? <StudentDataInput/> : <TeacherLoginPage/>}/>
+            <Route path='/student-data' element={isAuth ? <StudentDataSearch/> : <TeacherLoginPage/>}/> 
           </Routes>
         </BrowserRouter>
       }

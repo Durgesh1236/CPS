@@ -53,7 +53,7 @@ const Spend = () => {
 
               <div className="flex items-center justify-between">
                 <div className="flex gap-3">
-                  <button type="button" onClick={() => { setName(''); setTotal(''); setDate(new Date().toISOString().slice(0,10)); }} className="px-4 py-2 bg-gray-100 cursor-pointer border rounded text-sm">Reset</button>
+                  <button type="button" onClick={() => { setName(''); setTotal(''); setDate(new Date().toISOString().slice(0, 10)); }} className="px-4 py-2 bg-gray-100 cursor-pointer border rounded text-sm">Reset</button>
                   <button type="submit" className="px-6 py-3 bg-indigo-600 cursor-pointer text-white rounded-lg shadow hover:bg-indigo-700">
                     Submit
                   </button>

@@ -95,7 +95,8 @@ export const UserProvider = ({ children }) => {
             const { data } = await axios.post("/api/user/fee-submit", formData);
             if (data.success) {
                 toast.success(data.message);
-                setFeeSubmitList(data);
+                // refresh fee submissions list so UI (history) shows the latest entry with teacher name
+                await getAllFeesSubmit();
                 setImagePreview(null);
                 setLoading(false)
             } else {

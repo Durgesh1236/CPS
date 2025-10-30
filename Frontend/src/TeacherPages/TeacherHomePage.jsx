@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaMoneyCheckAlt, FaHistory, FaExclamationCircle, FaUserTie, FaClipboardList } from 'react-icons/fa';
+import { FaMoneyCheckAlt, FaHistory, FaExclamationCircle, FaUserTie, FaClipboardList, FaUserGraduate, FaSearch } from 'react-icons/fa';
 import TeacherLayout from '../Components/TeacherLayout';
 import { useNavigate } from 'react-router-dom';
 import { UserData } from '../context/User';
@@ -67,31 +67,8 @@ const TeacherHomePage = () => {
             <span className="text-xl font-semibold  text-gray-800">Teacher Attendance</span>
             <button className="mt-2 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View Attendance</button>
           </div>
-          {/* Teacher Registration */}
-          {
-            user.role === 'admin' &&
 
-            <div
-              onClick={() => navigate("/teacher-registration")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <FaUserTie className="text-4xl text-orange-500" />
-              <span className="text-xl font-semibold text-gray-800">Teacher Registration</span>
-              <button className="mt-2 px-4 cursor-pointer py-2 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">Register Now</button>
-            </div>
-          }
-          {/* Teacher Data */}
-          {user.role === 'admin' &&
-            <div
-              onClick={() => navigate("/teacher-data")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full border-2 border-blue-300"
-            >
-              <FaUserTie className="text-4xl text-blue-700 animate-pulse" />
-              <span className="text-xl font-bold text-blue-700">Teacher Data</span>
-              <button className="mt-2 px-4 cursor-pointer py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-green-600 transition">View Teacher Data</button>
-            </div>
-          }
-
+          
           {(user.role === 'accountent' || user.role === 'admin') &&
             <div
               onClick={() => navigate("/total-spend")}
@@ -113,7 +90,60 @@ const TeacherHomePage = () => {
               <button className="mt-2 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit</button>
             </div>
           }
+
+          {/* Student Data Input - link to the form page */}
+          {(
+            // user.role === 'accountent' || 
+            user.role === 'admin') &&
+            <div
+              onClick={() => navigate('/student-data-input')}
+              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
+            >
+              <FaUserGraduate className="text-4xl text-teal-600" />
+              <span className="text-xl font-semibold text-gray-800">Student Data Input</span>
+              <button className="mt-2 cursor-pointer px-4 py-2 bg-teal-500 text-white rounded-lg font-bold hover:bg-teal-600 transition">Add Student</button>
+            </div>
+          }
+
+          {/* Student Data Search - added before Teacher Registration */}
+          {(
+            // user.role === 'accountent' || 
+            user.role === 'admin') &&
+            <div
+              onClick={() => navigate('/student-data')}
+              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
+            >
+              <FaSearch className="text-4xl text-indigo-600" />
+              <span className="text-xl font-semibold text-gray-800">Student Data Search</span>
+              <button className="mt-2 cursor-pointer px-4 py-2 bg-indigo-500 text-white rounded-lg font-bold hover:bg-indigo-600 transition">Search Students</button>
+            </div>
+          }
+
+          {/* Teacher Registration */}
+          {
+            user.role === 'admin' &&
+            <div
+              onClick={() => navigate("/teacher-registration")}
+              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
+            >
+              <FaUserTie className="text-4xl text-orange-500" />
+              <span className="text-xl font-semibold text-gray-800">Teacher Registration</span>
+              <button className="mt-2 px-4 cursor-pointer py-2 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">Register Now</button>
+            </div>
+          }
+          {/* Teacher Data */}
+          {user.role === 'admin' &&
+            <div
+              onClick={() => navigate("/teacher-data")}
+              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full border-2 border-blue-300"
+            >
+              <FaUserTie className="text-4xl text-blue-700 animate-pulse" />
+              <span className="text-xl font-bold text-blue-700">Teacher Data</span>
+              <button className="mt-2 px-4 cursor-pointer py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-green-600 transition">View Teacher Data</button>
+            </div>
+          }
         </div>
+
         {/* Important Message - now on next line */}
         <div className="w-full mt-8">
           <div className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 w-full">
