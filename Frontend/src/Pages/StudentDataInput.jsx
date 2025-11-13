@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TeacherLayout from '../Components/TeacherLayout';
 import { useNavigate } from 'react-router-dom';
 import { FaSave, FaSyncAlt, FaCalendarAlt } from 'react-icons/fa';
+import { UserData } from '../context/User';
 
 const classes = Array.from({ length: 12 }, (_, i) => `${i + 1}`);
 const months = ['April','May','June','July','August','September','October','November','December','January','February','March'];
@@ -24,7 +25,7 @@ const StudentDataInput = () => {
     months: [],
     monthDetails: {},
   });
-  const [loading, setLoading] = useState(false);
+  const { loading, StudentDataInput } = UserData();
 
   // toggles a monthKey like '2025-April'
   const toggleMonth = (monthKey) => {
@@ -61,6 +62,7 @@ const StudentDataInput = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    StudentDataInput( form.ledgerId, form.studentName, form.studentClass, form.mobileNo, form.fatherName, form.motherName, form.aadhar, form.address, form.transport, form.monthDetails, setForm)
   }
 
   return (
@@ -199,7 +201,7 @@ const StudentDataInput = () => {
                 </button>
                 <button type="submit" disabled={loading} className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-lg shadow-lg hover:scale-105 transform transition flex items-center gap-2">
                   <FaSave />
-                  {loading ? 'Saving...' : 'Save Student'}
+                  {loading ? 'Saving...' : 'Submit'}
                 </button>
               </div>
             </form>

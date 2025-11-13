@@ -11,6 +11,21 @@ const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in 
 const TeacherHomePage = () => {
   const navigate = useNavigate();
   const { user } = UserData()
+  const { getStudentCount } = UserData();
+  const [totalStudents, setTotalStudents] = React.useState(null);
+
+  React.useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const c = await getStudentCount();
+        if (mounted) setTotalStudents(c);
+      } catch (err) {
+        console.error('Could not fetch student count', err);
+      }
+    })();
+    return () => { mounted = false; }
+  }, [getStudentCount]);
 
   return (
     <TeacherLayout>
@@ -36,6 +51,14 @@ const TeacherHomePage = () => {
         </div>
         {/* Main Boxes */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 w-full">
+          {/* Total Students */}
+          <div
+            className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-default w-full"
+          >
+            <FaUserGraduate className="text-4xl text-teal-600" />
+            <span className="text-xl font-semibold text-gray-800">Total Students</span>
+            <div className="text-3xl font-bold text-indigo-600">{totalStudents == null ? '—' : totalStudents}</div>
+          </div>
           {/* Student Fees Submit */}
           {(user.role === 'accountent' || user.role === 'admin') &&
             <div
@@ -44,7 +67,7 @@ const TeacherHomePage = () => {
             >
               <FaMoneyCheckAlt className="text-4xl text-green-600" />
               <span className="text-xl font-semibold text-gray-800">Student Fees Submit</span>
-              <button className="mt-2 cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View Details</button>
+              <button className="mt-2 cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit Details</button>
             </div>
           }
           {/* Student Fees History */}
@@ -55,7 +78,7 @@ const TeacherHomePage = () => {
             >
               <FaHistory className="text-4xl text-blue-600" />
               <span className="text-xl font-semibold cursor-pointer text-gray-800">Student Fees History</span>
-              <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View History</button>
+              <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold cursor-pointer hover:bg-blue-600 transition">View History</button>
             </div>
           }
           {/* Teacher Attendance */}
@@ -76,7 +99,7 @@ const TeacherHomePage = () => {
             >
               <FaRupeeSign className="text-4xl text-blue-600" />
               <span className="text-xl font-semibold text-gray-800">Spend</span>
-              <button className="mt-2 px-4 cursor-pointer py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit</button>
+              <button className="mt-2 px-4 cursor-pointer py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit Spend</button>
             </div>
           }
 
@@ -87,7 +110,7 @@ const TeacherHomePage = () => {
             >
               <MdOutlineManageHistory className="text-4xl text-blue-600" />
               <span className="text-xl font-semibold text-gray-800">Spend History</span>
-              <button className="mt-2 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit</button>
+              <button className="mt-2 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View History</button>
             </div>
           }
 
@@ -131,6 +154,7 @@ const TeacherHomePage = () => {
               <button className="mt-2 px-4 cursor-pointer py-2 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">Register Now</button>
             </div>
           }
+          
           {/* Teacher Data */}
           {user.role === 'admin' &&
             <div

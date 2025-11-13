@@ -14,7 +14,7 @@ export const FeesSubmit = TryCatch(async(req, res) => {
         backDues, 
         submitFees, 
         dues, 
-        date } = req.body;
+        date, paymentMethod } = req.body;
         const file = req.file;
 
         if(!ledgerId || !studentName || !studentClass || !backDues || !submitFees || !dues || !date || !file) {
@@ -46,7 +46,8 @@ export const FeesSubmit = TryCatch(async(req, res) => {
             receiptImage:{
                 id: cloud.public_id,
                 url: cloud.secure_url,
-            }
+            },
+            paymentMethod
         })
         if(!feeSubmit){
             return res.status(500).json({
@@ -121,12 +122,10 @@ export const addStudent = TryCatch(async (req, res) => {
         return res.status(400).json({ success: false, message: 'ledgerId and studentName are required' });
     }
 
-    // Find or create student by ledgerId
     let student = await Student.findOne({ ledgerId });
     if (!student) {
         student = await Student.create({ ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport });
     } else {
-        // update basic profile fields (non-destructive)
         student.studentName = studentName || student.studentName;
         student.studentClass = studentClass || student.studentClass;
         student.mobileNo = mobileNo || student.mobileNo;
@@ -137,13 +136,10 @@ export const addStudent = TryCatch(async (req, res) => {
         student.transport = typeof transport === 'boolean' ? transport : student.transport;
     }
 
-    // monthDetails expected as object keyed by `${year}-${month}` -> { backdues, paid, dues }
     if (monthDetails && typeof monthDetails === 'object') {
-        // months order same as frontend (academic year Apr..Mar)
         const monthsOrder = ['April','May','June','July','August','September','October','November','December','January','February','March'];
 
-        // normalize incoming payload into numeric values and compute its dues
-        const payloadNormalized = {}; // key -> { year, month, back, paid, dues }
+        const payloadNormalized = {}; 
         for (const key of Object.keys(monthDetails)) {
             const parts = key.split('-');
             const year = Number(parts[0]);
@@ -155,28 +151,22 @@ export const addStudent = TryCatch(async (req, res) => {
             payloadNormalized[key] = { year, month, back, paid, dues };
         }
 
-        // helper to compute previous month key
         const prevKeyFor = (year, month) => {
             const idx = monthsOrder.indexOf(month);
             if (idx === -1) return null;
             if (idx > 0) return `${year}-${monthsOrder[idx - 1]}`;
-            // idx === 0 -> previous is March of previous year
             return `${year - 1}-${monthsOrder[monthsOrder.length - 1]}`;
         }
 
-        // iterate incoming keys and upsert; for each, add previous unpaid dues (from payload or DB) to current backdues
         for (const key of Object.keys(payloadNormalized)) {
             const { year, month, back, paid } = payloadNormalized[key];
 
-            // find previous key and any unpaid dues
             const prevKey = prevKeyFor(year, month);
             let prevDues = 0;
             if (prevKey) {
-                // prefer value from payload if previous month is included in the same request
                 if (payloadNormalized[prevKey]) {
                     prevDues = payloadNormalized[prevKey].dues || 0;
                 } else {
-                    // otherwise look up in DB
                     const existing = student.feeRecords.find(r => r.year === Number(prevKey.split('-')[0]) && r.month === prevKey.split('-').slice(1).join('-'));
                     if (existing) prevDues = existing.dues || 0;
                 }
@@ -188,7 +178,7 @@ export const addStudent = TryCatch(async (req, res) => {
     }
 
     await student.save();
-    return res.status(201).json({ success: true, student, message: 'Student saved successfully' });
+    return res.status(201).json({  student, success: true, message: 'Student saved successfully' });
 })
 
 export const searchStudents = TryCatch(async (req, res) => {
@@ -198,6 +188,16 @@ export const searchStudents = TryCatch(async (req, res) => {
     if (name) query.studentName = { $regex: name, $options: 'i' };
     const students = await Student.find(query).limit(50);
     return res.json({ success: true, students });
+});
+
+export const getAllStudents = TryCatch(async (req, res) => {
+    const students = await Student.find({}).sort({ studentName: 1 });
+    return res.json({ success: true, students });
+});
+
+export const getStudentCount = TryCatch(async (req, res) => {
+    const count = await Student.countDocuments();
+    return res.json({ success: true, count });
 });
 
 export const getStudentByLedger = TryCatch(async (req, res) => {

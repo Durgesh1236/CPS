@@ -13,7 +13,11 @@ export const UserProvider = ({ children }) => {
     const [isAuth, setisAuth] = useState(false);
     const [teacherList, setTeacherList] = useState([]);
     const [FeesSubmitList, setFeeSubmitList] = useState([]);
-    const [spendList, setSpendList] = useState([]);
+    const [selected, setSelected] = useState(null);
+    const [editing, setEditing] = useState([]);
+    const [results, setResults] = useState([]); 
+
+    // axios.defaults.withCredentials = true;
 
     async function registerTeacher(name, email, password, mobileNo, role, setForm) {
         setLoading(true);
@@ -95,7 +99,6 @@ export const UserProvider = ({ children }) => {
             const { data } = await axios.post("/api/user/fee-submit", formData);
             if (data.success) {
                 toast.success(data.message);
-                // refresh fee submissions list so UI (history) shows the latest entry with teacher name
                 await getAllFeesSubmit();
                 setImagePreview(null);
                 setLoading(false)
@@ -141,10 +144,73 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    async function StudentDataInput(ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails, setForm) {
+        setLoading(true);
+        try {
+            const { data } = await axios.post("/api/user/add-student", {ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails });
+            if(data.success){
+            setForm([]);
+            toast.success(data.message);
+            setLoading(false);
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+     async function SaveEdit(ledgerId, year, month, backDues, paid){
+        setLoading(true);
+        try {
+            const payload = { year, month, backdues: Number(backDues || 0), paid: Number(paid || 0) };
+            const { data } = await axios.post(`/api/user/student/${encodeURIComponent(ledgerId)}/fee`, payload);
+            if(data?.success){
+                toast.success(data.message || 'Saved');
+                setLoading(false);
+                return data;
+            } else {
+                toast.error(data?.message || 'Save failed');
+                setLoading(false);
+                return data;
+            }
+        } catch (error) {
+            console.log(error?.message || error);
+            toast.error('Failed to save');
+            setLoading(false);
+            throw error;
+        }
+     }
+
+    async function getStudentCount(){
+        try{
+            const { data } = await axios.get('/api/user/student-count');
+            return data?.count || 0;
+        } catch (err) {
+            console.error('Failed to fetch student count', err);
+            return 0;
+        }
+    }
+
+    async function getAllStudents(){
+        setLoading(true);
+        try{
+            const { data } = await axios.get('/api/user/students');
+            setResults(data.students);
+            setLoading(false);
+        } catch (err) {
+            console.error('Failed to fetch all students', err);
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchUser();
         getAllTeachers();
         getAllFeesSubmit();
+        getAllStudents();
     }, []);
 
     return <UserContext.Provider value={{
@@ -158,7 +224,16 @@ export const UserProvider = ({ children }) => {
         FeesSubmit,
         FeesSubmitList ,
         getAllFeesSubmit,
-        spendForm
+        spendForm,
+        StudentDataInput,
+        selected,
+        setSelected,
+        setEditing,
+        editing,
+        SaveEdit,
+        getStudentCount,
+        results,
+        setResults
     }}>{children}</UserContext.Provider>
 }
 

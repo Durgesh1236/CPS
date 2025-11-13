@@ -21,6 +21,7 @@ export const FeeSubmitPage = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [dues, setDues] = useState('');
   const [file, setFile] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('');
   const {FeesSubmit} = UserData();
 
       const fileChangeHandler = (e) => {
@@ -52,7 +53,7 @@ export const FeeSubmitPage = () => {
     formData.append('dues', dues);
     formData.append('date', date);
     formData.append('file', file); 
-    
+    formData.append('paymentMethod', paymentMethod || '');
     FeesSubmit(formData, setImagePreview);
   };
 
@@ -158,9 +159,22 @@ export const FeeSubmitPage = () => {
                 />
               </div>
             </div>
+            <div className="mt-2">
+              <label className="block text-gray-700 mb-2 font-semibold">Payment Method</label>
+                <select
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg bg-gray-50"
+                  required
+                >
+                  <option value="">Select payment method</option>
+                  <option value="cash">Cash</option>
+                  <option value="account">Account</option>
+                </select>
+            </div>
             <div>
-              <label className=" text-gray-700 mb-2 font-semibold flex items-center gap-2">Upload Fee Receipt Image?</label>
-              <input
+              <label className="text-gray-700 mb-2 font-semibold flex items-center gap-2">Upload Fee Receipt Image?</label>
+                <input
                 type="file"
                 name="image"
                 accept="image/*"

@@ -33,6 +33,9 @@ const feeSubmitSchema = mongoose.Schema({
     receiptImage: {
         id: String,
         url: String,
+    }, paymentMethod: {
+        type: String,
+        required: true,
     }
 }, { timestamps: true });
 feeSubmitSchema.add({
