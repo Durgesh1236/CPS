@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TeacherLayout from '../Components/TeacherLayout';
 import { UserData } from '../context/User';
-import { useEffect } from 'react';
-
 
 const StudentFeeHistory = () => {
   const [search, setSearch] = useState('');
@@ -17,9 +15,16 @@ const StudentFeeHistory = () => {
   };
 
   const [filterDate, setFilterDate] = useState(getTodayInputDate());
-  // useEffect(() => {
-  //   getAllFeesSubmit();
-  // }, [])
+
+  const handleShowAll = async () => {
+    try {
+      await getAllFeesSubmit();
+      setFilterDate("");
+      setSearch('');
+    } catch (err) {
+      console.error('Failed to load all fee submissions', err);
+    }
+  }
 
   const safeList = Array.isArray(FeesSubmitList) ? FeesSubmitList : [];
   const filteredHistory = safeList.filter(item => {
@@ -65,12 +70,20 @@ const StudentFeeHistory = () => {
             onChange={e => setFilterDate(e.target.value)}
             className="w-full md:w-1/3 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg"
           />
-          <button
-            className="bg-gray-500 cursor-pointer text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-600 transition w-full md:w-auto"
-            onClick={() => navigate('/teacher-home')}
-          >
-            Home
-          </button>
+          <div className="flex gap-2 w-full md:w-auto">
+            {/* <button
+              className="bg-blue-600 cursor-pointer text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition"
+              onClick={handleShowAll}
+            >
+              Show All
+            </button> */}
+            <button
+              className="bg-gray-500 cursor-pointer text-white py-2 px-4 rounded-lg font-semibold hover:bg-gray-600 transition"
+              onClick={() => navigate('/teacher-home')}
+            >
+              Home
+            </button>
+          </div>
         </div>
         {/* Total for selected date */}
         <div className="w-full max-w-2xl mb-6">
@@ -95,10 +108,11 @@ const StudentFeeHistory = () => {
                 <th className="py-2 px-4 text-left">Class</th>
                 <th className="py-2 px-4 text-left">Ledger ID</th>
                 <th className="py-2 px-4 text-left">Date</th>
-                <th className="py-2 px-4 text-left">Teacher</th>
+                <th className="py-2 px-4 text-left">Payment Method</th>
                 <th className="py-2 px-4 text-left">Back Dues</th>
                 <th className="py-2 px-4 text-left">Submit Fees</th>
                 <th className="py-2 px-4 text-left">Dues</th>
+                <th className="py-2 px-4 text-left">Teacher</th>
               </tr>
             </thead>
             <tbody>
@@ -117,15 +131,16 @@ const StudentFeeHistory = () => {
                     <td className="py-2 px-4 text-gray-500">{item.studentClass}</td>
                     <td className="py-2 px-4 text-gray-500">{item.ledgerId}</td>
                     <td className="py-2 px-4 text-gray-500">{item.date}</td>
-                    <td className="py-2 px-4 text-gray-500">{item.submittedBy?.name || '—'}</td>
+                    <td className="py-2 px-4 text-gray-500">{item.paymentMethod || '—'}</td>
                     <td className="py-2 px-4 text-blue-700 font-semibold">₹{item.backDues}</td>
                     <td className="py-2 px-4 text-green-700 font-semibold">₹{item.submitFees}</td>
                     <td className={`py-2 px-4 font-semibold ${item.dues === 0 ? 'text-green-800' : 'text-red-700'}`}>₹{item.dues}</td>
+                   <td className="py-2 px-4 text-gray-500">{item.submittedBy?.name || '—'}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8" className="py-12 text-center">
+                  <td colSpan="10" className="py-12 text-center">
                     <span className="text-lg font-semibold text-gray-500">Data not found</span>
                   </td>
                 </tr>
