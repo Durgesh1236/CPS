@@ -222,3 +222,114 @@ export const updateFeeRecord = TryCatch(async (req, res) => {
     await student.save();
     return res.json({ success: true, student, message: 'Fee record updated' });
 });
+
+export const deleteFeeSubmit = TryCatch(async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+        return res.status(400).json({
+            success: false,
+            message: "ID is required"
+        });
+    }
+
+    const feeSubmit = await FeeSubmit.findByIdAndDelete(id);
+
+    if (!feeSubmit) {
+        return res.status(404).json({
+            success: false,
+            message: "Fee submit record not found"
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        message: "Fee submit record deleted successfully"
+    });
+});
+
+export const editStudentProfile =  TryCatch(async (req, res) => {
+    const { ledgerId } = req.params;
+    if(!ledgerId) {
+        return res.status(400).json({
+            success: false,
+            message: "Ledger ID is required"
+        })
+    }
+    const { studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport } = req.body;
+    const student = await Student.findOne({ledgerId});
+    if(!student) {
+        return res.status(404).json({
+            success: false,
+            message: "Student not found"
+        })
+    }
+    student.studentName = studentName || student.studentName;
+    student.studentClass = studentClass || student.studentClass;
+    student.mobileNo = mobileNo || student.mobileNo;
+    student.fatherName = fatherName || student.fatherName;
+    student.motherName = motherName || student.motherName;
+    student.aadhar = aadhar || student.aadhar;
+    student.address = address || student.address;
+    student.transport = typeof transport === 'boolean' ? transport : student.transport;
+
+    await student.save();
+    return res.status(200).json({
+        success: true,
+        message: "Student details updated successfully",
+    })
+})
+
+export const editStudentFeeRecord = TryCatch(async(req, res) => {
+    const { id } = req.params;
+    const { studentName, studentClass, date } = req.body;
+    if(!id) {
+        return res.status(400).json({
+            success: false,
+            message: "Ledger Id is wrong contact with Durgesh"
+        })
+    }
+
+    const studentFee = await FeeSubmit.findById(id);
+    if(!studentFee) {
+        return res.status(404).json({
+            success: false,
+            message: "Student Fee Record not found"
+        })
+    }
+     studentFee.studentName = studentName || studentFee.studentName;
+     studentFee.studentClass = studentClass || studentFee.studentClass;
+     studentFee.date = date || studentFee.date;
+    await studentFee.save();
+    return res.status(200).json({
+        success: true,
+        message: "Student Fee Record updated successfully"
+    }) 
+})
+
+export const SpendHistoryEdit = TryCatch(async (req, res) => {
+    const { id } = req.params;
+    const { name, date, totalReceived } = req.body;
+    
+    if(!id) {
+        return res.status(400).json({
+            success: false,
+            message: "ID is required"
+        })
+    }
+    const spendRecord = await SpendModel.findById(id);
+    if(!spendRecord) {
+        return res.status(400).json({
+            success: false,
+            message: "Spend record not found"
+        })
+    }
+    spendRecord.name = name || spendRecord.name;
+    spendRecord.date = date || spendRecord.date;
+    spendRecord.totalReceived = totalReceived || spendRecord.totalReceived;
+    await spendRecord.save();
+    return res.status(200).json({
+        success: true,
+        message: "Spend record updated successfully"
+    })
+})

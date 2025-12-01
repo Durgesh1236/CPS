@@ -88,3 +88,7 @@ export const getAllTeachers = TryCatch(async(req, res) => {
     const user = await User.find();
     return res.json(user);
 })
+
+export const deleteTeacher = TryCatch(async(req, res) => {
+    const {id} = req.params;
+})

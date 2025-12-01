@@ -16,9 +16,8 @@ export const UserProvider = ({ children }) => {
     const [selected, setSelected] = useState(null);
     const [editing, setEditing] = useState([]);
     const [results, setResults] = useState([]); 
-
+    const [spendlist, setSpendList] = useState([]);
     // axios.defaults.withCredentials = true;
-
     async function registerTeacher(name, email, password, mobileNo, role, setForm) {
         setLoading(true);
         try {
@@ -170,6 +169,7 @@ export const UserProvider = ({ children }) => {
             if(data?.success){
                 toast.success(data.message || 'Saved');
                 setLoading(false);
+                setSelected(data.student || null)
                 return data;
             } else {
                 toast.error(data?.message || 'Save failed');
@@ -206,11 +206,101 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    async function deleteStudentFee(ledgerId) {
+        setLoading(true);
+        try {
+            const { data } = await axios.delete(`/api/user/fee-submit/${ledgerId}`);
+            if(data.success){
+                await getAllFeesSubmit();
+                toast.success(data.message);
+                setLoading(false);
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log(error.message);
+            setLoading(false);
+        }
+    }
+
+    async function studentEditDetail(ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport) {
+        console.log(ledgerId);
+        
+        setLoading(true);
+        try {
+            const { data } = await axios.post(`/api/user/student-profile-edit/${ledgerId}`, { studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport });
+            if(data.success){
+                toast.success(data.message);
+                setLoading(false);
+                getAllStudents();
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+    async function editFeeDetails(id, studentName, studentClass, date) {
+        setLoading(true);
+    
+        try {
+            const { data } = await axios.post(`/api/user/student-fee-edit/${id}`, { studentName, studentClass, date });
+            if(data.success){
+                toast.success(data.message);
+                setLoading(false);
+                getAllFeesSubmit();
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    }
+
+    async function spendRecord() {
+        setLoading(true);
+        try {
+            const { data } = await axios.get("/api/user/get-all-spend");
+                setSpendList(data.reverse());
+                setLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        } 
+    }
+    
+    async function editSpendRecord(id, name, date, totalReceived) {
+        setLoading(true);
+        console.log(id, name, date, totalReceived);
+        
+        try {
+            const { data } = await axios.post(`/api/user/edit-spend-record/${id}`, {name, date, totalReceived});
+            if(data.success){
+                await spendRecord();
+                toast.success(data.message);
+                setLoading(false);
+            } else {
+                toast.error(data.message);
+                setLoading(false)
+            }
+        } catch (error) {
+            console.log(error.message);
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchUser();
         getAllTeachers();
         getAllFeesSubmit();
         getAllStudents();
+        spendRecord();
     }, []);
 
     return <UserContext.Provider value={{
@@ -233,7 +323,14 @@ export const UserProvider = ({ children }) => {
         SaveEdit,
         getStudentCount,
         results,
-        setResults
+        setResults,
+        deleteStudentFee,
+        editFeeDetails,
+        studentEditDetail,
+        spendlist,
+        editSpendRecord,
+        setSpendList,
+        spendRecord
     }}>{children}</UserContext.Provider>
 }
 

@@ -20,31 +20,11 @@ const prettyDate = (iso) => {
 }
 
 const SpendHistory = () => {
-  const [list, setList] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  
   const [filterDate, setFilterDate] = useState('');
-  const { user } = UserData();
-
-  const fetchList = async () => {
-    setLoading(true); setError(null);
-    try {
-      const res = await fetch('/api/user/get-all-spend');
-      if (!res.ok) throw new Error('Failed to load records');
-      const data = await res.json();
-      setList(Array.isArray(data) ? data.reverse() : []);
-    } catch (err) {
-      setError(err.message || 'Error fetching spends');
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchList();
-  }, []);
-
-  const filtered = list.filter(item => {
+  const { user, spendlist, loading, spendRecord, setSpendList, editSpendRecord } = UserData();
+   
+  const filtered = spendlist.filter(item => {
     if (!filterDate) return true;
     const itemDate = toInputDate(item.date);
     return itemDate === filterDate;
@@ -63,7 +43,7 @@ const SpendHistory = () => {
               <div className="mt-4 flex flex-wrap gap-3 items-center">
                 <input type="date" value={filterDate} onChange={e => setFilterDate(e.target.value)} className="p-2 rounded bg-white text-sm" />
                 <button onClick={() => setFilterDate('')} className="px-3 py-2 bg-white/20 border border-white/30 rounded text-sm">Clear</button>
-                <button onClick={fetchList} className="px-3 py-2 bg-white rounded text-sm font-medium">Refresh</button>
+                <button onClick={spendRecord} className="px-3 py-2 bg-white rounded text-sm font-medium">Refresh</button>
               </div>
             </div>
             <div className="bg-white rounded-2xl shadow p-4 flex flex-col justify-center">
@@ -83,20 +63,24 @@ const SpendHistory = () => {
                     <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Received (INR)</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Submitted By</th>
+                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Action</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y">
                   {loading && (
                     <tr><td colSpan={5} className="p-6 text-center text-gray-500">Loading...</td></tr>
                   )}
-                  {!loading && error && (
-                    <tr><td colSpan={5} className="p-6 text-center text-red-600">{error}</td></tr>
-                  )}
-                  {!loading && !error && filtered.length === 0 && (
+                  {!loading && filtered.length === 0 && (
                     <tr><td colSpan={5} className="p-6 text-center text-gray-500">No records found.</td></tr>
                   )}
-                  {!loading && !error && filtered.map((it) => (
-                    <SpendRow key={it._id} it={it} user={user} onUpdate={(updated) => setList(prev => prev.map(p => p._id === updated._id ? updated : p))} />
+                  {!loading && filtered.map((it) => (
+                    <SpendRow
+                      key={it._id}
+                      it={it}
+                      user={user}
+                      onUpdate={(updated) => setSpendList(prev => prev.map(p => p._id === updated._id ? updated : p))}
+                      editSpendRecord={editSpendRecord}
+                    />
                   ))}
                 </tbody>
               </table>
@@ -108,7 +92,14 @@ const SpendHistory = () => {
   )
 }
 
-const SpendRow = ({ it, user, onUpdate }) => {
+
+const SpendRow = ({ it, user, onUpdate, editSpendRecord }) => {
+  const [editing, setEditing] = useState(false);
+  const [editData, setEditData] = useState({
+    name: it.name || '',
+    date: toInputDate(it.date),
+    totalReceived: it.totalReceived || 0,
+  });
   const [updating, setUpdating] = useState(false);
 
   const markReceived = async () => {
@@ -121,34 +112,100 @@ const SpendRow = ({ it, user, onUpdate }) => {
       if (data && data.spend) onUpdate(data.spend);
     } catch (err) {
       console.error(err);
-      // optionally show error
     } finally {
       setUpdating(false);
     }
-  }
+  };
+
+  const handleEdit = () => setEditing(true);
+  const handleCancel = () => {
+    setEditData({
+      name: it.name || '',
+      date: toInputDate(it.date),
+      totalReceived: it.totalReceived || 0,
+    });
+    setEditing(false);
+  };
+  const handleSave = async () => {
+    setUpdating(true);
+    try {
+      // Use context API function
+      const updated = await editSpendRecord(it._id,
+         editData.name,
+         editData.date,
+        editData.totalReceived
+      );
+      if (updated) onUpdate(updated);
+      setEditing(false);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUpdating(false);
+    }
+  };
 
   return (
     <tr className="hover:bg-gray-50">
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{it.name || '-'}</td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{prettyDate(it.date)}</td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-gray-800">{formatCurrency(it.totalReceived || 0)}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+        {editing ? (
+          <input
+            type="text"
+            value={editData.name}
+            onChange={e => setEditData(ed => ({ ...ed, name: e.target.value }))}
+            className="border rounded px-2 py-1 text-sm w-28"
+          />
+        ) : (
+          it.name || '-'
+        )}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+        {editing ? (
+          <input
+            type="date"
+            value={editData.date}
+            onChange={e => setEditData(ed => ({ ...ed, date: e.target.value }))}
+            className="border rounded px-2 py-1 text-sm"
+          />
+        ) : (
+          prettyDate(it.date)
+        )}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-gray-800">
+        {editing ? (
+          <input
+            type="number"
+            value={editData.totalReceived}
+            onChange={e => setEditData(ed => ({ ...ed, totalReceived: e.target.value }))}
+            className="border rounded px-2 py-1 text-sm w-24 text-right"
+          />
+        ) : (
+          formatCurrency(it.totalReceived || 0)
+        )}
+      </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm">
-
         {it.status === 'pending' ? (
           <span className="inline-flex items-center px-2 py-1 rounded text-sm bg-yellow-100 text-yellow-800">Pending</span>
         ) : (
           <span className="inline-flex items-center px-2 py-1 rounded text-sm bg-green-100 text-green-800">Received</span>
         )}
-        {it.status === 'pending' && (
-          // Only admins can mark a spend as received. Accountants and others see status only.
-          user?.role === 'admin' ? (
-            <button onClick={markReceived} disabled={updating} className="ml-3 px-2 py-1 text-sm bg-blue-600 text-white rounded">{updating ? 'Updating...' : 'Receive'}</button>
-          ) : null
+        {it.status === 'pending' && user?.role === 'admin' && (
+          <button onClick={markReceived} disabled={updating} className="ml-3 px-2 py-1 text-sm bg-blue-600 text-white rounded">{updating ? 'Updating...' : 'Receive'}</button>
         )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{it.submittedBy?.name || it.UserId || '-'}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+        {!editing && (
+          <button onClick={handleEdit} className="px-2 py-1 text-sm bg-blue-500 cursor-pointer text-white rounded">Edit</button>
+        )}
+        {editing && (
+          <>
+            <button onClick={handleSave} disabled={updating} className="px-2 py-1 text-sm cursor-pointer bg-green-600 text-white rounded">{updating ? 'Saving...' : 'Save'}</button>
+            <button onClick={handleCancel} disabled={updating} className="ml-2 px-2 py-1 text-sm bg-red-500 cursor-pointer text-white rounded">Cancel</button>
+          </>
+        )}
+      </td>
     </tr>
-  )
-}
+  );
+};
 
 export default SpendHistory;

@@ -12,8 +12,7 @@ const SpendSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: true
-    }
-    ,
+    },
     status: {
         type: String,
         enum: ['pending', 'received'],
@@ -22,8 +21,7 @@ const SpendSchema = new mongoose.Schema({
     UserId: {
         type: String,
         required: true
-    }
-    ,
+    },
     submittedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
