@@ -295,6 +295,24 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    async function deleteSpendRecord(id) {
+        setLoading(true);
+        try {
+            const { data } = await axios.delete(`/api/user/delete-spend-record/${id}`);
+            if(data.success) {
+                await spendRecord();
+                toast.success(data.message);
+                setLoading(false);
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log(error.message);
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchUser();
         getAllTeachers();
@@ -330,7 +348,8 @@ export const UserProvider = ({ children }) => {
         spendlist,
         editSpendRecord,
         setSpendList,
-        spendRecord
+        spendRecord,
+        deleteSpendRecord
     }}>{children}</UserContext.Provider>
 }
 

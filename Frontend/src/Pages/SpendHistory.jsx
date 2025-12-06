@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { UserData } from '../context/User';
 import TeacherLayout from '../Components/TeacherLayout';
+import { MdDeleteForever } from "react-icons/md";
 
 const formatCurrency = (v) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(v);
 
@@ -22,7 +23,7 @@ const prettyDate = (iso) => {
 const SpendHistory = () => {
   
   const [filterDate, setFilterDate] = useState('');
-  const { user, spendlist, loading, spendRecord, setSpendList, editSpendRecord } = UserData();
+  const { user, spendlist, loading, spendRecord, setSpendList, editSpendRecord, deleteSpendRecord } = UserData();
    
   const filtered = spendlist.filter(item => {
     if (!filterDate) return true;
@@ -64,6 +65,7 @@ const SpendHistory = () => {
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Submitted By</th>
                     <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Action</th>
+                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Delete</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y">
@@ -80,6 +82,7 @@ const SpendHistory = () => {
                       user={user}
                       onUpdate={(updated) => setSpendList(prev => prev.map(p => p._id === updated._id ? updated : p))}
                       editSpendRecord={editSpendRecord}
+                      deleteSpendRecord={deleteSpendRecord}
                     />
                   ))}
                 </tbody>
@@ -93,7 +96,7 @@ const SpendHistory = () => {
 }
 
 
-const SpendRow = ({ it, user, onUpdate, editSpendRecord }) => {
+const SpendRow = ({ it, user, onUpdate, editSpendRecord, deleteSpendRecord }) => {
   const [editing, setEditing] = useState(false);
   const [editData, setEditData] = useState({
     name: it.name || '',
@@ -203,6 +206,14 @@ const SpendRow = ({ it, user, onUpdate, editSpendRecord }) => {
             <button onClick={handleCancel} disabled={updating} className="ml-2 px-2 py-1 text-sm bg-red-500 cursor-pointer text-white rounded">Cancel</button>
           </>
         )}
+      </td>
+
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+        <button
+          onClick={() => deleteSpendRecord(it._id)}
+          className="ml-4 text-red-600 hover:text-red-800 text-3xl cursor-pointer flex items-center justify-center"
+          title="Delete Record"
+        ><MdDeleteForever /></button>
       </td>
     </tr>
   );

@@ -9,7 +9,8 @@ import {
     getStudentByLedger, updateFeeRecord, 
     getStudentCount, deleteFeeSubmit, 
     editStudentFeeRecord, editStudentProfile, 
-    SpendHistoryEdit } from "../controllars/FeesSubmitControllars.js";
+    SpendHistoryEdit, 
+    deleteSpendRecord} from "../controllars/FeesSubmitControllars.js";
 import uploadFile from "../middlewares/multer.js";
 
 const router = express.Router();
@@ -34,5 +35,6 @@ router.delete('/fee-submit/:id', isAuth, deleteFeeSubmit);
 router.post('/student-profile-edit/:ledgerId', isAuth, editStudentProfile);
 router.post('/student-fee-edit/:id', isAuth, editStudentFeeRecord);
 router.post('/edit-spend-record/:id', isAuth, SpendHistoryEdit);
+router.delete('/delete-spend-record/:id', isAuth, deleteSpendRecord);
 
 export default router;

@@ -333,3 +333,27 @@ export const SpendHistoryEdit = TryCatch(async (req, res) => {
         message: "Spend record updated successfully"
     })
 })
+
+export const deleteSpendRecord = TryCatch(async(req, res) => {
+    const { id } = req.params;
+
+    if(!id) {
+        return res.status(400).json({
+            success: false,
+            message: "ID is required"
+        })
+    }
+
+    const SpendRecord = await SpendModel.findByIdAndDelete(id);
+    if(!SpendRecord){
+        return res.status(404).json({
+            success: false,
+            message: "Spend record not found"
+        })
+    }
+     
+    return res.status(200).json({
+        success: true,
+        message: "Spend record deleted successfully"
+    })
+})

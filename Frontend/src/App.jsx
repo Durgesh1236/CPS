@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginPage from './Pages/LoginPage'
 import StudentHome from './Pages/StudentHome'
 import StuAttendence from './Pages/StuAttendence'
+import TakeStudentAttendence from './Pages/TakeStudentAttendence'
 import { FeeSubmitPage } from './AccountentPages/FeeSubmitPage'
 import StudentFeeHistory from './AccountentPages/StudentFeeHistory'
 import TeacherHomePage from './TeacherPages/TeacherHomePage'
@@ -51,6 +52,7 @@ const App = () => {
             <Route path='/spend-history' element={isAuth ? <SpendHistory/> : <TeacherLoginPage/>}/>
             <Route path='/student-data-input' element={isAuth ? <StudentDataInput/> : <TeacherLoginPage/>}/>
             <Route path='/student-data' element={isAuth ? <StudentDataSearch/> : <TeacherLoginPage/>}/> 
+            <Route path='/student-attendence' element={isAuth ? <TakeStudentAttendence/> : <TeacherLoginPage/>}/>
           </Routes>
         </BrowserRouter>
       }

@@ -114,6 +114,16 @@ const TeacherHomePage = () => {
             </div>
           }
 
+           {/* Student Attendance */}
+          <div
+            onClick={() => navigate("/student-attendence")}
+            className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
+          >
+            <FaClipboardList className="text-4xl text-green-600" />
+            <span className="text-xl font-semibold text-gray-800">Student Attendance</span>
+            <button className="mt-2 px-4 py-2 cursor-pointer bg-green-500 text-white rounded-lg font-bold hover:bg-green-600 transition">Take Attendance</button>
+          </div>
+
           {/* Student Data Input - link to the form page */}
           {(
             // user.role === 'accountent' || 
@@ -166,6 +176,7 @@ const TeacherHomePage = () => {
               <button className="mt-2 px-4 cursor-pointer py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-green-600 transition">View Teacher Data</button>
             </div>
           }
+          
         </div>
 
         {/* Important Message - now on next line */}

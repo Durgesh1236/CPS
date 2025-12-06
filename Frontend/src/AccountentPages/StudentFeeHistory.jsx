@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TeacherLayout from '../Components/TeacherLayout';
 import { UserData } from '../context/User';
@@ -81,7 +81,6 @@ const StudentFeeHistory = () => {
   return (
     <TeacherLayout>
       <div className="min-h-screen bg-gray-50 p-4 flex flex-col items-start w-full pt-20">
-
         <h2 className="text-3xl font-bold text-blue-700 mb-6 w-full text-left">
           Student Fee History
         </h2>
@@ -145,8 +144,8 @@ const StudentFeeHistory = () => {
                 <th className="py-2 px-4 text-left">Dues</th>
                 <th className="py-2 px-4 text-left">Teacher</th>
                 <th className="py-2 px-4 text-left">Actions</th>
-                {user.role === 'admin' && 
-                <th className="py-2 px-4 text-left">Delete</th>
+                {user.role === 'admin' &&
+                  <th className="py-2 px-4 text-left">Delete</th>
                 }
               </tr>
             </thead>
@@ -252,12 +251,12 @@ const StudentFeeHistory = () => {
                     </td>
 
                     {user.role === 'admin' &&
-                    <td className="py-2 px-4">
-                      <MdDelete
-                        className="text-2xl text-red-500 cursor-pointer"
-                        onClick={() => deleteStudentFee(item._id)}
-                      />
-                    </td>
+                      <td className="py-2 px-4">
+                        <MdDelete
+                          className="text-2xl text-red-500 cursor-pointer"
+                          onClick={() => deleteStudentFee(item._id)}
+                        />
+                      </td>
                     }
                   </tr>
                 ))
@@ -292,7 +291,6 @@ const StudentFeeHistory = () => {
             </div>
           </div>
         )}
-
       </div>
     </TeacherLayout>
   );
