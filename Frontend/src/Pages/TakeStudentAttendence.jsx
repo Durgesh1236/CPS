@@ -67,7 +67,6 @@ const TakeStudentAttendence = () => {
         setSubmitted(false);
     }, [selectedClass]);
 
-    // Reset topic if subject changes
     useEffect(() => {
         setSelectedTopic('');
     }, [selectedSubject]);

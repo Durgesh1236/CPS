@@ -22,6 +22,10 @@ const SpendSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    paymentMethod: {
+        type: String,
+        required: true
+    },
     submittedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

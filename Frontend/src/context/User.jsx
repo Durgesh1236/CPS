@@ -123,12 +123,13 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function spendForm( name, date, totalReceived,setName, setTotal, setDate ) {
+    async function spendForm( name, date, totalReceived, paymentMethod ,setName, setTotal, setDate ) {
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/user/spend-record", { name, date, totalReceived });
+            const { data } = await axios.post("/api/user/spend-record", { name, date, totalReceived, paymentMethod });
             if(data.success) {
                 toast.success(data.message);
+                await spendRecord();
                 setName('');
                 setTotal();
                 setDate(new Date().toISOString().slice(0,10));
@@ -275,12 +276,10 @@ export const UserProvider = ({ children }) => {
         } 
     }
     
-    async function editSpendRecord(id, name, date, totalReceived) {
+    async function editSpendRecord(id, name, date, totalReceived, paymentMethod) {
         setLoading(true);
-        console.log(id, name, date, totalReceived);
-        
         try {
-            const { data } = await axios.post(`/api/user/edit-spend-record/${id}`, {name, date, totalReceived});
+            const { data } = await axios.post(`/api/user/edit-spend-record/${id}`, {name, date, totalReceived, paymentMethod});
             if(data.success){
                 await spendRecord();
                 toast.success(data.message);
@@ -303,6 +302,42 @@ export const UserProvider = ({ children }) => {
                 await spendRecord();
                 toast.success(data.message);
                 setLoading(false);
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log(error.message);
+            setLoading(false);
+        }
+    }
+
+    async function deleteTeacher(id) {
+        setLoading(true);
+        try {
+            const { data } = await axios.delete(`/api/user/delete-teacher-data/${id}`);
+            if(data.success){
+                toast.success(data.message);
+                await getAllTeachers();
+                setLoading(false);
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            setLoading(false);
+            console.log(error);
+        }
+    }
+
+    async function editTeacherProfile(id, name, email, mobileNo, role) {
+        setLoading(true);
+        try {
+            const { data } = await axios.post(`/api/user/edit-teacher-profile/${id}`, { name, email, mobileNo, role });
+            if(data.success){
+                toast.success(data.message);
+                await getAllTeachers();
+                setLoading(false);                
             } else {
                 toast.error(data.message);
                 setLoading(false);
@@ -349,7 +384,9 @@ export const UserProvider = ({ children }) => {
         editSpendRecord,
         setSpendList,
         spendRecord,
-        deleteSpendRecord
+        deleteSpendRecord,
+        deleteTeacher,
+        editTeacherProfile
     }}>{children}</UserContext.Provider>
 }
 

@@ -63,6 +63,7 @@ const SpendHistory = () => {
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
                     <th className="px-6 py-3 text-right text-sm font-semibold text-gray-700">Received (INR)</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Payment Method</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Submitted By</th>
                     <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Action</th>
                     <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Delete</th>
@@ -102,6 +103,7 @@ const SpendRow = ({ it, user, onUpdate, editSpendRecord, deleteSpendRecord }) =>
     name: it.name || '',
     date: toInputDate(it.date),
     totalReceived: it.totalReceived || 0,
+    paymentMethod: it.paymentMethod || 'Cash',
   });
   const [updating, setUpdating] = useState(false);
 
@@ -126,6 +128,7 @@ const SpendRow = ({ it, user, onUpdate, editSpendRecord, deleteSpendRecord }) =>
       name: it.name || '',
       date: toInputDate(it.date),
       totalReceived: it.totalReceived || 0,
+      paymentMethod: it.paymentMethod || 'Cash',
     });
     setEditing(false);
   };
@@ -133,10 +136,12 @@ const SpendRow = ({ it, user, onUpdate, editSpendRecord, deleteSpendRecord }) =>
     setUpdating(true);
     try {
       // Use context API function
-      const updated = await editSpendRecord(it._id,
-         editData.name,
-         editData.date,
-        editData.totalReceived
+      const updated = await editSpendRecord(
+        it._id,
+        editData.name,
+        editData.date,
+        editData.totalReceived,
+        editData.paymentMethod
       );
       if (updated) onUpdate(updated);
       setEditing(false);
@@ -195,6 +200,21 @@ const SpendRow = ({ it, user, onUpdate, editSpendRecord, deleteSpendRecord }) =>
           <button onClick={markReceived} disabled={updating} className="ml-3 px-2 py-1 text-sm bg-blue-600 text-white rounded">{updating ? 'Updating...' : 'Receive'}</button>
         )}
       </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+        {editing ? (
+          <select
+            value={editData.paymentMethod}
+            onChange={e => setEditData(ed => ({ ...ed, paymentMethod: e.target.value }))}
+            className="border rounded px-2 py-1 text-sm"
+          >
+            <option value="">--Method--</option>
+            <option value="Cash">Cash</option>
+            <option value="Account">Account</option>
+          </select>
+        ) : (
+          it.paymentMethod || '-'
+        )}
+      </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{it.submittedBy?.name || it.UserId || '-'}</td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
         {!editing && (
@@ -203,7 +223,9 @@ const SpendRow = ({ it, user, onUpdate, editSpendRecord, deleteSpendRecord }) =>
         {editing && (
           <>
             <button onClick={handleSave} disabled={updating} className="px-2 py-1 text-sm cursor-pointer bg-green-600 text-white rounded">{updating ? 'Saving...' : 'Save'}</button>
+            { user.role === 'admin' &&
             <button onClick={handleCancel} disabled={updating} className="ml-2 px-2 py-1 text-sm bg-red-500 cursor-pointer text-white rounded">Cancel</button>
+               }
           </>
         )}
       </td>

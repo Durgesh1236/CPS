@@ -68,8 +68,8 @@ export const getAllFeesSubmit = TryCatch(async(req, res) => {
 })
 
 export const totalSpend = TryCatch(async(req, res) => {
-    const { name, date, totalReceived,  } = req.body;
-    if(!name || !date || !totalReceived) {
+    const { name, date, totalReceived, paymentMethod } = req.body;
+    if(!name || !date || !totalReceived || !paymentMethod) {
         return res.status(400).json({
             success: false,
             message: "All fields are required"
@@ -80,6 +80,7 @@ export const totalSpend = TryCatch(async(req, res) => {
         date,
         totalReceived,
         status: 'pending',
+        paymentMethod,
         UserId: req.user?._id ? String(req.user._id) : undefined,
         submittedBy: req.user?._id || undefined,
     })
@@ -309,7 +310,7 @@ export const editStudentFeeRecord = TryCatch(async(req, res) => {
 
 export const SpendHistoryEdit = TryCatch(async (req, res) => {
     const { id } = req.params;
-    const { name, date, totalReceived } = req.body;
+    const { name, date, totalReceived, paymentMethod } = req.body;
     
     if(!id) {
         return res.status(400).json({
@@ -327,6 +328,7 @@ export const SpendHistoryEdit = TryCatch(async (req, res) => {
     spendRecord.name = name || spendRecord.name;
     spendRecord.date = date || spendRecord.date;
     spendRecord.totalReceived = totalReceived || spendRecord.totalReceived;
+    spendRecord.paymentMethod = paymentMethod || spendRecord.paymentMethod;
     await spendRecord.save();
     return res.status(200).json({
         success: true,

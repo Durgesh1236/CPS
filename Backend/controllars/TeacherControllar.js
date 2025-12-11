@@ -1,3 +1,4 @@
+// import { use } from "react";
 import { User } from "../models/TeacherModel.js";
 import generateToken from "../utils/generateToken.js";
 import TryCatch from "../utils/TryCatch.js";
@@ -89,6 +90,44 @@ export const getAllTeachers = TryCatch(async(req, res) => {
     return res.json(user);
 })
 
+export const editTeacherProfile = TryCatch(async(req, res) => {
+    const { id } = req.params;
+    const { name, email, mobileNo, role } = req.body;
+    const user = await User.findById(id);
+    if(!user){
+        return res.status(404).json({
+            success: false,
+            message: "Teacher not found"
+        })
+    }
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.mobileNo = mobileNo || user.mobileNo;
+    user.role = role || user.role;
+    await user.save();
+    return res.status(200).json({
+        success: true,
+        message: "Teacher profile updated successfully"
+    })
+})
+
 export const deleteTeacher = TryCatch(async(req, res) => {
     const {id} = req.params;
+    if(!id){
+        return res.status(400).json({
+            success: false,
+            message: "Teacher is not found"
+        })
+    }
+    const user = await User.findByIdAndDelete(id);
+    if(!user){
+        return res.status(404).json({
+            success: false,
+            message: "Teacher is not found"
+        })
+    }
+    return res.status(200).json({
+        success: true,
+        message: "Teacher deleted successfully"
+    })
 })
