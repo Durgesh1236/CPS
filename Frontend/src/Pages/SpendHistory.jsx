@@ -103,7 +103,7 @@ const SpendRow = ({ it, user, onUpdate, editSpendRecord, deleteSpendRecord }) =>
     name: it.name || '',
     date: toInputDate(it.date),
     totalReceived: it.totalReceived || 0,
-    paymentMethod: it.paymentMethod || 'Cash',
+    paymentMethod: it.paymentMethod || '',
   });
   const [updating, setUpdating] = useState(false);
 
