@@ -348,6 +348,24 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    async function TeacherImage(id, formData) {
+        setLoading(true);
+        try {
+            const { data } = await axios.post(`/api/user/teacher-profile-pic-upload/${id}`, formData);
+            if(data.success){
+                toast.success(data.message);
+                setLoading(false);
+                await fetchUser();
+            } else {
+                setLoading(false);
+                toast.error(data.message);
+            }
+        } catch (error) {
+            console.log(error.message);
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchUser();
         getAllTeachers();
@@ -386,7 +404,8 @@ export const UserProvider = ({ children }) => {
         spendRecord,
         deleteSpendRecord,
         deleteTeacher,
-        editTeacherProfile
+        editTeacherProfile,
+        TeacherImage
     }}>{children}</UserContext.Provider>
 }
 

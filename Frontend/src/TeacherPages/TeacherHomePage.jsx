@@ -34,7 +34,15 @@ const TeacherHomePage = () => {
         <div className="w-full mb-8">
           <div className="bg-white rounded-2xl shadow-lg flex flex-col md:flex-row items-center gap-6 p-6 md:p-8 w-full">
             <div className="flex items-center gap-4">
+              { user.thumbnails ? (
+                <img
+                  src={user.thumbnails.url}
+                  alt="Teacher Profile"
+                  className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-4 border-blue-300"
+                  />
+              ):
               <FaUserTie className="text-5xl text-blue-600" />
+              }
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Welcome,</h2>
                 <span className="text-xl md:text-2xl font-semibold text-yellow-600">{user.name}</span>

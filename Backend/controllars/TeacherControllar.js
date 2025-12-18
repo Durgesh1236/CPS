@@ -1,8 +1,10 @@
-// import { use } from "react";
+import sharp from "sharp";
 import { User } from "../models/TeacherModel.js";
 import generateToken from "../utils/generateToken.js";
 import TryCatch from "../utils/TryCatch.js";
 import bcrypt from 'bcrypt';
+import cloudinary from "cloudinary";
+import getDataurl from "../utils/urlGenerator.js";
 
 export const registerUser = TryCatch(async(req, res) => {
     const {name, email, password, mobileNo, role} = req.body;
@@ -19,7 +21,7 @@ export const registerUser = TryCatch(async(req, res) => {
             message: "Password must be at least 6 characters"
         })
     }
-    let user = await User.findOne({email});
+    const user = await User.findOne({email});
     if(user) {
         return res.json({
             success: false,
@@ -129,5 +131,78 @@ export const deleteTeacher = TryCatch(async(req, res) => {
     return res.status(200).json({
         success: true,
         message: "Teacher deleted successfully"
+    })
+})
+
+export const TeacherProfile = TryCatch(async(req, res) => {
+    const { id } = req.params;
+    const file = req.file;
+   
+    if(!file){
+        return res.status(400).json({
+            success: false,
+            message: "Image Upload"
+        })
+    }
+
+    if(!id){
+        return res.status(400).json({
+            success: false,
+            message: "Teacher is not found"
+        })
+    }
+
+    const compressedImage = await sharp(file.buffer)
+            .rotate()
+            .resize(800,800)
+            .jpeg({ quality: 80 })
+            .png({ quality: 50 }) 
+            .toBuffer();
+    
+            const fileUrl = getDataurl({...file, buffer: compressedImage});
+            const cloud = await cloudinary.v2.uploader.upload(fileUrl.content, {
+                quality: "auto",
+            });
+    const user = await User.findById(id);
+    if(!user){
+        return res.status(404).json({
+            success: false,
+            message: "Teacher is not found"
+        })
+    }
+    user.thumbnails = {
+        id: cloud.public_id,
+        url: cloud.secure_url,
+    }
+    await user.save();
+    return res.status(200).json({
+        success: true,
+        message: "Teacher profile image updated successfully"
+    })
+})
+
+export const deleteTeacherProfileImage = TryCatch(async(req, res) => {
+    const { id } = req.params;
+    if(!id){
+        return res.status(400).json({
+            success: false,
+            message: "Teacher is not found"
+        })
+    }
+    const user = await User.findById(id);
+    if(!user){
+        return res.status(404).json({
+            success: false,
+            message: "Teacher is not found"
+        })
+    }
+    if(user.thumbnails && user.thumbnails.id){
+        await cloudinary.v2.uploader.destroy(user.thumbnails.id);
+    }
+    user.thumbnails = null;
+    await user.save();
+    return res.status(200).json({
+        success: true,
+        message: "Teacher profile image deleted successfully"
     })
 })

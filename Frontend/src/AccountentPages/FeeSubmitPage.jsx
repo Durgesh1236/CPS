@@ -23,7 +23,7 @@ export const FeeSubmitPage = () => {
   const [file, setFile] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('');
   const {FeesSubmit} = UserData();
-
+ 
       const fileChangeHandler = (e) => {
         const file = e.target.files[0];
         setFile(file);
