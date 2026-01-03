@@ -5,6 +5,8 @@ import cloudinary from 'cloudinary';
 import router from './routes/TeacherRoute.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import feeSubmitRouter from './routes/FeeSubmitRoute.js';
+import studentRouter from './routes/StudentRoute.js';
 
 cloudinary.v2.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -17,7 +19,10 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use(cookieParser());
 
+// User Routes
 app.use("/api/user", router);
+app.use("/api/student/fee", feeSubmitRouter);
+app.use("/api/student-data", studentRouter);
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "/Frontend/dist")));

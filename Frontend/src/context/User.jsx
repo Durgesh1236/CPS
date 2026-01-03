@@ -32,7 +32,7 @@ export const UserProvider = ({ children }) => {
                 setisAuth(false);
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setLoading(false);
         }
     }
@@ -52,7 +52,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(false);
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setLoading(false);
         }
     }
@@ -65,20 +65,23 @@ export const UserProvider = ({ children }) => {
             setisAuth(true);
             setLoading(false)
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setLoading(false);
         }
     }
 
     async function logoutTeacher(navigate) {
+        setLoading(true);
         try {
             const { data } = await axios.get("/api/user/logout");
             toast.success(data.message);
             setisAuth(false);
+            setLoading(false);
             setUser([]);
             navigate('/teacher-login');
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            setLoading(false);
         }
     }
 
@@ -88,7 +91,7 @@ export const UserProvider = ({ children }) => {
             setTeacherList(data);
             setisAuth(true);
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
     }
 
@@ -106,7 +109,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(false);
             }
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
             setLoading(false);
         }
     }
@@ -118,7 +121,7 @@ export const UserProvider = ({ children }) => {
             setFeeSubmitList(data);
             setLoading(false);
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setLoading(false);
         }
     }
@@ -139,7 +142,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(false);
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setLoading(false);
         }
     }
@@ -147,7 +150,7 @@ export const UserProvider = ({ children }) => {
     async function StudentDataInput(ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails, setForm) {
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/user/add-student", {ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails });
+            const { data } = await axios.post("/api/student/fee/create-student-account", {ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails });
             if(data.success){
             setForm([]);
             toast.success(data.message);
@@ -157,7 +160,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(false);
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setLoading(false);
         }
     }
@@ -166,7 +169,7 @@ export const UserProvider = ({ children }) => {
         setLoading(true);
         try {
             const payload = { year, month, backdues: Number(backDues || 0), paid: Number(paid || 0) };
-            const { data } = await axios.post(`/api/user/student/${encodeURIComponent(ledgerId)}/fee`, payload);
+            const { data } = await axios.post(`/api/student/fee/fees-update/${encodeURIComponent(ledgerId)}`, payload);
             if(data?.success){
                 toast.success(data.message || 'Saved');
                 setLoading(false);
@@ -178,19 +181,19 @@ export const UserProvider = ({ children }) => {
                 return data;
             }
         } catch (error) {
-            console.log(error?.message || error);
+            // console.log(error?.message || error);
             toast.error('Failed to save');
             setLoading(false);
-            throw error;
+            // throw error;
         }
      }
 
     async function getStudentCount(){
         try{
-            const { data } = await axios.get('/api/user/student-count');
+            const { data } = await axios.get('/api/student/fee/get-total-students');
             return data?.count || 0;
         } catch (err) {
-            console.error('Failed to fetch student count', err);
+            // console.error('Failed to fetch student count', err);
             return 0;
         }
     }
@@ -198,11 +201,11 @@ export const UserProvider = ({ children }) => {
     async function getAllStudents(){
         setLoading(true);
         try{
-            const { data } = await axios.get('/api/user/students');
+            const { data } = await axios.post('/api/student/fee/get-all-student-accounts');
             setResults(data.students);
             setLoading(false);
         } catch (err) {
-            console.error('Failed to fetch all students', err);
+            // console.error('Failed to fetch all students', err);
             setLoading(false);
         }
     }
@@ -220,17 +223,16 @@ export const UserProvider = ({ children }) => {
                 setLoading(false);
             }
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
             setLoading(false);
         }
     }
 
     async function studentEditDetail(ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport) {
-        console.log(ledgerId);
         
         setLoading(true);
         try {
-            const { data } = await axios.post(`/api/user/student-profile-edit/${ledgerId}`, { studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport });
+            const { data } = await axios.post(`/api/student/fee/student-profile-edit/${ledgerId}`, { studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport });
             if(data.success){
                 toast.success(data.message);
                 setLoading(false);
@@ -240,7 +242,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(false);
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setLoading(false);
         }
     }
@@ -259,7 +261,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(false);
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setLoading(false);
         }
     }
@@ -271,7 +273,7 @@ export const UserProvider = ({ children }) => {
                 setSpendList(data.reverse());
                 setLoading(false)
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setLoading(false);
         } 
     }
@@ -289,7 +291,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(false)
             }
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
             setLoading(false);
         }
     }
@@ -307,7 +309,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(false);
             }
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
             setLoading(false);
         }
     }
@@ -326,7 +328,7 @@ export const UserProvider = ({ children }) => {
             }
         } catch (error) {
             setLoading(false);
-            console.log(error);
+            // console.log(error);
         }
     }
 
@@ -343,7 +345,7 @@ export const UserProvider = ({ children }) => {
                 setLoading(false);
             }
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
             setLoading(false);
         }
     }
@@ -361,7 +363,7 @@ export const UserProvider = ({ children }) => {
                 toast.error(data.message);
             }
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
             setLoading(false);
         }
     }
@@ -406,7 +408,7 @@ export const UserProvider = ({ children }) => {
         deleteTeacher,
         editTeacherProfile,
         TeacherImage
-    }}>{children}</UserContext.Provider>
+    }}>{children}</UserContext.Provider>;
 }
 
 export const UserData = () => useContext(UserContext);

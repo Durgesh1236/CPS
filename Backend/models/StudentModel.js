@@ -12,6 +12,7 @@ const FeeRecordSchema = new mongoose.Schema({
 const StudentSchema = new mongoose.Schema({
   ledgerId: { type: String, required: true, index: true },
   studentName: { type: String, required: true },
+  // password: { type: String , required: true},
   studentClass: { type: String },
   mobileNo: { type: String },
   fatherName: { type: String },
@@ -19,7 +20,6 @@ const StudentSchema = new mongoose.Schema({
   aadhar: { type: String },
   address: { type: String },
   transport: { type: Boolean, default: false },
-  // year-wise fee records. Stored as an array of records where each record contains year & month
   feeRecords: { type: [FeeRecordSchema], default: [] },
 }, {
   timestamps: true,

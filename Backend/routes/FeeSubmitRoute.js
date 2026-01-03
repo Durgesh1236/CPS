@@ -1,0 +1,16 @@
+import express from "express";
+import { isAuth } from "../middlewares/isAuth.js";
+import { 
+    addStudent, editStudentProfile, getAllStudents, 
+    getStudentByLedger, getStudentCount, 
+    searchStudents, updateFeeRecord } from "../controllars/FeesSubmitControllars.js";
+
+const feeSubmitRouter = express.Router();
+feeSubmitRouter.post("/create-student-account", isAuth, addStudent);
+feeSubmitRouter.get("/search-student-account", isAuth, searchStudents);
+feeSubmitRouter.post("/get-all-student-accounts", isAuth, getAllStudents);
+feeSubmitRouter.get("/get-total-students", isAuth, getStudentCount);
+feeSubmitRouter.get('/student/:ledgerId', isAuth, getStudentByLedger);
+feeSubmitRouter.post('/fees-update/:ledgerId', isAuth, updateFeeRecord);
+feeSubmitRouter.post('/student-profile-edit/:ledgerId', isAuth, editStudentProfile);
+export default feeSubmitRouter;

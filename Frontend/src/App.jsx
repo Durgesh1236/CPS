@@ -1,4 +1,3 @@
-import React from 'react'
 import HomePage from './Pages/HomePage'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginPage from './Pages/LoginPage'
@@ -19,14 +18,17 @@ import Spend from './Pages/Spend'
 import SpendHistory from './Pages/SpendHistory'
 import StudentDataInput from './Pages/StudentDataInput'
 import StudentDataSearch from './Pages/StudentDataSearch'
+import TeacherPayment from './TeacherPages/TeacherPayment'
+import { StudentData } from './context/Student'
+import StudentRegister from './TeacherPages/StudentRegister'
 
 const App = () => {
   const { isAuth, loading } = UserData();
-
+  const { StudentAuth, studentLoading } = StudentData();
   return (
     <>
       <ToastContainer />
-      {loading ? (
+      {loading || studentLoading ? (
         <div className="min-h-screen flex items-center justify-center">
           <RingLoader
             color="#0e12f9"
@@ -40,7 +42,6 @@ const App = () => {
             <Route path="/" element={<HomePage />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/teacher-login' element={<TeacherLoginPage />} />
-            <Route path='/student-home' element={<StudentHome />} />
             <Route path='/attendance' element={<StuAttendence />} />
             <Route path='/student-fee-submit' element={isAuth ? <FeeSubmitPage /> : <TeacherLoginPage />} />
             <Route path='/student-fee-history' element={isAuth ? <StudentFeeHistory /> : <TeacherLoginPage />} />
@@ -53,6 +54,11 @@ const App = () => {
             <Route path='/student-data-input' element={isAuth ? <StudentDataInput/> : <TeacherLoginPage/>}/>
             <Route path='/student-data' element={isAuth ? <StudentDataSearch/> : <TeacherLoginPage/>}/> 
             <Route path='/student-attendence' element={isAuth ? <TakeStudentAttendence/> : <TeacherLoginPage/>}/>
+            <Route path='/teacher-payment' element={isAuth ? <TeacherPayment/> : <TeacherLoginPage/>}/>
+            <Route path='/student-register' element={ isAuth ? <StudentRegister/> : <TeacherLoginPage/> }/>
+            {/* student routes */}
+            <Route path='/student-home' element={StudentAuth ? <StudentHome/> : <LoginPage/>}/>
+            
           </Routes>
         </BrowserRouter>
       }

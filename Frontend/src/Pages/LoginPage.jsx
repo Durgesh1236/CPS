@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../Components/Layout';
+import { StudentData } from '../context/Student';
 
 const LoginPage = () => {
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
   const [agree, setAgree] = useState(false);
   const navigate = useNavigate();
-
+  const { StudentLogin } = StudentData();
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!agree) {
-      alert('You must agree to the terms and conditions.');
-      return;
-    }
-    alert(`Student ID: ${studentId}\nPassword: ${password}`);
+    StudentLogin(studentId, password, navigate);
+    setStudentId('');
+    setPassword('');
   };
 
   return (

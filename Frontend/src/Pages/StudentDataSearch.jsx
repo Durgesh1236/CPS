@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TeacherLayout from '../Components/TeacherLayout';
 import { FaSearch } from 'react-icons/fa';
-import axios from 'axios';
 import { UserData } from '../context/User';
 
 const monthsOrder = [
@@ -42,7 +41,7 @@ export default function StudentDataSearch() {
       const q = new URLSearchParams();
       if (ledgerId) q.set('ledgerId', ledgerId);
       if (name) q.set('name', name);
-      const res = await fetch('/api/user/student/search?' + q.toString());
+      const res = await fetch('/api/student/fee/student?' + q.toString());
       const body = await res.json();
       setResults(body.students || []);
     } catch (err) {
@@ -55,7 +54,7 @@ export default function StudentDataSearch() {
   const loadStudent = async (ledger) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/user/student/${encodeURIComponent(ledger)}`);
+      const res = await fetch(`/api/student/fee/student/${encodeURIComponent(ledger)}`);
       const body = await res.json();
       setSelected(body.student || null);
       setEditing([]);
@@ -102,7 +101,7 @@ export default function StudentDataSearch() {
       studentForm.address,
       studentForm.transport
     )
-    // studentForm('')
+    setStudentForm('')
   };
 
   const cancelStudentEdit = () => {
