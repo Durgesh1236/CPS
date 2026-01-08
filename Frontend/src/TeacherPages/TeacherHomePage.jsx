@@ -45,7 +45,7 @@ const TeacherHomePage = () => {
         </div>
 
         {/* Welcome Message */}
-        <div className="mb-8 flex bg-blue-500 rounded-2xl shadow-lg p-5 text-white">
+        <div className="mb-3 flex bg-blue-500 rounded-2xl shadow-lg p-5 text-white">
           {/* { user.thumbnails ? (
                 <img
                   src={user.thumbnails.url}
@@ -55,11 +55,11 @@ const TeacherHomePage = () => {
               ):
               <FaUserTie className="text-5xl text-blue-600" />
               } */}
-          <h1 className="text-2xl mr-2 font-bold text-gray-900 mb-1">Hey <span className='text-white'>{user.name.split(' ')[0]} </span> <span className='text-3xl'> 👋 </span></h1>
+          <h1 className="text-2xl mr-2 font-bold text-gray-900 mb-1">Hey <span className=''>{user.name.split(' ')[0]} </span> <span className='text-3xl'> 👋 </span></h1>
           {/* <p className="text-gray-600 text-sm">Welcome back to your dashboard</p> */}
         </div>
 
-        <div className="mb-8 bg-gradient-to-br from-purple-300 to-purple-300 rounded-2xl shadow-lg p-5 text-black">
+        <div className="mb-2 bg-gradient-to-br from-purple-300 to-purple-300 rounded-2xl shadow-lg p-2 text-black">
           <h1 className="text-2xl font-bold  mb-1">Total Students: {totalStudents}</h1>
         </div>
 
