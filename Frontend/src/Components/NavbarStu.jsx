@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaBars, FaRegUser } from "react-icons/fa";
+import { StudentData } from '../context/Student';
 
 const NavbarStu = ({ setSidebarOpen, sidebarOpen }) => {
   const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
-
+  const { studentLogout } = StudentData();
   return (
     <nav className="fixed top-0 left-0 w-full z-50 flex items-center justify-between bg-white shadow px-4 py-3">
       {/* Sidebar Icon & School Name */}
@@ -41,7 +42,7 @@ const NavbarStu = ({ setSidebarOpen, sidebarOpen }) => {
           >
             <button
               className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
-              onClick={() => navigate('/profile')}
+              onClick={() => navigate('/student-profile')}
             >
               Student Profile
             </button>
@@ -49,7 +50,7 @@ const NavbarStu = ({ setSidebarOpen, sidebarOpen }) => {
               className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
               onClick={() => {
                 // Add logout logic here
-                alert('Logged out!');
+                studentLogout();
               }}
             >
               Logout

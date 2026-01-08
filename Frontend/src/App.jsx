@@ -21,6 +21,7 @@ import StudentDataSearch from './Pages/StudentDataSearch'
 import TeacherPayment from './TeacherPages/TeacherPayment'
 import { StudentData } from './context/Student'
 import StudentRegister from './TeacherPages/StudentRegister'
+import StudentProfile from './StudentPage/StudentProfile'
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -58,7 +59,7 @@ const App = () => {
             <Route path='/student-register' element={ isAuth ? <StudentRegister/> : <TeacherLoginPage/> }/>
             {/* student routes */}
             <Route path='/student-home' element={StudentAuth ? <StudentHome/> : <LoginPage/>}/>
-            
+            <Route path='/student-profile' element={StudentAuth ? <StudentProfile/> : <LoginPage/>}/>
           </Routes>
         </BrowserRouter>
       }

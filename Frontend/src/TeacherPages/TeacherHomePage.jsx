@@ -186,7 +186,7 @@ const TeacherHomePage = () => {
             }
 
             {(user.role === 'accountent' || user.role === 'admin') &&
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-green-200">
+            <div onClick={() => navigate("/spend-history")} className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-green-200">
               <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
                 <MdOutlineManageHistory className="text-lg text-green-600" />
               </div>

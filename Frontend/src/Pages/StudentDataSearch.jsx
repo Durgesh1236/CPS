@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TeacherLayout from '../Components/TeacherLayout';
 import { FaSearch } from 'react-icons/fa';
 import { UserData } from '../context/User';
+import { FaDeleteLeft } from "react-icons/fa6";
 
 const monthsOrder = [
   'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March'
@@ -20,7 +21,7 @@ export default function StudentDataSearch() {
     editing, setEditing,
     SaveEdit,
     results, setResults,
-    studentEditDetail
+    studentEditDetail, StudentAccountDelete
   } = UserData();
 
   const [editStudent, setEditStudent] = useState(false);
@@ -388,6 +389,13 @@ export default function StudentDataSearch() {
                           >
                             Cancel
                           </button>
+
+                          <button
+                            onClick={() => StudentAccountDelete(selected._id)}
+                            className="bg-red-600 cursor-pointer text-white px-3 rounded"
+                          >
+                            <FaDeleteLeft />
+                          </button>
                         </div>
                       )}
 
@@ -586,6 +594,14 @@ export default function StudentDataSearch() {
                                         >
                                           Cancel
                                         </button>
+
+                                        <button
+                                          onClick={() => deleteRecord(rec)}
+                                          className="bg-red-600 text-white px-3 rounded"
+                                        >
+                                          Delete
+                                        </button>
+
                                       </div>
                                     )}
                                   </td>

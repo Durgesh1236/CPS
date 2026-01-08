@@ -180,7 +180,7 @@ export const addStudent = TryCatch(async (req, res) => {
 
     await student.save();
     return res.status(201).json({  student, success: true, message: 'Student saved successfully' });
-})
+}) 
 
 export const searchStudents = TryCatch(async (req, res) => {
     const { ledgerId, name } = req.query;

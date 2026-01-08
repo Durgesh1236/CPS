@@ -4,6 +4,7 @@ import {
     addStudent, editStudentProfile, getAllStudents, 
     getStudentByLedger, getStudentCount, 
     searchStudents, updateFeeRecord } from "../controllars/FeesSubmitControllars.js";
+import { StudentProfileDelete } from "../controllars/StudentControllar.js";
 
 const feeSubmitRouter = express.Router();
 feeSubmitRouter.post("/create-student-account", isAuth, addStudent);
@@ -13,4 +14,6 @@ feeSubmitRouter.get("/get-total-students", isAuth, getStudentCount);
 feeSubmitRouter.get('/student/:ledgerId', isAuth, getStudentByLedger);
 feeSubmitRouter.post('/fees-update/:ledgerId', isAuth, updateFeeRecord);
 feeSubmitRouter.post('/student-profile-edit/:ledgerId', isAuth, editStudentProfile);
+feeSubmitRouter.delete('/delete-student/:id', isAuth, StudentProfileDelete);
+
 export default feeSubmitRouter;

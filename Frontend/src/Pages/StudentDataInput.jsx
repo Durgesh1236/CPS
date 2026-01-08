@@ -88,6 +88,17 @@ const StudentDataInput = () => {
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Student Name</label>
                   <input name="studentName" value={form.studentName} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="Full name" />
                 </div>
+
+                 <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Password</label>
+                  <input name="mobileNo" value={form.password} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="Student Password" />
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">AAdhar Number</label>
+                  <input name="mobileNo" value={form.aadhar} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="12 Digit Number" />
+                </div>
+
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Class</label>
                   <select name="studentClass" value={form.studentClass} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition">
@@ -112,10 +123,10 @@ const StudentDataInput = () => {
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-sm font-medium text-gray-700">Aadhar Number</label>
                 <input name="aadhar" value={form.aadhar} onChange={handleChange} className="mt-1 p-3 w-full border rounded-lg" placeholder="12-digit Aadhar" />
-              </div>
+              </div> */}
 
               <div>
                 <label className="text-sm font-medium text-gray-700">Address</label>

@@ -368,6 +368,25 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    async function StudentAccountDelete(id) {
+        setLoading(true);
+        try {
+            const { data } = await axios.delete(`/api/student/fee/delete-student/${id}`);
+            if(data.success){
+                toast.success(data.message);
+                setLoading(false);
+                await getAllStudents();
+                setSelected(null);
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            setLoading(false);
+            toast.error(error.message);
+        }
+    }
+
     useEffect(() => {
         fetchUser();
         getAllTeachers();
@@ -407,7 +426,8 @@ export const UserProvider = ({ children }) => {
         deleteSpendRecord,
         deleteTeacher,
         editTeacherProfile,
-        TeacherImage
+        TeacherImage,
+        StudentAccountDelete
     }}>{children}</UserContext.Provider>;
 }
 

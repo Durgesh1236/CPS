@@ -1,15 +1,15 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { FaUserTie, FaIdBadge, FaEnvelope, FaPhone } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
-import TeacherLayout from "../Components/TeacherLayout";
 import { useNavigate } from "react-router-dom";
-import { UserData } from "../context/User";
+import Layout from "../Components/LayoutStu";
+import { StudentData } from "../context/Student";
 
 
 
-const TeacherProfile = () => {
+const StudentProfile = () => {
   const navigate = useNavigate();
-  const { user, TeacherImage } = UserData();
+  const { studentData, StudentImage } = StudentData();
   const [image, setImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const fileInputRef = useRef(null);
@@ -30,7 +30,7 @@ const TeacherProfile = () => {
   const handleUploadImage = (id) => {
     const formData = new FormData();
     formData.append('file', imageFile);
-    TeacherImage(id, formData);
+    StudentImage(id, formData);
     setImageFile(null);
   };
 
@@ -38,9 +38,10 @@ const TeacherProfile = () => {
   const handleCancelImage = () => {
     setImageFile(null);
   };
+console.log(studentData);
 
   return (
-    <TeacherLayout>
+    <Layout>
       <div className="h-full flex flex-col items-center justify-center px-2">
         <div className="w-full max-w-md bg-white shadow-2xl rounded-3xl p-10 md:p-7 border-4 border-blue-300 flex flex-col items-center animate__animated animate__fadeIn relative">
           <div className="w-full flex justify-end mb-4">
@@ -56,13 +57,14 @@ const TeacherProfile = () => {
           <div className="relative w-36 h-36 md:w-40 md:h-40 mb-4 cursor-pointer group" onClick={handleImageClick} title="Click to change profile image">
             <img
               src={
-                image
-                  ? image
-                  : user.thumbnails
-                    ? user.thumbnails.url
-                    : "https://randomuser.me/api/portraits/men/32.jpg"
+                // image
+                //   ? image
+                //   : studentData.thumbnails
+                //     ? studentData.thumbnails.url
+                    // : 
+                    "https://randomuser.me/api/portraits/men/32.jpg"
               }
-              alt="Teacher"
+              alt="Student"
               className="w-full h-full rounded-full object-cover border-4 border-blue-400 shadow-xl group-hover:opacity-80 transition"
               style={{ cursor: "pointer" }}
             />
@@ -81,7 +83,7 @@ const TeacherProfile = () => {
             <div className="flex gap-4 mb-4">
               <button
                 type="button"
-                onClick={() => handleUploadImage(user._id)}
+                onClick={() => handleUploadImage(studentData._id)}
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold shadow-md transition"
               >
                 Upload Image
@@ -99,33 +101,33 @@ const TeacherProfile = () => {
           <div className="w-full flex flex-col gap-6">
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
               <span className="flex items-center gap-2 text-blue-700 font-bold text-lg md:text-xl">
-                <FaIdBadge /> Teacher ID:
+                <FaIdBadge /> Student ID:
               </span>
-              <span className="text-blue-900 font-extrabold text-lg md:text-xl tracking-wide">T001</span>
+              <span className="text-blue-900 font-extrabold text-lg md:text-xl tracking-wide">{studentData.ledgerId}</span>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
               <span className="flex items-center gap-2 text-gray-800 font-bold text-lg md:text-xl">
                 <FaUserTie /> Name:
               </span>
-              <span className="text-gray-900 font-extrabold text-lg md:text-xl tracking-wide">{user.name}</span>
+              <span className="text-gray-900 font-extrabold text-lg md:text-xl tracking-wide">{studentData.name}</span>
             </div>
-            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+            {/* <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
               <span className="flex items-center gap-2 text-green-700 font-bold text-lg md:text-xl">
                 <FaEnvelope /> Email:
               </span>
-              <span className="text-green-900 font-semibold text-lg md:text-xl">{user.email}</span>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+              <span className="text-green-900 font-semibold text-lg md:text-xl">{studentData.email}</span>
+            </div> */}
+            {/* <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
               <span className="flex items-center gap-2 text-purple-700 font-bold text-lg md:text-xl">
                 <FaPhone /> Mobile:
               </span>
-              <span className="text-purple-900 font-semibold text-lg md:text-xl">{user.mobileNo}</span>
-            </div>
+              <span className="text-purple-900 font-semibold text-lg md:text-xl">{studentData.mobileNo}</span>
+            </div> */}
           </div>
         </div>
       </div>
-    </TeacherLayout>
+    </Layout>
   );
 };
 
-export default TeacherProfile;
+export default StudentProfile;
