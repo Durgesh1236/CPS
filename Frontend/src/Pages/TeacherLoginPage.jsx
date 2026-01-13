@@ -31,7 +31,7 @@ const TeacherLoginPage = () => {
               id="email"
               type="text"
               value={email}
-              onChange={(e) => setemail(e.target.value)}
+              onChange={(e) => setemail(e.target.value.toLowerCase())}
               className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
               required
             />

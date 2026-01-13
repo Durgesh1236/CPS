@@ -594,14 +594,6 @@ export default function StudentDataSearch() {
                                         >
                                           Cancel
                                         </button>
-
-                                        <button
-                                          onClick={() => deleteRecord(rec)}
-                                          className="bg-red-600 text-white px-3 rounded"
-                                        >
-                                          Delete
-                                        </button>
-
                                       </div>
                                     )}
                                   </td>

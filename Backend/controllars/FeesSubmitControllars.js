@@ -117,70 +117,70 @@ export const getAllSpend = TryCatch(async(req, res) => {
     return res.status(200).json(spend);
 })
 
-export const addStudent = TryCatch(async (req, res) => {
-    const { ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails } = req.body;
-    if (!ledgerId || !studentName) {
-        return res.status(400).json({ success: false, message: 'ledgerId and studentName are required' });
-    }
+// export const addStudent = TryCatch(async (req, res) => {
+//     const { ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails } = req.body;
+//     if (!ledgerId || !studentName) {
+//         return res.status(400).json({ success: false, message: 'ledgerId and studentName are required' });
+//     }
 
-    let student = await Student.findOne({ ledgerId });
-    if (!student) {
-        student = await Student.create({ ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport });
-    } else {
-        student.studentName = studentName || student.studentName;
-        student.studentClass = studentClass || student.studentClass;
-        student.mobileNo = mobileNo || student.mobileNo;
-        student.fatherName = fatherName || student.fatherName;
-        student.motherName = motherName || student.motherName;
-        student.aadhar = aadhar || student.aadhar;
-        student.address = address || student.address;
-        student.transport = typeof transport === 'boolean' ? transport : student.transport;
-    }
+//     let student = await Student.findOne({ ledgerId });
+//     if (!student) {
+//         student = await Student.create({ ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport });
+//     } else {
+//         student.studentName = studentName || student.studentName;
+//         student.studentClass = studentClass || student.studentClass;
+//         student.mobileNo = mobileNo || student.mobileNo;
+//         student.fatherName = fatherName || student.fatherName;
+//         student.motherName = motherName || student.motherName;
+//         student.aadhar = aadhar || student.aadhar;
+//         student.address = address || student.address;
+//         student.transport = typeof transport === 'boolean' ? transport : student.transport;
+//     }
 
-    if (monthDetails && typeof monthDetails === 'object') {
-        const monthsOrder = ['April','May','June','July','August','September','October','November','December','January','February','March'];
+//     if (monthDetails && typeof monthDetails === 'object') {
+//         const monthsOrder = ['April','May','June','July','August','September','October','November','December','January','February','March'];
 
-        const payloadNormalized = {}; 
-        for (const key of Object.keys(monthDetails)) {
-            const parts = key.split('-');
-            const year = Number(parts[0]);
-            const month = parts.slice(1).join('-');
-            const md = monthDetails[key] || {};
-            const back = Number(md.backdues || 0);
-            const paid = Number(md.paid || 0);
-            const dues = Math.max(0, back - paid);
-            payloadNormalized[key] = { year, month, back, paid, dues };
-        }
+//         const payloadNormalized = {}; 
+//         for (const key of Object.keys(monthDetails)) {
+//             const parts = key.split('-');
+//             const year = Number(parts[0]);
+//             const month = parts.slice(1).join('-');
+//             const md = monthDetails[key] || {};
+//             const back = Number(md.backdues || 0);
+//             const paid = Number(md.paid || 0);
+//             const dues = Math.max(0, back - paid);
+//             payloadNormalized[key] = { year, month, back, paid, dues };
+//         }
 
-        const prevKeyFor = (year, month) => {
-            const idx = monthsOrder.indexOf(month);
-            if (idx === -1) return null;
-            if (idx > 0) return `${year}-${monthsOrder[idx - 1]}`;
-            return `${year - 1}-${monthsOrder[monthsOrder.length - 1]}`;
-        }
+//         const prevKeyFor = (year, month) => {
+//             const idx = monthsOrder.indexOf(month);
+//             if (idx === -1) return null;
+//             if (idx > 0) return `${year}-${monthsOrder[idx - 1]}`;
+//             return `${year - 1}-${monthsOrder[monthsOrder.length - 1]}`;
+//         }
 
-        for (const key of Object.keys(payloadNormalized)) {
-            const { year, month, back, paid } = payloadNormalized[key];
+//         for (const key of Object.keys(payloadNormalized)) {
+//             const { year, month, back, paid } = payloadNormalized[key];
 
-            const prevKey = prevKeyFor(year, month);
-            let prevDues = 0;
-            if (prevKey) {
-                if (payloadNormalized[prevKey]) {
-                    prevDues = payloadNormalized[prevKey].dues || 0;
-                } else {
-                    const existing = student.feeRecords.find(r => r.year === Number(prevKey.split('-')[0]) && r.month === prevKey.split('-').slice(1).join('-'));
-                    if (existing) prevDues = existing.dues || 0;
-                }
-            }
+//             const prevKey = prevKeyFor(year, month);
+//             let prevDues = 0;
+//             if (prevKey) {
+//                 if (payloadNormalized[prevKey]) {
+//                     prevDues = payloadNormalized[prevKey].dues || 0;
+//                 } else {
+//                     const existing = student.feeRecords.find(r => r.year === Number(prevKey.split('-')[0]) && r.month === prevKey.split('-').slice(1).join('-'));
+//                     if (existing) prevDues = existing.dues || 0;
+//                 }
+//             }
 
-            const adjustedBack = Number(back || 0) + Number(prevDues || 0);
-            student.upsertFeeRecord(year, month, adjustedBack, paid);
-        }
-    }
+//             const adjustedBack = Number(back || 0) + Number(prevDues || 0);
+//             student.upsertFeeRecord(year, month, adjustedBack, paid);
+//         }
+//     }
 
-    await student.save();
-    return res.status(201).json({  student, success: true, message: 'Student saved successfully' });
-}) 
+//     await student.save();
+//     return res.status(201).json({  student, success: true, message: 'Student saved successfully' });
+// }) 
 
 export const searchStudents = TryCatch(async (req, res) => {
     const { ledgerId, name } = req.query;

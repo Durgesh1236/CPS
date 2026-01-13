@@ -11,23 +11,23 @@ export const StudentProvider  = ({ children }) => {
     const [StudentAuth, setStudentAuth] = useState(false);
 // console.log(studentData.ledgerId);
 
-    async function StudentRegister(ledgerId, name, password){
-        setLoading(true);
-        try {
-            const { data } = await axios.post("/api/student-data/student/register", { ledgerId, name, password });
-            if(data.success){
-                toast.success(data.message);
-                setLoading(false);
-                setStudentData(data);
-            } else {
-                toast.warning(data.message);
-                setLoading(false);
-            }
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-        }
-    }
+    // async function StudentRegister(ledgerId, name, password){
+    //     setLoading(true);
+    //     try {
+    //         const { data } = await axios.post("/api/student-data/student/register", { ledgerId, name, password });
+    //         if(data.success){
+    //             toast.success(data.message);
+    //             setLoading(false);
+    //             setStudentData(data);
+    //         } else {
+    //             toast.warning(data.message);
+    //             setLoading(false);
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //         setLoading(false);
+    //     }
+    // }
     
     async function StudentLogin(ledgerId, password, navigate) {
         setLoading(true);
@@ -56,7 +56,7 @@ export const StudentProvider  = ({ children }) => {
         try {
             const { data } = await axios.post("/api/student-data/student/profile");
             // if(data.success){
-                setStudentData(data.students);
+                setStudentData(data.user);
                 setStudentAuth(true);
                 setLoading(false);
             // } 
@@ -76,6 +76,7 @@ export const StudentProvider  = ({ children }) => {
                 setStudentAuth(false);
                 setStudentData(null);
                 setLoading(false);
+                navigate('/login');
             }
         } catch (error) {
             setLoading(false);
@@ -85,11 +86,12 @@ export const StudentProvider  = ({ children }) => {
     useEffect(() => {
         fetchStudentData();
     },[])
+
     return <UserContext.Provider value={{
         StudentLogin,
         studentLoading,
         studentData,
-        StudentRegister,
+        // StudentRegister,
         StudentAuth,
         studentLogout
     }}>{children}</UserContext.Provider>;

@@ -1,13 +1,13 @@
 import express from "express";
 import { isAuth } from "../middlewares/isAuth.js";
 import { 
-    addStudent, editStudentProfile, getAllStudents, 
+     editStudentProfile, getAllStudents, 
     getStudentByLedger, getStudentCount, 
     searchStudents, updateFeeRecord } from "../controllars/FeesSubmitControllars.js";
 import { StudentProfileDelete } from "../controllars/StudentControllar.js";
 
 const feeSubmitRouter = express.Router();
-feeSubmitRouter.post("/create-student-account", isAuth, addStudent);
+// feeSubmitRouter.post("/create-student-account", isAuth, addStudent);
 feeSubmitRouter.get("/search-student-account", isAuth, searchStudents);
 feeSubmitRouter.post("/get-all-student-accounts", isAuth, getAllStudents);
 feeSubmitRouter.get("/get-total-students", isAuth, getStudentCount);

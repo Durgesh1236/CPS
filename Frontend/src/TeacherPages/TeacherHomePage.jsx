@@ -6,6 +6,7 @@ import { UserData } from '../context/User';
 import { MdOutlineManageHistory, MdEventNote } from "react-icons/md";
 import { GiTeacher } from "react-icons/gi";
 import { FiSearch } from "react-icons/fi";
+import { VscFeedback } from "react-icons/vsc";
 
 const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in the conference hall.";
 
@@ -31,9 +32,9 @@ const TeacherHomePage = () => {
   return (
     <TeacherLayout>
       {/* Mobile View - ONLY DESIGN ADDED */}
-      <div className="md:hidden min-h-screen bg-white p-4 pt-20">
+      <div className="md:hidden min-h-screen bg-white p-4 pt-18">
         {/* Search Bar */}
-        <div className="relative mb-6">
+        <div className="relative mb-5">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <FiSearch className="h-5 w-5 text-gray-400" />
           </div>
@@ -45,7 +46,7 @@ const TeacherHomePage = () => {
         </div>
 
         {/* Welcome Message */}
-        <div className="mb-3 flex bg-blue-500 rounded-2xl shadow-lg p-5 text-white">
+        <div className="mb-3 flex bg-blue-300 rounded-2xl shadow-lg p-5 text-white">
           {/* { user.thumbnails ? (
                 <img
                   src={user.thumbnails.url}
@@ -55,7 +56,8 @@ const TeacherHomePage = () => {
               ):
               <FaUserTie className="text-5xl text-blue-600" />
               } */}
-          <h1 className="text-2xl mr-2 font-bold text-gray-900 mb-1">Hey <span className=''>{user.name.split(' ')[0]} </span> <span className='text-3xl'> 👋 </span></h1>
+          <h1 className="text-2xl mr-2 flex font-bold text-gray-900 mb-1">Hey, <span className='ml-2 mr-2'>{user.name.split(' ')[0]}</span>
+           <span className='text-3xl'> <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f972/512.gif" alt="🥲" width="40" height="35"></img> </span></h1>
           {/* <p className="text-gray-600 text-sm">Welcome back to your dashboard</p> */}
         </div>
 
@@ -261,10 +263,10 @@ const TeacherHomePage = () => {
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-5 flex items-center gap-4 border border-gray-200">
             <div className="p-3 rounded-lg bg-white shadow-sm">
-              <MdEventNote className="text-xl text-gray-700" />
+              <VscFeedback className="text-xl text-gray-700" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-800 text-sm"></h3>
+              <h3 className="font-semibold text-gray-800 text-sm">FeedBack</h3>
             </div>
           </div>
           

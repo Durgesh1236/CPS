@@ -15,6 +15,7 @@ const StudentDataInput = () => {
     ledgerId: '',
     year: '',
     studentName: '',
+    password: '',
     studentClass: '',
     mobileNo: '',
     fatherName: '',
@@ -62,7 +63,7 @@ const StudentDataInput = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    StudentDataInput( form.ledgerId, form.studentName, form.studentClass, form.mobileNo, form.fatherName, form.motherName, form.aadhar, form.address, form.transport, form.monthDetails, setForm)
+    StudentDataInput( form.ledgerId, form.studentName, form.password, form.studentClass, form.mobileNo, form.fatherName, form.motherName, form.aadhar, form.address, form.transport, form.monthDetails, setForm)
   }
 
   return (
@@ -91,12 +92,12 @@ const StudentDataInput = () => {
 
                  <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Password</label>
-                  <input name="mobileNo" value={form.password} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="Student Password" />
+                  <input name="password" value={form.password} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="Student Password" />
                 </div>
 
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">AAdhar Number</label>
-                  <input name="mobileNo" value={form.aadhar} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="12 Digit Number" />
+                  <input name="aadhar" value={form.aadhar} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="12 Digit Number" />
                 </div>
 
                 <div>
@@ -210,7 +211,7 @@ const StudentDataInput = () => {
                   <FaSyncAlt />
                   Reset
                 </button>
-                <button type="submit" disabled={loading} className="px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-lg shadow-lg hover:scale-105 transform transition flex items-center gap-2">
+                <button type="submit" disabled={loading} className="px-6 cursor-pointer py-3 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-lg shadow-lg hover:scale-105 transform transition flex items-center gap-2">
                   <FaSave />
                   {loading ? 'Saving...' : 'Submit'}
                 </button>

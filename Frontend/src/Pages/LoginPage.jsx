@@ -70,7 +70,7 @@ const LoginPage = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
+              className="w-full cursor-pointer bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
             >
               Login
             </button>
@@ -82,12 +82,12 @@ const LoginPage = () => {
             >
               Teacher Login
             </button>
-            <button
+            {/* <button
               className="w-full cursor-pointer bg-gray-700 text-white py-2 rounded hover:bg-gray-900 transition font-semibold"
               onClick={() => navigate('/admin-login')}
             >
               Admin Login
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

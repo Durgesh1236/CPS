@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { StudentAccountCreate } from "../models/StudentAccountCreate.js";
+import { Student } from "../models/StudentModel.js";
 
 export const StudentisAuth = async(req, res, next) => {
     try {
@@ -15,7 +15,7 @@ export const StudentisAuth = async(req, res, next) => {
                 message: "token expired"
             })
         }
-        req.user = await StudentAccountCreate.findById(decodedData.id);
+        req.user = await Student.findById(decodedData.id);
         next();
     } catch (error) {
         res.status(500).json({
