@@ -29,7 +29,7 @@ export const UserProvider = ({ children }) => {
             } else {
                 toast.error(data.message);
                 setLoading(false);
-                setisAuth(false);
+                // setisAuth(false);
             }
         } catch (error) {
             // console.log(error);
@@ -50,9 +50,11 @@ export const UserProvider = ({ children }) => {
             } else {
                 toast.error(data.message);
                 setLoading(false);
+                setisAuth(false);
             }
         } catch (error) {
             // console.log(error);
+            setisAuth(false);
             setLoading(false);
         }
     }
@@ -66,6 +68,7 @@ export const UserProvider = ({ children }) => {
             setLoading(false)
         } catch (error) {
             // console.log(error);
+            setisAuth(false);
             setLoading(false);
         }
     }
@@ -82,16 +85,21 @@ export const UserProvider = ({ children }) => {
         } catch (error) {
             // console.log(error);
             setLoading(false);
+            setisAuth(false);
         }
     }
 
     async function getAllTeachers() {
+        setLoading(true);
         try {
             const { data } = await axios.get("/api/user/all-teachers");
             setTeacherList(data);
+            setLoading(false);
             setisAuth(true);
         } catch (error) {
             // console.log(error);
+            setisAuth(false);
+            setLoading(false);
         }
     }
 
@@ -103,14 +111,17 @@ export const UserProvider = ({ children }) => {
                 toast.success(data.message);
                 await getAllFeesSubmit();
                 setImagePreview(null);
+                setisAuth(true);
                 setLoading(false)
             } else {
                 toast.error(data.message);
+                setisAuth(false);
                 setLoading(false);
             }
         } catch (error) {
             // console.log(error.message);
             setLoading(false);
+            setisAuth(false);
         }
     }
 
