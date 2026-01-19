@@ -65,28 +65,6 @@ const TeacherHomePage = () => {
           <h1 className="text-2xl font-bold  mb-1">Total Students: {totalStudents}</h1>
         </div>
 
-        {/* Attendance, Timetable, Fees Row */}
-        {/* <div className="grid grid-cols-3 gap-3 mb-8">
-          <div onClick={()=> navigate("/teacher-profile")} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-purple-200">
-            <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
-              <FaUserGraduate className="text-xl text-purple-600" />
-            </div>
-            <span className="font-medium text-gray-800 text-sm">Profile</span>
-          </div> */}
-          {/* <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
-            <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
-              <FaClipboardList className="text-xl text-blue-600" />
-            </div>
-            <span className="font-medium text-gray-800 text-sm">Attendance</span>
-          </div> */}
-          {/* <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-yellow-200">
-            <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
-              <FaRupeeSign className="text-xl text-yellow-600" />
-            </div>
-            <span className="font-medium text-gray-800 text-sm">Teacher Payment</span>
-          </div> */}
-        {/* </div> */}
-
         {/* Divider */}
         <div className="h-px bg-gray-200 my-6"></div>
 
@@ -158,13 +136,6 @@ const TeacherHomePage = () => {
             <span className="font-medium text-gray-800 text-sm">Student Registration</span>
           </div> 
            }
-
-            {/* <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-orange-200">
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <IoMdCalendar className="text-lg text-orange-600" />
-              </div>
-              <span className="font-medium text-gray-800 text-xs">Holidays</span>
-            </div> */}
           </div>
         </div>
 
@@ -195,13 +166,6 @@ const TeacherHomePage = () => {
               <span className="font-medium text-gray-800 text-xs">Spend History</span>
             </div>
            }
-
-            {/* <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-red-200">
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <FaQuestionCircle className="text-lg text-red-600" />
-              </div>
-              <span className="font-medium text-gray-800 text-xs">Grievance</span>
-            </div> */}
           </div>
         </div>
 

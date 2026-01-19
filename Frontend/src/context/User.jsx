@@ -95,10 +95,10 @@ export const UserProvider = ({ children }) => {
             const { data } = await axios.get("/api/user/all-teachers");
             setTeacherList(data);
             setLoading(false);
-            setisAuth(true);
+            // setisAuth(true);
         } catch (error) {
             // console.log(error);
-            setisAuth(false);
+            // setisAuth(false);
             setLoading(false);
         }
     }
@@ -111,17 +111,14 @@ export const UserProvider = ({ children }) => {
                 toast.success(data.message);
                 await getAllFeesSubmit();
                 setImagePreview(null);
-                setisAuth(true);
                 setLoading(false)
             } else {
                 toast.error(data.message);
-                setisAuth(false);
                 setLoading(false);
             }
         } catch (error) {
             // console.log(error.message);
             setLoading(false);
-            setisAuth(false);
         }
     }
 
@@ -248,7 +245,7 @@ export const UserProvider = ({ children }) => {
             if(data.success){
                 toast.success(data.message);
                 setLoading(false);
-                getAllStudents();
+                await getAllStudents();
             } else {
                 toast.error(data.message);
                 setLoading(false);
