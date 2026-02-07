@@ -1,6 +1,8 @@
 import express from "express";
 import { isAuth } from "../middlewares/isAuth.js";
 import { 
+    allBookData,
+    BookSaleSubmit,
      editStudentProfile, getAllStudents, 
     getStudentByLedger, getStudentCount, 
     searchStudents, updateFeeRecord } from "../controllars/FeesSubmitControllars.js";
@@ -15,5 +17,7 @@ feeSubmitRouter.get('/student/:ledgerId', isAuth, getStudentByLedger);
 feeSubmitRouter.post('/fees-update/:ledgerId', isAuth, updateFeeRecord);
 feeSubmitRouter.post('/student-profile-edit/:ledgerId', isAuth, editStudentProfile);
 feeSubmitRouter.delete('/delete-student/:id', isAuth, StudentProfileDelete);
+feeSubmitRouter.post("/book-sale-data", isAuth, BookSaleSubmit);
+feeSubmitRouter.get("/all-book-sale-data", isAuth, allBookData);
 
 export default feeSubmitRouter;

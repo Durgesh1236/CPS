@@ -1,3 +1,4 @@
+import { BookSubmit } from "../models/BookSubmitModel.js";
 import { FeeSubmit } from "../models/FeeSubmitModels.js";
 import { SpendModel } from "../models/SpendModel.js";
 import { Student } from "../models/StudentModel.js";
@@ -12,9 +13,10 @@ export const FeesSubmit = TryCatch(async(req, res) => {
         studentName, 
         studentClass, 
         backDues, 
-        submitFees, 
+        submitFees,  
         dues, 
-        date, paymentMethod } = req.body;
+        date, 
+        paymentMethod } = req.body;
         const file = req.file;
 
         if(!ledgerId || !studentName || !studentClass || !backDues || !submitFees || !dues || !date || !file) {
@@ -24,8 +26,9 @@ export const FeesSubmit = TryCatch(async(req, res) => {
             })
         }
         const  compressedImage = await sharp(file.buffer)
-        .resize(800,800)
-        .jpeg({ quality: 80 })
+        // .resize(800,800)
+        .rotate()
+        .jpeg({ quality: 50 })
         .png({ quality: 50 }) 
         .toBuffer();
 
@@ -358,4 +361,41 @@ export const deleteSpendRecord = TryCatch(async(req, res) => {
         success: true,
         message: "Spend record deleted successfully"
     })
+})
+
+export const BookSaleSubmit = TryCatch(async(req,res) => {
+    const {ledgerId, studentName, studentClass, totalamount, submitFees, dues, date, paymentMethod} = req.body;
+    if(!ledgerId || !studentName || !studentClass || !totalamount || !submitFees || !dues || !date || !paymentMethod) {
+        return res.status(400).json({
+            success: false,
+            message: "All fields are required"
+        })
+    }
+    const bookSale = await BookSubmit.create ({
+        ledgerId,
+        studentName,
+        studentClass,
+        totalamount,
+        submitAmount: submitFees,
+        dues,
+        date,
+        paymentMethod,
+        submitedBy: req.user._id
+    })
+    if(!bookSale){
+        return res.status(500).json({
+            success: false,
+            message: "Failed to submit book sale"
+        })
+    }
+    return res.status(201).json ({
+        success: true,
+        bookSale,
+        message: "Book sale submitted successfully",
+    })
+})
+
+export const allBookData = TryCatch(async(req,res) => {
+    const booksale = await BookSubmit.find().populate('submitedBy', 'name');
+    return res.status(200).json(booksale);
 })

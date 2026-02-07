@@ -7,6 +7,7 @@ import { MdOutlineManageHistory, MdEventNote } from "react-icons/md";
 import { GiTeacher } from "react-icons/gi";
 import { FiSearch } from "react-icons/fi";
 import { VscFeedback } from "react-icons/vsc";
+import { FaBookReader } from "react-icons/fa";
 
 const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in the conference hall.";
 
@@ -47,17 +48,8 @@ const TeacherHomePage = () => {
 
         {/* Welcome Message */}
         <div className="mb-3 flex bg-blue-300 rounded-2xl shadow-lg p-5 text-white">
-          {/* { user.thumbnails ? (
-                <img
-                  src={user.thumbnails.url}
-                  alt="Teacher Profile"
-                  className="w-15 h-15md:w-24 md:h-24 rounded-full object-cover border-4 border-blue-300"
-                  />
-              ):
-              <FaUserTie className="text-5xl text-blue-600" />
-              } */}
           <h1 className="text-2xl mr-2 flex font-bold text-gray-900 mb-1">Hey, <span className='ml-2 mr-2'>{user.name.split(' ')[0]}</span>
-           <span className='text-3xl'> <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f972/512.gif" alt="🥲" width="40" height="35"></img> </span></h1>
+            <span className='text-3xl'> <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f972/512.gif" alt="🥲" width="40" height="35"></img> </span></h1>
           {/* <p className="text-gray-600 text-sm">Welcome back to your dashboard</p> */}
         </div>
 
@@ -68,74 +60,98 @@ const TeacherHomePage = () => {
         {/* Divider */}
         <div className="h-px bg-gray-200 my-6"></div>
 
-        {/* Admin Card Section */}
+         {/* Book Sale Data */}
         <div className="mb-6">
+          <div className="grid grid-cols-2 gap-4 mb-8">
+          {(
+            // user.role === 'accountent' || 
+            user.role === 'admin') &&
+              <div onClick={() => navigate("/book-sale-data")} className="bg-gradient-to-br from-red-80 to-orange-300 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-teal-200">
+                <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
+                  <FaBookReader className="text-lg text-pink-500" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">BookSale</span>
+              </div>
+            }
+
+             {( 
+              // user.role === 'accountent' || 
+              user.role === 'admin') &&
+              <div onClick={() => navigate("/book-sale-history")} className="bg-gradient-to-br from-red-80 to-pink-300 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-teal-200">
+                <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
+                  <FaBookReader className="text-lg text-pink-500" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">BookSale History</span>
+              </div>
+            }
+        </div>
+
           <div className="flex items-center gap-3 mb-4">
             <div className="h-5 w-1 bg-blue-500 rounded-full"></div>
             <h2 className="text-lg font-bold text-gray-900">Student Fees Submit</h2>
           </div>
           <div className="grid grid-cols-3 gap-3">
             {(user.role === 'accountent' || user.role === 'admin') &&
-            <div onClick={() => navigate("/student-fee-submit")} className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-teal-200">
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <FaMoneyCheckAlt className="text-lg text-teal-600" />
+              <div onClick={() => navigate("/student-fee-submit")} className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-teal-200">
+                <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
+                  <FaMoneyCheckAlt className="text-lg text-teal-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">Fees Submit</span>
               </div>
-              <span className="font-medium text-gray-800 text-xs">Fees Submit</span>
-            </div>
             }
 
             {(user.role === 'accountent' || user.role === 'admin') &&
-            <div onClick={() => navigate("/student-fee-history")} className="bg-gradient-to-br from-red-50 to-sky-300 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-red-200">
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <FaHistory className="text-lg text-purple-600" />
+              <div onClick={() => navigate("/student-fee-history")} className="bg-gradient-to-br from-red-50 to-sky-300 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-red-200">
+                <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
+                  <FaHistory className="text-lg text-purple-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">Fees History</span>
               </div>
-              <span className="font-medium text-gray-800 text-xs">Fees History</span>
-            </div>
             }
 
             {(user.role === 'admin') &&
-            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-red-200">
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <FaBell className="text-lg text-red-600" />
+              <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-red-200">
+                <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
+                  <FaBell className="text-lg text-red-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">Notifications</span>
               </div>
-              <span className="font-medium text-gray-800 text-xs">Notifications</span>
-            </div>
-           }
-           {(user.role === 'admin') &&
-             <div onClick={() => navigate("/student-attendence")} className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
-            <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
-              <FaClipboardList className="text-xl text-blue-600" />
-            </div>
-            <span className="font-medium text-gray-800 text-sm">Attendance</span>
-          </div> 
-           }
+            }
+            {(user.role === 'admin') &&
+              <div onClick={() => navigate("/student-attendence")} className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
+                <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
+                  <FaClipboardList className="text-xl text-blue-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-sm">Attendance</span>
+              </div>
+            }
 
-           {(user.role === 'admin') &&
-             <div onClick={() => navigate('/student-data-input')} className="bg-gradient-to-br from-blue-50 to-blue-400 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
-            <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
-              <FaUserGraduate className="text-xl text-blue-600" />
-            </div>
-            <span className="font-medium text-gray-800 text-sm">Student Data</span>
-          </div> 
-           }
+            {(user.role === 'admin') &&
+              <div onClick={() => navigate('/student-data-input')} className="bg-gradient-to-br from-blue-50 to-blue-400 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
+                <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
+                  <FaUserGraduate className="text-xl text-blue-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-sm">Student Data</span>
+              </div>
+            }
 
-           {(user.role === 'admin') &&
-             <div onClick={() => navigate('/student-data')} className="bg-gradient-to-br from-blue-50 to-yellow-400 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
-            <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
-              <FaSearch className="text-xl text-blue-600" />
-            </div>
-            <span className="font-medium text-gray-800 text-sm">Search Student</span>
-          </div> 
-           }
+            {(user.role === 'admin') &&
+              <div onClick={() => navigate('/student-data')} className="bg-gradient-to-br from-blue-50 to-yellow-400 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
+                <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
+                  <FaSearch className="text-xl text-blue-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-sm">Search Student</span>
+              </div>
+            }
 
-           {(user.role === 'admin') &&
-             <div onClick={() => navigate("/student-register")} className="bg-gradient-to-br from-blue-50 to-black-500 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
-            <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
-              <FaUserTie className="text-xl text-blue-600" />
-            </div>
-            <span className="font-medium text-gray-800 text-sm">Student Registration</span>
-          </div> 
-           }
+            {(user.role === 'admin') &&
+              <div onClick={() => navigate("/student-register")} className="bg-gradient-to-br from-blue-50 to-black-500 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
+                <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
+                  <FaUserTie className="text-xl text-blue-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-sm">Student Registration</span>
+              </div>
+            }
           </div>
         </div>
 
@@ -150,22 +166,22 @@ const TeacherHomePage = () => {
           </div>
           <div className="grid grid-cols-3 gap-3">
             {(user.role === 'accountent' || user.role === 'admin') &&
-            <div onClick={() => navigate("/total-spend")} className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <FaRupeeSign className="text-lg text-blue-600" />
+              <div onClick={() => navigate("/total-spend")} className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
+                <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
+                  <FaRupeeSign className="text-lg text-blue-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">Spend</span>
               </div>
-              <span className="font-medium text-gray-800 text-xs">Spend</span>
-            </div>
             }
 
             {(user.role === 'accountent' || user.role === 'admin') &&
-            <div onClick={() => navigate("/spend-history")} className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-green-200">
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <MdOutlineManageHistory className="text-lg text-green-600" />
+              <div onClick={() => navigate("/spend-history")} className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-green-200">
+                <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
+                  <MdOutlineManageHistory className="text-lg text-green-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">Spend History</span>
               </div>
-              <span className="font-medium text-gray-800 text-xs">Spend History</span>
-            </div>
-           }
+            }
           </div>
         </div>
 
@@ -181,42 +197,42 @@ const TeacherHomePage = () => {
 
           <div className="grid grid-cols-3 gap-3">
             {(user.role === 'accountent' || user.role === 'admin') &&
-            <div onClick={() => navigate("/teacher-payment")} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-purple-200"> 
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <GiTeacher className="text-lg text-purple-600" />
+              <div onClick={() => navigate("/teacher-payment")} className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-purple-200">
+                <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
+                  <GiTeacher className="text-lg text-purple-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">Teacher Payment</span>
               </div>
-              <span className="font-medium text-gray-800 text-xs">Teacher Payment</span>
-            </div>
-             }
+            }
 
-             {(user.role === 'accountent' || user.role === 'admin' || user.role === 'teacher') &&
-            <div onClick={() => navigate("/spend-history")} className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-yellow-200">
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <GiTeacher className="text-lg text-yellow-600" />
+            {(user.role === 'accountent' || user.role === 'admin' || user.role === 'teacher') &&
+              <div onClick={() => navigate("/spend-history")} className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-yellow-200">
+                <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
+                  <GiTeacher className="text-lg text-yellow-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">History Payment</span>
               </div>
-              <span className="font-medium text-gray-800 text-xs">History Payment</span>
-            </div>
             }
 
             {
-            user.role === 'admin' &&
-            <div onClick={() => navigate("/teacher-registration")} className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-teal-200">
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <FaUserTie className="text-lg text-teal-600" />
+              user.role === 'admin' &&
+              <div onClick={() => navigate("/teacher-registration")} className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-teal-200">
+                <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
+                  <FaUserTie className="text-lg text-teal-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">Teacher Registration</span>
               </div>
-              <span className="font-medium text-gray-800 text-xs">Teacher Registration</span>
-            </div>
-             }
+            }
 
-             {
-            user.role === 'admin' &&
-            <div onClick={() => navigate("/teacher-registration")} className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-teal-200">
-              <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
-                <FaUserTie className="text-lg text-teal-600" />
+            {
+              user.role === 'admin' &&
+              <div onClick={() => navigate("/teacher-registration")} className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-teal-200">
+                <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
+                  <FaUserTie className="text-lg text-teal-600" />
+                </div>
+                <span className="font-medium text-gray-800 text-xs">Teacher Data</span>
               </div>
-              <span className="font-medium text-gray-800 text-xs">Teacher Data</span>
-            </div>
-             }
+            }
           </div>
         </div>
 
@@ -233,7 +249,7 @@ const TeacherHomePage = () => {
               <h3 className="font-semibold text-gray-800 text-sm">FeedBack</h3>
             </div>
           </div>
-          
+
           <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 flex items-center gap-4 border border-blue-200">
             <div className="p-3 rounded-lg bg-white shadow-sm">
               <FaUserGraduate className="text-xl text-blue-600" />
@@ -262,14 +278,14 @@ const TeacherHomePage = () => {
         <div className="w-full mb-8">
           <div className="bg-white rounded-2xl shadow-lg flex flex-col md:flex-row items-center gap-6 p-6 md:p-8 w-full">
             <div className="flex items-center gap-4">
-              { user.thumbnails ? (
+              {user.thumbnails ? (
                 <img
                   src={user.thumbnails.url}
                   alt="Teacher Profile"
                   className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover border-4 border-blue-300"
-                  />
-              ):
-              <FaUserTie className="text-5xl text-blue-600" />
+                />
+              ) :
+                <FaUserTie className="text-5xl text-blue-600" />
               }
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-1">Welcome,</h2>
@@ -315,6 +331,31 @@ const TeacherHomePage = () => {
               <FaHistory className="text-4xl text-blue-600" />
               <span className="text-xl font-semibold cursor-pointer text-gray-800">Student Fees History</span>
               <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold cursor-pointer hover:bg-blue-600 transition">View History</button>
+            </div>
+          }
+
+          {/* book sale data */}
+          {
+            user.role === 'admin' &&
+            <div
+              onClick={() => navigate("/book-sale-data")}
+              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
+            >
+              <FaBookReader className="text-4xl text-pink-500" />
+              <span className="text-xl font-semibold text-gray-800">Book Sale Data</span>
+              <button className="mt-2 px-4 cursor-pointer py-2 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">Submit Data</button>
+            </div>
+          }
+
+          {
+            user.role === 'admin' &&
+            <div
+              onClick={() => navigate("/book-sale-history")}
+              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
+            >
+              <FaBookReader className="text-4xl text-pink-500" />
+              <span className="text-xl font-semibold text-gray-800">Book Sale History</span>
+              <button className="mt-2 px-4 cursor-pointer py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">View History</button>
             </div>
           }
           {/* Teacher Attendance */}

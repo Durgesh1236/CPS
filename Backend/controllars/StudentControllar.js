@@ -1,48 +1,8 @@
-// import { StudentAccountCreate } from "../models/StudentAccountCreate.js";
 import { Student } from "../models/StudentModel.js";
 import generateToken from "../utils/generateToken.js";
-// import { Student } from "../models/StudentModel";
 import TryCatch from "../utils/TryCatch.js";
 import bcrypt from 'bcrypt';
 
-// export const StudentAccount = TryCatch(async(req, res) => {
-//     const { ledgerId, name, password, studentfeeID } = req.body;
-//     if(!ledgerId || !name || !password){
-//         return res.status(400).json({
-//             success: false,
-//             message: "Please provide all required fields"
-//         })
-//     }
-
-//     if(password.length < 6){
-//         return res.json({
-//             success: false,
-//             message: "Password must be at least 6 characters"
-//         })
-//     }
-
-//     const StudentExists = await StudentAccountCreate.findOne({ ledgerId });
-//     if(StudentExists){
-//         return res.status(400).json({
-//             success: false,
-//             message: "Student with this ledgerId already exists"
-//         })
-//     }
-
-//     const hashPassword = await bcrypt.hash(password, 10);
-//     const Student = await StudentAccountCreate.create({
-//         ledgerId,
-//         name,
-//         password: hashPassword,
-//         studentfeeID
-//     });
-
-//     return res.status(201).json({
-//         success: true,
-//         Student,
-//         message: "Student Account Created Successfully"
-//     })
-// })
 
 export const addStudent = TryCatch(async (req, res) => {
     const { ledgerId, password, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails } = req.body;
