@@ -226,7 +226,7 @@ const TeacherHomePage = () => {
 
             {
               user.role === 'admin' &&
-              <div onClick={() => navigate("/teacher-registration")} className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-teal-200">
+              <div onClick={() => navigate("/teacher-data")} className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-teal-200">
                 <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
                   <FaUserTie className="text-lg text-teal-600" />
                 </div>

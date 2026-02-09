@@ -1,3 +1,4 @@
+import { BookSubmit } from "../models/BookSubmitModel.js";
 import { Student } from "../models/StudentModel.js";
 import generateToken from "../utils/generateToken.js";
 import TryCatch from "../utils/TryCatch.js";

@@ -399,3 +399,42 @@ export const allBookData = TryCatch(async(req,res) => {
     const booksale = await BookSubmit.find().populate('submitedBy', 'name');
     return res.status(200).json(booksale);
 })
+
+export const editBookData = TryCatch(async(req,res) => {
+    const { id } = req.params;
+    const { ledgerId, studentName, studentClass, paymentMethod, totalamount, submitAmount, dues} = req.body;
+    const bookData = await BookSubmit.findById(id);
+    if(!bookData){
+        return res.status(404).json({
+            success: false,
+            message: "Book data not found"
+        })
+    } 
+    bookData.ledgerId = ledgerId || bookData.ledgerId;
+    bookData.studentName = studentName || bookData.studentName;
+    bookData.studentClass = studentClass || bookData.studentClass;
+    bookData.totalamount = totalamount || bookData.totalamount;
+    bookData.submitAmount = submitAmount || bookData.submitAmount;
+    bookData.dues = dues || bookData.dues;
+    bookData.paymentMethod = paymentMethod || bookData.paymentMethod;
+    await bookData.save();
+    return res.status(200).json({
+        success: true,
+        message: "Book data updated successfully",
+    })
+})
+
+export const deleteBookData = TryCatch(async(req,res) => {
+    const { id } = req.params;
+    const bookData = await BookSubmit.findByIdAndDelete(id);
+    if(!bookData){
+        return res.status(404).json({
+            success: false,
+            message: "Book data not found"
+        })
+    }
+    return res.status(200).json({
+        success: true,
+        message: "Book data deleted successfully"
+    })
+})

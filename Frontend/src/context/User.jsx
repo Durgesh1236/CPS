@@ -425,7 +425,41 @@ export const UserProvider = ({ children }) => {
                 setLoading(false);
         } catch (error) {
             setLoading(false);
-            // toast.error(error.message);
+        }
+    }
+
+    async function editBookData(id, ledgerId, studentName, studentClass, paymentMethod, totalamount, submitAmount, dues) {
+        setLoading(true);
+        console.log(id, ledgerId, studentName, studentClass, paymentMethod, totalamount, submitAmount, dues);
+        try {
+            const { data } = await axios.post(`/api/student/fee/book/data/update/${id}`, { ledgerId, studentName, studentClass, paymentMethod, totalamount, submitAmount, dues });
+            if(data.success){
+                toast.success(data.message);
+                setLoading(false);
+                await allbookdata();
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            setLoading(false);
+        }
+    }
+
+    async function Deletebookdata(id) {
+        setLoading(true);
+        try {
+            const { data } = await axios.post(`/api/student/fee/book/data/delete/${id}`);
+            if(data.success){
+                toast.success(data.message);
+                setLoading(false);
+                await allbookdata();
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            setLoading(false);
         }
     }
     useEffect(() => {
@@ -471,7 +505,9 @@ export const UserProvider = ({ children }) => {
         TeacherImage,
         StudentAccountDelete,
         bookSale,
-        BookSaleData
+        BookSaleData,
+        editBookData,
+        Deletebookdata
     }}>{children}</UserContext.Provider>;
 }
 

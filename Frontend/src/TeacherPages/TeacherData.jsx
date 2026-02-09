@@ -36,7 +36,7 @@ const TeacherData = () => {
   return (
     <TeacherLayout>
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex flex-col items-center justify-start pt-24 px-2">
-      <div className="w-full bg-white shadow-2xl rounded-2xl p-1 sm:p-4 md:p-8 border-4 border-blue-300">
+      <div className="w-full bg-white shadow-2xl rounded-2xl p-1 sm:p-4 md:p-8">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-green-500 to-blue-700 flex items-center justify-center gap-3 drop-shadow-lg">
             <FaUserCheck className="text-blue-500 animate-bounce" /> Teacher Data
           </h2>
