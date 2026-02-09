@@ -20,7 +20,7 @@ const Spend = () => {
 
   return (
     <TeacherLayout>
-      <div className="h-full pt-10 px-2 sm:px-6 bg-gradient-to-br from-indigo-100 via-blue-50 to-pink-100 flex items-center justify-center">
+      <div className="h-full pt-10 px-2 sm:px-6 flex items-center justify-center">
         <div className="w-full max-w-4xl mx-auto">
           <div className="bg-white bg-opacity-90 rounded-3xl shadow-2xl p-6 sm:p-10 border border-indigo-100 ring-1 ring-indigo-50">
             <div className="flex items-center justify-between mb-6">

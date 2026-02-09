@@ -206,7 +206,7 @@ const TeacherHomePage = () => {
             }
 
             {(user.role === 'accountent' || user.role === 'admin' || user.role === 'teacher') &&
-              <div onClick={() => navigate("/spend-history")} className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-yellow-200">
+              <div onClick={() => alert("History Payment feature is under development")} className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-yellow-200">
                 <div className="p-2 rounded-lg bg-white shadow-sm mb-2">
                   <GiTeacher className="text-lg text-yellow-600" />
                 </div>
