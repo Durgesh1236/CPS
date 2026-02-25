@@ -5,6 +5,7 @@ import TryCatch from "../utils/TryCatch.js";
 import bcrypt from 'bcrypt';
 import cloudinary from "cloudinary";
 import getDataurl from "../utils/urlGenerator.js";
+import { TeacherPayment } from "../models/TeacherPaymentModel.js";
 
 export const registerUser = TryCatch(async(req, res) => {
     const {name, email, password, mobileNo, role} = req.body;
@@ -204,5 +205,54 @@ export const deleteTeacherProfileImage = TryCatch(async(req, res) => {
     return res.status(200).json({
         success: true,
         message: "Teacher profile image deleted successfully"
+    })
+})
+
+export const teacherPayment = TryCatch(async(req, res) => {
+    const { teacherName, teacherBackdues, teacherPaid, teacherDues, submitedDate } = req.body;
+    if(!teacherName || !teacherBackdues || !teacherPaid || !teacherDues || !submitedDate){
+        return res.status(400).json({
+            success: false,
+            message: "All fields are required"
+        })
+    }
+    const TeacherPayment = await TeacherPayment.create({
+        teacherName,
+        teacherBackdues,
+        teacherPaid,
+        teacherDues,
+        submitedDate,
+        submitedBy: req.user._id
+    })
+
+    return res.status(201).json({
+        success: true,
+        message: "Teacher payment created successfully",
+    })
+})
+
+export const getTeacherPayment = TryCatch(async(req, res) => {
+    const teacherPayment = await TeacherPayment.find().populate("submitedBy", "name");
+    return res.status(200).json(teacherPayment);
+})
+
+export const deleteTeacherPayment = TryCatch(async(req, res) => {
+    const { id } = req.params;
+    if(!id){
+        return res.status(400).json({
+            success: false,
+            message: "Teacher payment record is not found"
+        })
+    }
+    const teacherPayment = await TeacherPayment.findByIdAndDelete(id);
+    if(!teacherPayment){
+        return res.status(404).json({
+            success: false,
+            message: "Teacher payment record is not found"
+        })
+    }
+    return res.status(200).json({
+        success: true,
+        message: "Teacher payment record deleted successfully"
     })
 })

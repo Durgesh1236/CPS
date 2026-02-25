@@ -67,12 +67,13 @@ const TeacherLoginPage = () => {
             Login
           </button>
         </form>
-        {/* {success && (
-          <div className="mt-6 p-4 bg-green-100 text-green-700 rounded text-center font-semibold">
-            Login successful!<br />
-            Welcome, Teacher.
-          </div>
-        )} */}
+        <button
+            type="submit"
+            className="w-full cursor-pointer mt-2 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition"
+            onClick={() => navigate("/login")}
+          >
+            Student Login
+          </button>
       </div>
     </div>
     </Layout>

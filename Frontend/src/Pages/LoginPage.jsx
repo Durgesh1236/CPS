@@ -75,19 +75,13 @@ const LoginPage = () => {
               Login
             </button>
           </form>
-          <div className="mt-8 flex flex-col gap-3 px-8">
+          <div className="mt-2 flex flex-col gap-3 px-8">
             <button
               className="w-full cursor-pointer bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition font-semibold"
               onClick={() => navigate('/teacher-login')}
             >
               Teacher Login
             </button>
-            {/* <button
-              className="w-full cursor-pointer bg-gray-700 text-white py-2 rounded hover:bg-gray-900 transition font-semibold"
-              onClick={() => navigate('/admin-login')}
-            >
-              Admin Login
-            </button> */}
           </div>
         </div>
       </div>

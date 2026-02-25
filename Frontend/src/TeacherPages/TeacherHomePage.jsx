@@ -273,10 +273,10 @@ const TeacherHomePage = () => {
       </div>
 
       {/* Desktop View - Your original code EXACTLY AS IT WAS */}
-      <div className="hidden md:block min-h-screen bg-gradient-to-br from-blue-50 to-yellow-50 flex-col items-center p-4 w-full pt-20">
+      <div className="hidden md:block min-h-screen flex-col items-center p-4 w-full pt-20">
         {/* Teacher Info Box */}
         <div className="w-full mb-8">
-          <div className="bg-white rounded-2xl shadow-lg flex flex-col md:flex-row items-center gap-6 p-6 md:p-8 w-full">
+          <div className="bg-white rounded-2xl shadow-lg shadow-slate-200 flex flex-col md:flex-row items-center gap-6 p-6 md:p-8 w-full">
             <div className="flex items-center gap-4">
               {user.thumbnails ? (
                 <img
@@ -301,194 +301,130 @@ const TeacherHomePage = () => {
             </div>
           </div>
         </div>
-        {/* Main Boxes */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 w-full">
-          {/* Total Students */}
-          <div
-            className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-default w-full"
-          >
-            <FaUserGraduate className="text-4xl text-teal-600" />
-            <span className="text-xl font-semibold text-gray-800">Total Students</span>
-            <div className="text-3xl font-bold text-indigo-600">{totalStudents == null ? '—' : totalStudents}</div>
-          </div>
-          {/* Student Fees Submit */}
-          {(user.role === 'accountent' || user.role === 'admin') &&
-            <div
-              onClick={() => navigate("/student-fee-submit")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <FaMoneyCheckAlt className="text-4xl text-green-600" />
-              <span className="text-xl font-semibold text-gray-800">Student Fees Submit</span>
-              <button className="mt-2 cursor-pointer px-4 py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit Details</button>
-            </div>
-          }
-          {/* Student Fees History */}
-          {(user.role === 'accountent' || user.role === 'admin') &&
-            <div
-              onClick={() => navigate("/student-fee-history")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <FaHistory className="text-4xl text-blue-600" />
-              <span className="text-xl font-semibold cursor-pointer text-gray-800">Student Fees History</span>
-              <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg font-bold cursor-pointer hover:bg-blue-600 transition">View History</button>
-            </div>
-          }
-
-          {/* book sale data */}
-          {
-            user.role === 'admin' &&
-            <div
-              onClick={() => navigate("/book-sale-data")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <FaBookReader className="text-4xl text-pink-500" />
-              <span className="text-xl font-semibold text-gray-800">Book Sale Data</span>
-              <button className="mt-2 px-4 cursor-pointer py-2 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">Submit Data</button>
-            </div>
-          }
-
-          {
-            user.role === 'admin' &&
-            <div
-              onClick={() => navigate("/book-sale-history")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <FaBookReader className="text-4xl text-pink-500" />
-              <span className="text-xl font-semibold text-gray-800">Book Sale History</span>
-              <button className="mt-2 px-4 cursor-pointer py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">View History</button>
-            </div>
-          }
-          {/* Teacher Attendance */}
-          <div
-            // onClick={() => navigate("/teacher-attendance")}
-            className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-          >
-            <FaClipboardList className="text-4xl text-purple-600" />
-            <span className="text-xl font-semibold  text-gray-800">Teacher Attendance</span>
-            <button className="mt-2 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View Attendance</button>
-          </div>
-
-
-          {(user.role === 'accountent' || user.role === 'admin') &&
-            <div
-              onClick={() => navigate("/total-spend")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <FaRupeeSign className="text-4xl text-blue-600" />
-              <span className="text-xl font-semibold text-gray-800">Spend</span>
-              <button className="mt-2 px-4 cursor-pointer py-2 bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Submit Spend</button>
-            </div>
-          }
-
-          {(user.role === 'accountent' || user.role === 'admin') &&
-            <div
-              onClick={() => navigate("/spend-history")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <MdOutlineManageHistory className="text-4xl text-blue-600" />
-              <span className="text-xl font-semibold text-gray-800">Spend History</span>
-              <button className="mt-2 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">View History</button>
-            </div>
-          }
-
-          {/* Teacher Payment */}
-          {(user.role === 'accountent' || user.role === 'admin') &&
-            <div
-              onClick={() => navigate("/teacher-payment")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <GiTeacher className="text-4xl text-blue-600" />
-              <span className="text-xl font-semibold text-gray-800">Teacher Payment</span>
-              <button className="mt-2 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Teacher Paid</button>
-            </div>
-          }
-
-          {(user.role === 'accountent' || user.role === 'admin') &&
-            <div
-              onClick={() => navigate("/spend-history")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <GiTeacher className="text-4xl text-blue-600" />
-              <span className="text-xl font-semibold text-gray-800">Teacher Paid History</span>
-              <button className="mt-2 px-4 py-2 cursor-pointer bg-blue-500 text-white rounded-lg font-bold hover:bg-blue-600 transition">Teacher Paid History</button>
-            </div>
-          }
-
-          {/* Student Attendance */}
-          <div
-            onClick={() => navigate("/student-attendence")}
-            className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-          >
-            <FaClipboardList className="text-4xl text-green-600" />
-            <span className="text-xl font-semibold text-gray-800">Student Attendance</span>
-            <button className="mt-2 px-4 py-2 cursor-pointer bg-green-500 text-white rounded-lg font-bold hover:bg-green-600 transition">Take Attendance</button>
-          </div>
-
-          {/* Student Data Input - link to the form page */}
-          {(
-            // user.role === 'accountent' || 
-            user.role === 'admin') &&
-            <div
-              onClick={() => navigate('/student-data-input')}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
+        {/* Main Boxes */} 
+        {/* Student Data Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-blue-200 pb-2">Student Data</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+            {/* Total Students */}
+            <div className="bg-white h-28 transition hover:shadow-lg rounded-xl shadow-lg p-8 flex flex-row items-center gap-2 cursor-default w-full">
               <FaUserGraduate className="text-4xl text-teal-600" />
-              <span className="text-xl font-semibold text-gray-800">Student Data Input</span>
-              <button className="mt-2 cursor-pointer px-4 py-2 bg-teal-500 text-white rounded-lg font-bold hover:bg-teal-600 transition">Add Student</button>
+              <p className="text-xl font-semibold text-gray-800">Total Students</p>
+              <div className="text-3xl font-bold text-indigo-600">{totalStudents == null ? '—' : totalStudents}</div>
             </div>
-          }
-
-          {/* Student Data Search - added before Teacher Registration */}
-          {(
-            // user.role === 'accountent' || 
-            user.role === 'admin') &&
-            <div
-              onClick={() => navigate('/student-data')}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <FaSearch className="text-4xl text-indigo-600" />
-              <span className="text-xl font-semibold text-gray-800">Student Data Search</span>
-              <button className="mt-2 cursor-pointer px-4 py-2 bg-indigo-500 text-white rounded-lg font-bold hover:bg-indigo-600 transition">Search Students</button>
+            {/* Student Fees Submit */}
+            {(user.role === 'accountent' || user.role === 'admin') &&
+              <div onClick={() => navigate("/student-fee-submit")} className="bg-white rounded-xl h-28 shadow-lg p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <FaMoneyCheckAlt className="text-4xl text-green-600" />
+                <span className="text-xl font-semibold text-gray-800">Student Fees Submit</span>
+              </div>
+            }
+            {/* Student Fees History */}
+            {(user.role === 'accountent' || user.role === 'admin') &&
+              <div onClick={() => navigate("/student-fee-history")} className="bg-white rounded-xl h-28 shadow-lg p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <FaHistory className="text-4xl text-blue-600" />
+                <span className="text-xl font-semibold cursor-pointer text-gray-800">Student Fees History</span>
+              </div>
+            }
+            {/* Student Attendance */}
+            <div onClick={() => navigate("/student-attendence")} className="bg-white rounded-xl shadow-lg p-8 flex flex-row items-center h-28 gap-4 cursor-pointer hover:scale-105 transition w-full">
+              <FaClipboardList className="text-4xl text-green-600" />
+              <span className="text-xl font-semibold text-gray-800">Student Attendance</span>
             </div>
-          }
+            {/* Student Data Input */}
+            {(user.role === 'admin') &&
+              <div onClick={() => navigate('/student-data-input')} className="bg-white rounded-xl h-28 shadow-lg p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <FaUserGraduate className="text-4xl text-teal-600" />
+                <span className="text-xl font-semibold text-gray-800">Student Data Input</span>
+              </div>
+            }
+            {/* Student Data Search */}
+            {(user.role === 'admin') &&
+              <div onClick={() => navigate('/student-data')} className="bg-white rounded-xl shadow-lg p-8 flex flex-row items-center h-28 gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <FaSearch className="text-4xl text-indigo-600" />
+                <span className="text-xl font-semibold text-gray-800">Student Data Search</span>
+              </div>
+            }
+            {/* Student Registration */}
+            {user.role === 'admin' &&
+              <div onClick={() => navigate("/student-register")} className="bg-white rounded-xl shadow-lg p-8 flex flex-row items-center h-28 gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <FaUserTie className="text-4xl text-black-500" />
+                <span className="text-xl font-semibold text-gray-800">Student Registration</span>
+              </div>
+            }
+            {/* Book Sale Data */}
+            {user.role === 'admin' &&
+              <div onClick={() => navigate("/book-sale-data")} className="bg-white rounded-xl h-28 shadow-lg p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <FaBookReader className="text-4xl text-pink-500" />
+                <span className="text-xl font-semibold text-gray-800">Book Sale Data</span>
+              </div>
+            }
+            {user.role === 'admin' &&
+              <div onClick={() => navigate("/book-sale-history")} className="bg-white rounded-xl h-28 shadow-lg p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <FaBookReader className="text-4xl text-pink-500" />
+                <span className="text-xl font-semibold text-gray-800">Book Sale History</span>
+              </div>
+            }
+          </div>
+        </div>
 
-          {/* Teacher Registration */}
-          {
-            user.role === 'admin' &&
-            <div
-              onClick={() => navigate("/teacher-registration")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <FaUserTie className="text-4xl text-orange-500" />
-              <span className="text-xl font-semibold text-gray-800">Teacher Registration</span>
-              <button className="mt-2 px-4 cursor-pointer py-2 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">Register Now</button>
+        {/* Teacher Data Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-purple-200 pb-2">Teacher Data</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+            {/* Teacher Attendance */}
+            <div className="bg-white rounded-xl h-28 shadow-lg p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+              <FaClipboardList className="text-4xl text-purple-600" />
+              <span className="text-xl font-semibold  text-gray-800">Teacher Attendance</span>
             </div>
-          }
+            {/* Teacher Payment */}
+            {(user.role === 'accountent' || user.role === 'admin') &&
+              <div onClick={() => navigate("/teacher-payment")} className="bg-white rounded-xl h-28 shadow-lg p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <GiTeacher className="text-4xl text-blue-600" />
+                <span className="text-xl font-semibold text-gray-800">Teacher Payment</span>
+              </div>
+            }
+            {/* Teacher Paid History */}
+            {(user.role === 'accountent' || user.role === 'admin') &&
+              <div onClick={() => navigate("/spend-history")} className="bg-white rounded-xl h-28 shadow-lg p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <GiTeacher className="text-4xl text-blue-600" />
+                <span className="text-xl font-semibold text-gray-800">Teacher Paid History</span>
+              </div>
+            }
+            {/* Teacher Registration */}
+            {user.role === 'admin' &&
+              <div onClick={() => navigate("/teacher-registration")} className="bg-white rounded-xl shadow-lg p-8 flex flex-row items-center h-28 gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <FaUserTie className="text-4xl text-orange-500" />
+                <span className="text-xl font-semibold text-gray-800">Teacher Registration</span>
+              </div>
+            }
+            {/* Teacher Data */}
+            {user.role === 'admin' &&
+              <div onClick={() => navigate("/teacher-data")} className="bg-white rounded-xl shadow-lg p-8 flex flex-row items-center h-28 gap-4 cursor-pointer hover:scale-105 transition w-full border-2 border-blue-300">
+                <FaUserTie className="text-4xl text-blue-700 animate-pulse" />
+                <span className="text-xl font-bold text-blue-700">Teacher Data</span>
+              </div>
+            }
+          </div>
+        </div>
 
-          {
-            user.role === 'admin' &&
-            <div
-              onClick={() => navigate("/student-register")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full"
-            >
-              <FaUserTie className="text-4xl text-black-500" />
-              <span className="text-xl font-semibold text-gray-800">Student Registration</span>
-              <button className="mt-2 px-4 cursor-pointer py-2 bg-sky-500 text-white rounded-lg font-bold hover:bg-orange-600 transition">Register Now</button>
-            </div>
-          }
-
-          {/* Teacher Data */}
-          {user.role === 'admin' &&
-            <div
-              onClick={() => navigate("/teacher-data")}
-              className="bg-white rounded-xl shadow-lg p-8 flex flex-col items-center justify-center gap-4 cursor-pointer hover:scale-105 transition w-full border-2 border-blue-300"
-            >
-              <FaUserTie className="text-4xl text-blue-700 animate-pulse" />
-              <span className="text-xl font-bold text-blue-700">Teacher Data</span>
-              <button className="mt-2 px-4 cursor-pointer py-2 bg-gradient-to-r from-blue-500 to-green-500 text-white rounded-lg font-bold hover:from-blue-600 hover:to-green-600 transition">View Teacher Data</button>
-            </div>
-          }
-
+        {/* Spend Data Section */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-green-200 pb-2">Spend Data</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+            {(user.role === 'accountent' || user.role === 'admin') &&
+              <div onClick={() => navigate("/total-spend")} className="bg-white rounded-xl h-28 shadow-lg p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <FaRupeeSign className="text-4xl text-blue-600" />
+                <span className="text-xl font-semibold text-gray-800">Spend</span>
+              </div>
+            }
+            {(user.role === 'accountent' || user.role === 'admin') &&
+              <div onClick={() => navigate("/spend-history")} className="bg-white rounded-xl h-28 shadow-lg p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <MdOutlineManageHistory className="text-4xl text-blue-600" />
+                <span className="text-xl font-semibold text-gray-800">Spend History</span>
+              </div>
+            }
+          </div>
         </div>
 
         {/* Important Message - now on next line */}

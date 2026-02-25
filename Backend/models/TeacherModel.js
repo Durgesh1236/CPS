@@ -25,18 +25,13 @@ const userSchema = new mongoose.Schema({
         id: String,
         url: String,
     },
-    verifyotp:{
-        type: String,
-        default:''
-    },
-     verifyotpExpireAt : {
-        type: Number,
-        default: 0
-     },
-     isAccountVerified:{
-        type: Boolean,
-        default: false
-     },
+    teacherPayment: [
+        {
+            type: String,
+            required: true,
+        },
+    ],
+
 }, {
     timestamps: true
 })

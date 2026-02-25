@@ -1,7 +1,7 @@
 import HomePage from './Pages/HomePage'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginPage from './Pages/LoginPage'
-import StudentHome from './Pages/StudentHome'
+import StudentHome from './StudentPage/StudentHome'
 import StuAttendence from './Pages/StuAttendence'
 import TakeStudentAttendence from './Pages/TakeStudentAttendence'
 import { FeeSubmitPage } from './AccountentPages/FeeSubmitPage'

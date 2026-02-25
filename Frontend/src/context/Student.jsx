@@ -67,7 +67,7 @@ export const StudentProvider  = ({ children }) => {
     }
 
     
-    async function studentLogout() {
+    async function studentLogout(navigate) {
         setLoading(true);
         try {
             const { data } = await axios.post("/api/student-data/student/logout");

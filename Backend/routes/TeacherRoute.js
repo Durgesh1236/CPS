@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteTeacher, editTeacherProfile, getAllTeachers, loginUser, logoutUser, MyProfile, registerUser, TeacherProfile } from "../controllars/TeacherControllar.js";
+import { deleteTeacher, editTeacherProfile, getAllTeachers, getTeacherPayment, loginUser, logoutUser, MyProfile, registerUser, teacherPayment, TeacherProfile } from "../controllars/TeacherControllar.js";
 import { isAuth } from "../middlewares/isAuth.js";
 import { 
     FeesSubmit, getAllFeesSubmit, 
@@ -30,5 +30,7 @@ router.delete('/delete-spend-record/:id', isAuth, deleteSpendRecord);
 router.delete('/delete-teacher-data/:id', isAuth, deleteTeacher);
 router.post('/edit-teacher-profile/:id', isAuth, editTeacherProfile);
 router.post('/teacher-profile-pic-upload/:id', isAuth, uploadFile, TeacherProfile);
+router.post('/teacher-payment', isAuth, teacherPayment);
+router.get('/get-all-teacher-payment', isAuth, getTeacherPayment);
 
 export default router;
