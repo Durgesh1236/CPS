@@ -7,78 +7,82 @@ import getDataurl from "../utils/urlGenerator.js";
 import cloudinary from "cloudinary";
 import sharp from "sharp";
 
-export const FeesSubmit = TryCatch(async(req, res) => {
-    const { 
-        ledgerId, 
-        studentName, 
-        studentClass, 
-        backDues, 
-        submitFees,  
-        dues, 
-        date, 
+export const FeesSubmit = TryCatch(async (req, res) => {
+    const {
+        ledgerId,
+        studentName,
+        studentClass,
+        backDues,
+        submitFees,
+        dues,
+        date,
         paymentMethod } = req.body;
-        const file = req.file;
+    const file = req.file;
 
-        if(!ledgerId || !studentName || !studentClass || !backDues || !submitFees || !dues || !date || !file) {
-            return res.status(400).json({
-                success: false,
-                message: "All fields are required"
-            })
-        }
-        const  compressedImage = await sharp(file.buffer)
-        // .resize(800,800)
-        .rotate()
-        .jpeg({ quality: 50 })
-        .png({ quality: 50 }) 
-        .toBuffer();
-
-        const fileUrl = getDataurl({...file, buffer: compressedImage});
-        const cloud = await cloudinary.v2.uploader.upload(fileUrl.content, {
-            quality: "auto",
-        });
-
-        const feeSubmit = await FeeSubmit.create ({
-            ledgerId,
-            studentName,
-            studentClass,
-            submitFees,
-            dues,
-            backDues,
-            date,
-            submittedBy: req.user?._id || undefined,
-            receiptImage:{
-                id: cloud.public_id,
-                url: cloud.secure_url,
-            },
-            paymentMethod
-        })
-        if(!feeSubmit){
-            return res.status(500).json({
-                success: false,
-                message: "Failed to submit fees"
-            })
-        }
-        return res.status(201).json ({
-            feeSubmit,
-            success: true,
-            message: "Fees submitted successfully",
-        })
-})
-
-export const getAllFeesSubmit = TryCatch(async(req, res) => {
-    const feeSubmit = await FeeSubmit.find().populate('submittedBy', 'name');
-    return res.json(feeSubmit);
-})
-
-export const totalSpend = TryCatch(async(req, res) => {
-    const { name, date, totalReceived, paymentMethod } = req.body;
-    if(!name || !date || !totalReceived || !paymentMethod) {
+    if (!ledgerId || !studentName || !studentClass || !backDues || !submitFees || !dues || !date || !file) {
         return res.status(400).json({
             success: false,
             message: "All fields are required"
         })
-    } 
-    const totalSpend = await SpendModel.create ({
+    }
+    const compressedImage = await sharp(file.buffer)
+        .resize({
+            width: 900,
+            height: 900,
+            fit: "inside", // Maintain aspect ratio
+        })
+        .rotate()
+        .jpeg({ quality: 50 })
+        // .png({ quality: 50 }) 
+        .toBuffer();
+
+    const fileUrl = getDataurl({ ...file, buffer: compressedImage });
+    const cloud = await cloudinary.v2.uploader.upload(fileUrl.content, {
+        quality: "auto",
+    });
+
+    const feeSubmit = await FeeSubmit.create({
+        ledgerId,
+        studentName,
+        studentClass,
+        submitFees,
+        dues,
+        backDues,
+        date,
+        submittedBy: req.user?._id || undefined,
+        receiptImage: {
+            id: cloud.public_id,
+            url: cloud.secure_url,
+        },
+        paymentMethod
+    })
+    if (!feeSubmit) {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to submit fees"
+        })
+    }
+    return res.status(201).json({
+        feeSubmit,
+        success: true,
+        message: "Fees submitted successfully",
+    })
+})
+
+export const getAllFeesSubmit = TryCatch(async (req, res) => {
+    const feeSubmit = await FeeSubmit.find().populate('submittedBy', 'name');
+    return res.json(feeSubmit);
+})
+
+export const totalSpend = TryCatch(async (req, res) => {
+    const { name, date, totalReceived, paymentMethod } = req.body;
+    if (!name || !date || !totalReceived || !paymentMethod) {
+        return res.status(400).json({
+            success: false,
+            message: "All fields are required"
+        })
+    }
+    const totalSpend = await SpendModel.create({
         name,
         date,
         totalReceived,
@@ -87,13 +91,13 @@ export const totalSpend = TryCatch(async(req, res) => {
         UserId: req.user?._id ? String(req.user._id) : undefined,
         submittedBy: req.user?._id || undefined,
     })
-    if(!totalSpend){
+    if (!totalSpend) {
         return res.status(500).json({
             success: false,
             message: "Failed to record spend"
         })
     }
-    return res.status(200).json ({
+    return res.status(200).json({
         totalSpend,
         success: true,
         message: "record successfully Submitted"
@@ -115,7 +119,7 @@ export const markSpendReceived = TryCatch(async (req, res) => {
     return res.status(200).json({ success: true, spend: updated, message: 'Marked as received' });
 })
 
-export const getAllSpend = TryCatch(async(req, res) => {
+export const getAllSpend = TryCatch(async (req, res) => {
     const spend = await SpendModel.find().populate('submittedBy', 'name');
     return res.status(200).json(spend);
 })
@@ -252,17 +256,17 @@ export const deleteFeeSubmit = TryCatch(async (req, res) => {
     });
 });
 
-export const editStudentProfile =  TryCatch(async (req, res) => {
+export const editStudentProfile = TryCatch(async (req, res) => {
     const { ledgerId } = req.params;
-    if(!ledgerId) {
+    if (!ledgerId) {
         return res.status(400).json({
             success: false,
             message: "Ledger ID is required"
         })
     }
     const { studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport } = req.body;
-    const student = await Student.findOne({ledgerId});
-    if(!student) {
+    const student = await Student.findOne({ ledgerId });
+    if (!student) {
         return res.status(404).json({
             success: false,
             message: "Student not found"
@@ -284,10 +288,10 @@ export const editStudentProfile =  TryCatch(async (req, res) => {
     })
 })
 
-export const editStudentFeeRecord = TryCatch(async(req, res) => {
+export const editStudentFeeRecord = TryCatch(async (req, res) => {
     const { id } = req.params;
     const { studentName, studentClass, date } = req.body;
-    if(!id) {
+    if (!id) {
         return res.status(400).json({
             success: false,
             message: "Ledger Id is wrong contact with Durgesh"
@@ -295,34 +299,34 @@ export const editStudentFeeRecord = TryCatch(async(req, res) => {
     }
 
     const studentFee = await FeeSubmit.findById(id);
-    if(!studentFee) {
+    if (!studentFee) {
         return res.status(404).json({
             success: false,
             message: "Student Fee Record not found"
         })
     }
-     studentFee.studentName = studentName || studentFee.studentName;
-     studentFee.studentClass = studentClass || studentFee.studentClass;
-     studentFee.date = date || studentFee.date;
+    studentFee.studentName = studentName || studentFee.studentName;
+    studentFee.studentClass = studentClass || studentFee.studentClass;
+    studentFee.date = date || studentFee.date;
     await studentFee.save();
     return res.status(200).json({
         success: true,
         message: "Student Fee Record updated successfully"
-    }) 
+    })
 })
 
 export const SpendHistoryEdit = TryCatch(async (req, res) => {
     const { id } = req.params;
     const { name, date, totalReceived, paymentMethod } = req.body;
-    
-    if(!id) {
+
+    if (!id) {
         return res.status(400).json({
             success: false,
             message: "ID is required"
         })
     }
     const spendRecord = await SpendModel.findById(id);
-    if(!spendRecord) {
+    if (!spendRecord) {
         return res.status(400).json({
             success: false,
             message: "Spend record not found"
@@ -339,10 +343,10 @@ export const SpendHistoryEdit = TryCatch(async (req, res) => {
     })
 })
 
-export const deleteSpendRecord = TryCatch(async(req, res) => {
+export const deleteSpendRecord = TryCatch(async (req, res) => {
     const { id } = req.params;
 
-    if(!id) {
+    if (!id) {
         return res.status(400).json({
             success: false,
             message: "ID is required"
@@ -350,28 +354,28 @@ export const deleteSpendRecord = TryCatch(async(req, res) => {
     }
 
     const SpendRecord = await SpendModel.findByIdAndDelete(id);
-    if(!SpendRecord){
+    if (!SpendRecord) {
         return res.status(404).json({
             success: false,
             message: "Spend record not found"
         })
     }
-     
+
     return res.status(200).json({
         success: true,
         message: "Spend record deleted successfully"
     })
 })
 
-export const BookSaleSubmit = TryCatch(async(req,res) => {
-    const {ledgerId, studentName, studentClass, totalamount, submitFees, dues, date, paymentMethod} = req.body;
-    if(!ledgerId || !studentName || !studentClass || !totalamount || !submitFees || !dues || !date || !paymentMethod) {
+export const BookSaleSubmit = TryCatch(async (req, res) => {
+    const { ledgerId, studentName, studentClass, totalamount, submitFees, dues, date, paymentMethod } = req.body;
+    if (!ledgerId || !studentName || !studentClass || !totalamount || !submitFees || !dues || !date || !paymentMethod) {
         return res.status(400).json({
             success: false,
             message: "All fields are required"
         })
     }
-    const bookSale = await BookSubmit.create ({
+    const bookSale = await BookSubmit.create({
         ledgerId,
         studentName,
         studentClass,
@@ -382,34 +386,34 @@ export const BookSaleSubmit = TryCatch(async(req,res) => {
         paymentMethod,
         submitedBy: req.user._id
     })
-    if(!bookSale){
+    if (!bookSale) {
         return res.status(500).json({
             success: false,
             message: "Failed to submit book sale"
         })
     }
-    return res.status(201).json ({
+    return res.status(201).json({
         success: true,
         bookSale,
         message: "Book sale submitted successfully",
     })
 })
 
-export const allBookData = TryCatch(async(req,res) => {
+export const allBookData = TryCatch(async (req, res) => {
     const booksale = await BookSubmit.find().populate('submitedBy', 'name');
     return res.status(200).json(booksale);
 })
 
-export const editBookData = TryCatch(async(req,res) => {
+export const editBookData = TryCatch(async (req, res) => {
     const { id } = req.params;
-    const { ledgerId, studentName, studentClass, paymentMethod, totalamount, submitAmount, dues} = req.body;
+    const { ledgerId, studentName, studentClass, paymentMethod, totalamount, submitAmount, dues } = req.body;
     const bookData = await BookSubmit.findById(id);
-    if(!bookData){
+    if (!bookData) {
         return res.status(404).json({
             success: false,
             message: "Book data not found"
         })
-    } 
+    }
     bookData.ledgerId = ledgerId || bookData.ledgerId;
     bookData.studentName = studentName || bookData.studentName;
     bookData.studentClass = studentClass || bookData.studentClass;
@@ -424,10 +428,10 @@ export const editBookData = TryCatch(async(req,res) => {
     })
 })
 
-export const deleteBookData = TryCatch(async(req,res) => {
+export const deleteBookData = TryCatch(async (req, res) => {
     const { id } = req.params;
     const bookData = await BookSubmit.findByIdAndDelete(id);
-    if(!bookData){
+    if (!bookData) {
         return res.status(404).json({
             success: false,
             message: "Book data not found"

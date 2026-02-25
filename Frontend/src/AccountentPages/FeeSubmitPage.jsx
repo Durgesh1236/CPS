@@ -178,6 +178,7 @@ export const FeeSubmitPage = () => {
                 type="file"
                 name="image"
                 accept="image/*"
+                capture="environment"
                 onChange={fileChangeHandler}
                 className="mt-2 w-full border rounded-lg px-4 py-2"
               />
