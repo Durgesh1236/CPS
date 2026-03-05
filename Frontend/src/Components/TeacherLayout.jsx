@@ -8,7 +8,7 @@ const TeacherLayout = ({ children }) => {
       <NavbarTeacher/>
       <div className="flex flex-1">
         {/* <Sidebar sidebarOpen = {sidebarOpen} /> */}
-        <main className="flex-1 p-4 overflow-auto">
+        <main className="flex-1 p-2 bg-gray-200 overflow-auto">
           {children}
         </main>
       </div>

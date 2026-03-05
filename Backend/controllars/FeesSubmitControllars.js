@@ -27,8 +27,8 @@ export const FeesSubmit = TryCatch(async (req, res) => {
     }
     const compressedImage = await sharp(file.buffer)
         .resize({
-            width: 900,
-            height: 900,
+            width: 800,
+            // height: 900,
             fit: "inside", // Maintain aspect ratio
         })
         .rotate()
