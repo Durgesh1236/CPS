@@ -1,4 +1,5 @@
 import { BookSubmit } from "../models/BookSubmitModel.js";
+import { FeeSubmit } from "../models/FeeSubmitModels.js";
 import { Student } from "../models/StudentModel.js";
 import generateToken from "../utils/generateToken.js";
 import TryCatch from "../utils/TryCatch.js";
@@ -137,3 +138,51 @@ export const studentLogout = TryCatch(async(req,res) => {
         message: "Logout Successfully"
     })
 })
+
+// export const studentFeeHistory = TryCatch(async(req, res) => {
+//     const { ledgerId } = req.params;
+//     const { studentclass } = req.body;
+
+//     const feeHistory = await FeeSubmit.find({
+//         ledgerId,
+//         studentClass: studentclass
+//     })
+//     if(!feeHistory){
+//         return res.json({
+//             success: false,
+//             message: "No fee history found for this student"
+//         })
+//     }
+
+//     return res.status(200).json({
+//         feeHistory,
+//         success: true,
+//         message: "Fee history retrieved successfully"
+//     })
+// })
+
+export const studentFeeHistory = TryCatch(async (req, res) => {
+    const { ledgerId } = req.params;
+    const { studentclass } = req.body;
+
+    const feeHistory = await FeeSubmit.find({
+        ledgerId: ledgerId,
+        studentClass: studentclass
+    });
+
+    console.log(feeHistory);
+    
+
+    if (feeHistory.length === 0) {
+        return res.json({
+            success: false,
+            message: "No fee history found for this student"
+        });
+    }
+
+    return res.status(200).json({
+        feeHistory,
+        success: true,
+        message: "Fee history retrieved successfully",
+    });
+});

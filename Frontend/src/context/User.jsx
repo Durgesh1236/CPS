@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
     const [results, setResults] = useState([]);
     const [spendlist, setSpendList] = useState([]);
     const [bookSale, setBookSale] = useState([]);
-
+    const [bookPrice, setBookPrice] = useState([]);
     // axios.defaults.withCredentials = true;
     async function registerTeacher(name, email, password, mobileNo, role, setForm) {
         setLoading(true);
@@ -462,6 +462,65 @@ export const UserProvider = ({ children }) => {
             setLoading(false);
         }
     }
+
+    async function BookPriceForm(studentClass, totalprice, diary, discount, BookQuantity){
+        setLoading(true);
+        try {
+            const { data } = await axios.post("/api/student-data/student/book-sale-form", { studentClass, totalprice, diary, discount, BookQuantity });
+            if(data.success){
+                toast.success(data.message);
+                setBookPrice(data.bookPrice);
+                setLoading(false);
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
+        } catch (error) {
+            setLoading(false);
+        }
+    }
+
+    async function getallbookprice() {
+        setLoading(true);
+        try {
+            const { data } = await axios.get("/api/student-data/student/get-all-book-price");
+            setBookPrice(data.bookPrice)
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+        }
+    }
+
+    async function editBookPrice(id, studentClass, totalprice, diary, discount, BookQuantity){
+        setLoading(true);
+        try {
+            const { data } = await axios.post(`/api/student-data/student/book-price-edit/${id}`, { studentClass, totalprice, diary, discount, BookQuantity });
+            if(data.success){
+                toast.success(data.message);
+                setLoading(false)
+                await getallbookprice();
+            } else {
+                setLoading(false);
+            }
+        } catch (error) {
+            setLoading(false);
+        }
+    }
+
+    async function deleteBookPrice(id) {
+        setLoading(true);
+        try {
+            const { data } = await axios.delete(`/api/student-data/student/delete-book-price/${id}`);
+            if(data.success){
+                await getallbookprice();
+                setLoading(false);
+                toast.success(data.message);
+            }
+        } catch (error) {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchUser();
         getAllTeachers();
@@ -469,6 +528,7 @@ export const UserProvider = ({ children }) => {
         getAllStudents();
         spendRecord();
         allbookdata();
+        getallbookprice();
     }, []);
 
     return <UserContext.Provider value={{
@@ -507,7 +567,11 @@ export const UserProvider = ({ children }) => {
         bookSale,
         BookSaleData,
         editBookData,
-        Deletebookdata
+        Deletebookdata,
+        BookPriceForm,
+        editBookPrice,
+        deleteBookPrice,
+        bookPrice
     }}>{children}</UserContext.Provider>;
 }
 

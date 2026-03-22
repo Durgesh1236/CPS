@@ -26,6 +26,9 @@ import BookSaleHistory from './TeacherPages/BookSaleHistory'
 import StudentAttendence from './StudentPage/StudentAttendence'
 import StudentResult from './StudentPage/StudentResult'
 import StudentFees from './StudentPage/StudentFees'
+import StudentTimetable from './StudentPage/StudentTimetable'
+import BookForm from './TeacherPages/BookForm'
+import BookPriceHistory from './TeacherPages/BookPriceHistory'
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -62,12 +65,15 @@ const App = () => {
             <Route path='/student-register' element={ isAuth ? <StudentRegister/> : <TeacherLoginPage/> }/>
             <Route path='/book-sale-data' element={ isAuth ? <BookSaleSubmit/> : <TeacherLoginPage/> }/>
             <Route path='/book-sale-history' element= {isAuth ? <BookSaleHistory/> : <TeacherLoginPage/> } />
+            <Route path='/book-form' element={isAuth ? <BookForm/> : <TeacherLoginPage/>}/>
+            <Route path='/book-price' element={isAuth ? <BookPriceHistory/> : <TeacherLoginPage/>}/>
             {/* student routes */}
             <Route path='/student-home' element={StudentAuth ? <StudentHome/> : <LoginPage/>}/>
             <Route path='/student-profile' element={StudentAuth ? <StudentProfile/> : <LoginPage/>}/>
             <Route path='/student-attendance' element={StudentAuth ? <StudentAttendence/> : <LoginPage/>}/>
             <Route path='/student-result' element={StudentAuth ? <StudentResult/> : <LoginPage/>}/>
             <Route path='/fee-submit' element={StudentAuth ? <StudentFees/> : <LoginPage/>}/>
+            <Route path='/student-time-table' element={StudentAuth ? <StudentTimetable/> : <LoginPage/>}/>
           </Routes>
         </BrowserRouter>
       }

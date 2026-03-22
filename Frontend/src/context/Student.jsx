@@ -9,25 +9,9 @@ export const StudentProvider  = ({ children }) => {
     const [studentData, setStudentData] = useState([]);
     const [studentLoading, setLoading] = useState(false);
     const [StudentAuth, setStudentAuth] = useState(false);
-// console.log(studentData.ledgerId);
-
-    // async function StudentRegister(ledgerId, name, password){
-    //     setLoading(true);
-    //     try {
-    //         const { data } = await axios.post("/api/student-data/student/register", { ledgerId, name, password });
-    //         if(data.success){
-    //             toast.success(data.message);
-    //             setLoading(false);
-    //             setStudentData(data);
-    //         } else {
-    //             toast.warning(data.message);
-    //             setLoading(false);
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //         setLoading(false);
-    //     }
-    // }
+    const [feeshistory, setFeesHistory] = useState([]);
+    const ledgerId = studentData?.ledgerId;
+    const studentclass = studentData?.studentClass;
     
     async function StudentLogin(ledgerId, password, navigate) {
         setLoading(true);
@@ -83,6 +67,29 @@ export const StudentProvider  = ({ children }) => {
             setStudentAuth(true);
         }
     }
+
+    async function feesHistory(ledgerId, studentclass){
+        console.log(ledgerId, studentclass);
+        setLoading(true);
+        try {
+            const { data } = await axios.post(`/api/student-data/student/fee-history/${ledgerId}`, { studentclass });
+            if(data.success){
+                // if(data.studentClass == studentclass){
+                setFeesHistory(data.feeHistory);
+            //  }
+                setLoading(false);
+            }
+        } catch (error) {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+    if (ledgerId) {
+        feesHistory(ledgerId, studentclass);
+    }
+   }, [ledgerId, studentclass]);
+
     useEffect(() => {
         fetchStudentData();
     },[])

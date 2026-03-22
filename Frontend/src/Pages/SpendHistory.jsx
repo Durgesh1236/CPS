@@ -47,11 +47,13 @@ const SpendHistory = () => {
                 <button onClick={spendRecord} className="px-3 py-2 bg-white rounded text-sm font-medium">Refresh</button>
               </div>
             </div>
-            <div className="bg-white rounded-2xl shadow p-4 flex flex-col justify-center">
-              <div className="text-xs text-gray-500">Filtered total</div>
-              <div className="text-lg font-bold">{formatCurrency(totalFiltered)}</div>
-              <div className="text-sm text-gray-500">{filtered.length} record(s)</div>
-            </div>
+            {user?.role === 'admin' && (
+              <div className="bg-white rounded-2xl shadow p-4 flex flex-col justify-center">
+                <div className="text-xs text-gray-500">Filtered total</div>
+                <div className="text-lg font-bold">{formatCurrency(totalFiltered)}</div>
+                <div className="text-sm text-gray-500">{filtered.length} record(s)</div>
+              </div>
+            )}
           </div>
 
           <div className="bg-white rounded-2xl shadow overflow-hidden">
@@ -95,7 +97,6 @@ const SpendHistory = () => {
     </TeacherLayout>
   )
 }
-
 
 const SpendRow = ({ it, user, onUpdate, editSpendRecord, deleteSpendRecord }) => {
   const [editing, setEditing] = useState(false);

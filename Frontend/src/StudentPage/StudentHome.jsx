@@ -52,7 +52,7 @@ const StudentHomePage = () => {
           </div>
 
           <div className="grid grid-cols-3 gap-4 mb-8">
-            <div onClick={() => alert("Fees Submit functionality coming soon!")} className="bg-gradient-to-br from-green-200 to-green-400 rounded-3xl p-2 h-28 flex flex-col items-center justify-center text-center border border-green-300">
+            <div onClick={() => navigate("/fee-submit")} className="bg-gradient-to-br from-green-200 to-green-400 rounded-3xl p-2 h-28 flex flex-col items-center justify-center text-center border border-green-300">
               <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
                 <FaRupeeSign className="text-2xl text-green-700" />
               </div>
@@ -201,7 +201,7 @@ const StudentHomePage = () => {
               <span className="text-xl font-semibold text-gray-800">Timetable</span>
             </div>
             {/* Fees */}
-            <div onClick={() => alert("Fees functionality coming soon!")} className="bg-white rounded-xl h-28 shadow shadow-gray-400 p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+            <div onClick={() => navigate("/fee-submit")} className="bg-white rounded-xl h-28 shadow shadow-gray-400 p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
               <FaRupeeSign className="text-4xl text-green-700" />
               <span className="text-xl font-semibold text-gray-800">Fees</span>
             </div>
@@ -226,7 +226,7 @@ const StudentHomePage = () => {
               <span className="text-xl font-semibold text-gray-800">Seating Plan</span>
             </div>
             {/* Result */}
-            <div onClick={() => alert("Result functionality coming soon!")} className="bg-white rounded-xl h-28 shadow shadow-gray-400 p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+            <div onClick={() => navigate("/student-result")} className="bg-white rounded-xl h-28 shadow shadow-gray-400 p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
               <FaHandPaper className="text-4xl text-pink-500" />
               <span className="text-xl font-semibold text-gray-800">Result</span>
             </div>

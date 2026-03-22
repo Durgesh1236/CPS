@@ -2,28 +2,41 @@ import React, { useEffect, useState } from 'react';
 import { FaCheckCircle, FaTimesCircle, FaCalendarAlt, FaBook } from 'react-icons/fa';
 import LayoutStu from '../Components/LayoutStu';
 import './StudentAttendence.css';
+
 const dummyAttendance = [
-  { date: '2026-03-01', subjects: [
-    { subject: 'Mathematics', status: 'present' },
-    { subject: 'Science', status: 'absent' },
-    { subject: 'English', status: 'present' },
-  ] },
-  { date: '2026-03-02', subjects: [
-    { subject: 'Mathematics', status: 'present' },
-    { subject: 'Science', status: 'present' },
-    { subject: 'English', status: 'absent' },
-  ] },
+  {
+    date: '2026-03-16',
+    subjects: [
+      { subject: 'Mathematics', status: 'present' },
+      { subject: 'Science', status: 'absent' },
+      { subject: 'English', status: 'present' },
+    ],
+    teacher: [
+      { subject: 'Mathematics', name: 'Mr. Smith' },
+      { subject: 'Science', name: 'Ms. Johnson' },
+      { subject: 'English', name: 'Mrs. Lee' },
+    ]
+  },
+  {
+    date: '2026-03-02',
+    subjects: [
+      { subject: 'Mathematics', status: 'present', teacher: 'Mr. Smith' },
+      { subject: 'Science', status: 'present', teacher: 'Ms. Johnson' },
+      { subject: 'English', status: 'absent', teacher: 'Mrs. Lee' },
+    ]
+  },
 ];
 
 const StudentAttendence = () => {
+
   const [attendance, setAttendance] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
     setAttendance(dummyAttendance);
-    if (dummyAttendance.length > 0) {
-      setSelectedDate(dummyAttendance[0].date);
-    }
+
+    const today = new Date().toISOString().split('T')[0];
+    setSelectedDate(today);
   }, []);
 
   const handleDateChange = (e) => {
@@ -34,58 +47,94 @@ const StudentAttendence = () => {
 
   return (
     <LayoutStu>
-    <div className="h-max-screen md:h-full lg:h-full mt-15 md:mt-0 lg:mt-0 bg-gray-100 p-2 sm:p-4 md:p-8 flex flex-col">
-      <div className="w-full mx-auto bg-white rounded-3xl shadow-2xl p-4 sm:p-8 mt-8">
-        <h2 className="text-2xl font-bold text-blue-700 mb-6 flex items-center gap-3">
-          <FaCalendarAlt className="text-blue-400" />Attendance
-        </h2>
-        <div className="mb-6 flex flex-col md:flex-row gap-4 items-center">
-          <label className="font-semibold text-gray-700">Select Date:</label>
-          <select
-            className="rounded-xl border border-blue-200 px-4 py-2 focus:ring-2 focus:ring-blue-300 outline-none shadow w-full md:w-auto"
-            value={selectedDate}
-            onChange={handleDateChange}
-          >
-            {attendance.map(a => (
-              <option key={a.date} value={a.date}>{a.date}</option>
-            ))}
-          </select>
-        </div>
-        <div className="overflow-x-auto w-full">
-          <table className="min-w-full bg-white rounded-xl shadow text-sm md:text-base">
-            <thead>
-              <tr className="bg-blue-100">
-                <th className="py-3 px-6 text-left font-semibold text-blue-700 flex items-center gap-2 whitespace-nowrap"><FaBook className="text-blue-400" /> Subject</th>
-                <th className="py-3 px-6 text-center font-semibold text-blue-700 whitespace-nowrap">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedAttendance && selectedAttendance.subjects.map((subject, idx) => (
-                <tr key={idx} className="border-b hover:bg-blue-50 transition animate-fadein">
-                  <td className="py-3 px-6 text-gray-800 font-medium flex items-center gap-2 whitespace-nowrap"><FaBook className="text-blue-300" /> {subject.subject}</td>
-                  <td className="py-3 px-6 text-center whitespace-nowrap">
-                    {subject.status === 'present' ? (
-                      <span className="flex items-center justify-center gap-2 text-green-600 font-semibold">
-                        <FaCheckCircle className="text-xl" /> Present
-                      </span>
-                    ) : (
-                      <span className="flex items-center justify-center gap-2 text-red-500 font-semibold">
-                        <FaTimesCircle className="text-xl" /> Absent
-                      </span>
-                    )}
-                  </td>
+
+      <div className="h-full bg-gradient-to-br from-blue-100 via-white to-blue-200">
+        <div className="w-full mt-10 lg:mt-14.5 mx-auto bg-white shadow-2xl rounded-3xl p-8 transition hover:shadow-blue-200">
+          <h2 className="text-2xl font-bold md:text-2xl lg:text-2xl text-blue-700 flex items-center gap-3 mb-6">
+            <FaCalendarAlt className="text-blue-500 text-md md:text-2xl lg:text-2xl" />
+            Student Attendance
+          </h2>
+          {/* Date Picker */}
+          <div className="flex flex-col md:flex-row items-center gap-4 mb-8">
+            <label className="font-semibold text-gray-700">
+              Select Date
+            </label>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={handleDateChange}
+              className="border border-blue-300 px-4 py-2 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
+            />
+
+          </div>
+
+          {/* Attendance Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full rounded-xl overflow-hidden">
+              <thead>
+                <tr className="bg-blue-500 text-white">
+                  <th className="py-3 px-6 text-left flex items-center gap-2">
+                    <FaBook />
+                    Subject
+                  </th>
+                  <th className="py-3 px-6 text-center">
+                    Status
+                  </th>
+
+                  <th className="py-3 px-6 text-center">
+                    Teacher Name
+                  </th>
                 </tr>
-              ))}
-              {selectedAttendance && selectedAttendance.subjects.length === 0 && (
-                <tr>
-                  <td colSpan={2} className="py-6 text-center text-gray-400">No records found for this date.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {selectedAttendance ? (
+                  selectedAttendance.subjects.map((subject, idx) => (
+                    <tr
+                      key={idx}
+                      className="border-b hover:bg-blue-50 transition"
+                    >
+                      <td className="py-3 px-6 flex items-center gap-2">
+                        <FaBook className="text-blue-400" />
+                        {subject.subject}
+                      </td>
+                      <td className="py-3 px-6 text-center">
+                        {subject.status === 'present' ? (
+                          <span className="text-green-600 font-semibold flex items-center justify-center gap-2">
+                            <FaCheckCircle />
+                            Present
+                          </span>
+                        ) : (
+                          <span className="text-red-500 font-semibold flex items-center justify-center gap-2">
+                            <FaTimesCircle />
+                            Absent
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3 px-6 text-center">
+                        {/* Show teacher name for each subject */}
+                        {subject.teacher ? subject.teacher : (() => {
+                          // For 2026-03-16, teacher info is in selectedAttendance.teacher array
+                          if (selectedAttendance.teacher && Array.isArray(selectedAttendance.teacher)) {
+                            const teacherObj = selectedAttendance.teacher.find(t => t.subject === subject.subject);
+                            return teacherObj ? teacherObj.name : 'N/A';
+                          }
+                          return 'N/A';
+                        })()}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3" className="py-8 text-center text-gray-400 text-lg">
+                      ❌ Data not found for selected date
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
     </LayoutStu>
   );
 };

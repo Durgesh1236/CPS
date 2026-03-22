@@ -1,3 +1,4 @@
+import { BookPrice } from "../models/BookPriceModel.js";
 import { BookSubmit } from "../models/BookSubmitModel.js";
 import { FeeSubmit } from "../models/FeeSubmitModels.js";
 import { SpendModel } from "../models/SpendModel.js";
@@ -442,3 +443,81 @@ export const deleteBookData = TryCatch(async (req, res) => {
         message: "Book data deleted successfully"
     })
 })
+
+export const bookPriceForm = TryCatch(async(req, res) => {
+    const { studentClass, totalprice, diary, discount, BookQuantity } = req.body;
+    if(!studentClass || !totalprice || !diary || !discount || !BookQuantity){
+        return res.status(400).json({
+            success:false,
+            message: "All fields are required"
+        })
+    }
+
+    const bookPrice = await BookPrice.create({
+        studentClass,
+        bookTotalPrice: totalprice,
+        diary,
+        discount,
+        totalPayable: String(Number(totalprice) + Number(diary) - Number(discount)),
+        BookQuantity
+    })
+
+    if(!bookPrice){
+        return res.status(500).json({
+            success: false,
+            message: "Failed to create book price"
+        })
+    }
+
+    return res.status(200).json({
+        success: true,
+        bookPrice,
+        message: "Book price created successfully"
+    })
+})
+
+export const getBookPrice = TryCatch(async(req, res) => {
+    const bookPrice = await BookPrice.find();
+    return res.status(200).json({
+        success: true,
+        bookPrice
+    })
+})
+
+export const bookPriceEdit = TryCatch(async(req, res) => {
+    const { id } = req.params;
+    const { studentClass, totalprice, diary, discount, BookQuantity } = req.body;
+    const bookPrice = await BookPrice.findById(id);
+    if(!bookPrice){
+        return res.status(404).json({
+            success: false,
+            message: "Book price not found"
+        })
+    }
+    bookPrice.studentClass = studentClass || bookPrice.studentClass;
+    bookPrice.bookTotalPrice = totalprice || bookPrice.bookTotalPrice;
+    bookPrice.diary = diary || bookPrice.diary;
+    bookPrice.discount = discount || bookPrice.discount;
+    bookPrice.BookQuantity = BookQuantity || bookPrice.BookQuantity;
+    await bookPrice.save();
+    return res.status(200).json({
+        success: true,
+        message: "Book price updated successfully"
+    })
+})
+
+export const bookPriceDelete = TryCatch(async(req, res) => {
+    const { id } = req.params;
+    const bookPrice = await BookPrice.findByIdAndDelete(id);
+    if(!bookPrice){
+        return res.status(404).json({
+            success: false,
+            message: "Book price not found"
+        })
+    }
+    return res.status(200).json({
+        success: true,
+        message: "Book price deleted successfully"
+    })
+})
+

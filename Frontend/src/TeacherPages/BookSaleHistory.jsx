@@ -1,153 +1,231 @@
-import TeacherLayout from '../Components/TeacherLayout';
-import { useState } from 'react';
-import { UserData } from '../context/User';
+import React, { useState } from "react";
+import TeacherLayout from "../Components/TeacherLayout";
+import { UserData } from "../context/User";
 import { MdDelete } from "react-icons/md";
 
 const BookSaleHistory = () => {
-	const [editIndex, setEditIndex] = useState(null);
-	const [editRow, setEditRow] = useState({});
-	const { user, bookSale, Deletebookdata, editBookData } = UserData();
-	const role = user?.role || 'accountant';
+  const [editIndex, setEditIndex] = useState(null);
+  const [editRow, setEditRow] = useState({});
+  const [showSummary, setShowSummary] = useState(false);
 
-	// Edit button handler
-	const handleEdit = (index, row) => {
-		setEditIndex(index);
-		setEditRow({ ...row });
-	};
+  const { bookSale, Deletebookdata, editBookData } = UserData();
 
-	// Save button handler (mock, you should replace with API call)
-	const handleSave = (row) => {
-		editBookData(row._id, editRow.ledgerId, editRow.studentName, editRow.studentClass, editRow.paymentMethod, editRow.totalamount, editRow.submitAmount, editRow.dues);
-		setEditIndex(null);
-	};
+  // ✅ Calculations
+  const totalSubmitAmount = bookSale.reduce(
+    (sum, row) => sum + (Number(row.submitAmount) || 0),
+    0
+  );
 
-	// Cancel button handler
-	const handleCancel = () => {
-		setEditIndex(null);
-		setEditRow({});
-	};
-	return (
-		<TeacherLayout>
-			<div className="w-full mx-auto mt-20 p-4">
-				<h2 className="text-3xl font-extrabold mb-8 text-center text-blue-700 tracking-tight drop-shadow animate-fade-in">Book Sale History</h2>
-				<div className="overflow-x-auto rounded-xl shadow-lg bg-gradient-to-br from-blue-50 to-white p-2 md:p-6">
-					<div className="w-full overflow-x-auto">
-						<table className="min-w-full divide-blue-200 bg-white rounded-xl text-xs sm:text-sm md:text-base">
-							<thead className="bg-blue-200">
-								<tr>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">S.No</th>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">LedgerID</th>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Name</th>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Class</th>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Payment Method</th>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Total Amount</th>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Submit Amount</th>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Dues</th>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Date</th>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Submitted By</th>
-									<th className="px-4 py-3 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Status</th>
-								</tr>
-							</thead>
-							<tbody className="divide-y divide-blue-100">
-								{bookSale.map((row, index) => (
-									<tr key={row.sNo} className="hover:bg-blue-50 transition group">
-										<td className="px-4 py-3 whitespace-nowrap font-semibold text-gray-700 group-hover:text-blue-700">{index + 1}</td>
-										{editIndex === index ? (
-											<>
-												<td className="px-4 py-3 whitespace-nowrap">
-													<input
-														className="border rounded px-2 py-1 w-24 sm:w-32"
-														value={editRow.ledgerId || ''}
-														onChange={e => setEditRow({ ...editRow, ledgerId: e.target.value })}
-													/>
-												</td>
-												<td className="px-4 py-3 whitespace-nowrap">
-													<input
-														className="border rounded px-2 py-1 w-24 sm:w-32"
-														value={editRow.studentName || ''}
-														onChange={e => setEditRow({ ...editRow, studentName: e.target.value })}
-													/>
-												</td>
-												<td className="px-4 py-3 whitespace-nowrap">
-													<input
-														className="border rounded px-2 py-1 w-16 sm:w-24"
-														value={editRow.studentClass || ''}
-														onChange={e => setEditRow({ ...editRow, studentClass: e.target.value })}
-													/>
-												</td>
-												<td className="px-4 py-3 whitespace-nowrap">
-													<input
-														className="border rounded px-2 py-1 w-20 sm:w-28"
-														value={editRow.paymentMethod || ''}
-														onChange={e => setEditRow({ ...editRow, paymentMethod: e.target.value })}
-													/>
-												</td>
-												<td className="px-4 py-3 whitespace-nowrap">
-													<input
-														type="number"
-														className="border rounded px-2 py-1 w-20 sm:w-28"
-														value={editRow.totalamount || ''}
-														onChange={e => setEditRow({ ...editRow, totalamount: e.target.value })}
-													/>
-												</td>
-												<td className="px-4 py-3 whitespace-nowrap">
-													<input
-														type="number"
-														className="border rounded px-2 py-1 w-20 sm:w-28"
-														value={editRow.submitAmount || ''}
-														onChange={e => setEditRow({ ...editRow, submitAmount: e.target.value })}
-													/>
-												</td>
-												<td className="px-4 py-3 whitespace-nowrap">
-													<input
-														type="number"
-														className="border rounded px-2 py-1 w-16 sm:w-24"
-														value={editRow.dues || ''}
-														onChange={e => setEditRow({ ...editRow, dues: e.target.value })}
-													/>
-												</td>
-												<td className="px-4 py-3 whitespace-nowrap text-gray-700">{row.date}</td>
-												<td className="px-4 py-3 whitespace-nowrap text-gray-700">{row.submitedBy.name}</td>
-											</>
-										) : (
-											<>
-												<td className="px-4 py-3 whitespace-nowrap text-gray-800">{row.ledgerId}</td>
-												<td className="px-4 py-3 whitespace-nowrap text-gray-800">{row.studentName}</td>
-												<td className="px-4 py-3 whitespace-nowrap text-gray-800">{row.studentClass}</td>
-												<td className="px-4 py-3 whitespace-nowrap text-gray-800">{row.paymentMethod}</td>
-												<td className="px-4 py-3 whitespace-nowrap text-green-700 font-bold">₹{row.totalamount}</td>
-												<td className="px-4 py-3 whitespace-nowrap text-green-700 font-bold">₹{row.submitAmount}</td>
-												<td className="px-4 py-3 whitespace-nowrap text-red-600 font-semibold">₹{row.totalamount - row.submitAmount}</td>
-												<td className="px-4 py-3 whitespace-nowrap text-gray-700">{row.date}</td>
-												<td className="px-4 py-3 whitespace-nowrap text-gray-700">{row.submitedBy.name}</td>
-											</>
-										)}
-										<td className="px-4 py-3 whitespace-nowrap">
-											{editIndex === index ? (
-												<div className="flex flex-col gap-2 sm:flex-row">
-													<button className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-semibold" onClick={() => handleSave(row)}>Save</button>
-													<button className="bg-gray-400 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs font-semibold" onClick={handleCancel}>Cancel</button>
-													<button className="py-2 px-4">
-														<MdDelete
-															className="text-2xl text-red-500 cursor-pointer"
-															onClick={() => Deletebookdata(row._id)}
-														/>
-													</button>
-												</div>
-											) : (
-												<button className="bg-blue-600 hover:bg-blue-800 text-white px-2 py-1 rounded text-xs font-semibold" onClick={() => handleEdit(index, row)}>Edit</button>
-											)}
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</TeacherLayout>
-	);
+  const totalDues = bookSale.reduce(
+    (sum, row) =>
+      sum + ((Number(row.totalamount) || 0) - (Number(row.submitAmount) || 0)),
+    0
+  );
+
+  // Edit
+  const handleEdit = (index, row) => {
+    setEditIndex(index);
+    setEditRow({ ...row });
+  };
+
+  // Save
+  const handleSave = (row) => {
+    editBookData(
+      row._id,
+      editRow.ledgerId,
+      editRow.studentName,
+      editRow.studentClass,
+      editRow.paymentMethod,
+      editRow.totalamount,
+      editRow.submitAmount,
+      editRow.dues
+    );
+    setEditIndex(null);
+  };
+
+  // Cancel
+  const handleCancel = () => {
+    setEditIndex(null);
+    setEditRow({});
+  };
+
+  return (
+    <TeacherLayout>
+      <div className="w-full mx-auto mt-20 p-3 md:p-6">
+
+        {/* 🔥 Title */}
+        <h2 className="text-2xl md:text-4xl font-extrabold text-center mb-6 
+        bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 
+        text-transparent bg-clip-text">
+          📚 Book Sale Dashboard
+        </h2>
+
+        {/* 🔥 MOBILE DROPDOWN */}
+        <div className="md:hidden mb-4">
+          <button
+            onClick={() => setShowSummary(!showSummary)}
+            className="w-full bg-blue-500 text-white py-2 rounded-xl shadow"
+          >
+            {showSummary ? "Hide Summary ▲" : "Show Summary ▼"}
+          </button>
+        </div>
+
+        {/* 🔥 SUMMARY */}
+        <div className={`${showSummary ? "block" : "hidden"} md:block`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+
+            <div className="bg-green-100 rounded-2xl p-5 text-center shadow">
+              <p>Total Submit</p>
+              <p className="text-xl font-bold text-green-700">
+                ₹ {totalSubmitAmount}
+              </p>
+            </div>
+
+            <div className="bg-blue-100 rounded-2xl p-5 text-center shadow">
+              <p>Total Records</p>
+              <p className="text-xl font-bold text-blue-700">
+                {bookSale.length}
+              </p>
+            </div>
+
+            <div className="bg-red-100 rounded-2xl p-5 text-center shadow">
+              <p>Total Dues</p>
+              <p className="text-xl font-bold text-red-600">
+                ₹ {totalDues}
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        {/* 🔥 TABLE */}
+        <div className="rounded-3xl shadow-2xl bg-gradient-to-br 
+        from-blue-100 via-white to-purple-100 p-3 md:p-5">
+
+          <div className="overflow-x-auto">
+            <table className="min-w-[1100px] w-full rounded-xl 
+            text-xs sm:text-sm md:text-base border-separate border-spacing-y-2">
+
+              {/* HEAD */}
+              <thead className="bg-blue-300">
+                <tr className="text-blue-900 uppercase font-bold">
+                  <th className="px-6 py-4 whitespace-nowrap">S.No</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Ledger ID</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Name</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Class</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Payment</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Total</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Submit</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Dues</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Date</th>
+                  <th className="px-6 py-4 whitespace-nowrap">By</th>
+                  <th className="px-6 py-4 text-center whitespace-nowrap">Action</th>
+                </tr>
+              </thead>
+
+              {/* BODY */}
+              <tbody>
+                {bookSale.length === 0 ? (
+                  <tr>
+                    <td colSpan="11" className="text-center py-6 text-gray-500">
+                      No Data Available
+                    </td>
+                  </tr>
+                ) : (
+                  bookSale.map((row, index) => (
+                    <tr
+                      key={index}
+                      className="bg-white shadow-sm hover:shadow-md rounded-lg transition"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {index + 1}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {row.ledgerId}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {row.studentName}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {row.studentClass}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {row.paymentMethod}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap text-green-700 font-bold">
+                        ₹ {row.totalamount}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap text-green-700 font-bold">
+                        ₹ {row.submitAmount}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap text-red-600">
+                        ₹ {row.totalamount - row.submitAmount}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {row.date}
+                      </td>
+
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {row.submitedBy?.name}
+                      </td>
+
+                      {/* 🔥 ACTION BUTTONS */}
+                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                        {editIndex === index ? (
+                          <div className="flex flex-row gap-2 justify-center items-center">
+
+                            {/* Save */}
+                            <button
+                              onClick={() => handleSave(row)}
+                              className="bg-green-600 text-white px-2 py-1 rounded text-xs"
+                            >
+                              Save
+                            </button>
+
+                            {/* Cancel */}
+                            <button
+                              onClick={handleCancel}
+                              className="bg-gray-400 text-white px-2 py-1 rounded text-xs"
+                            >
+                              Cancel
+                            </button>
+
+                            {/* Delete */}
+                            <MdDelete
+                              className="text-red-500 text-xl cursor-pointer"
+                              onClick={() => Deletebookdata(row._id)}
+                            />
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => handleEdit(index, row)}
+                            className="bg-blue-500 text-white px-3 py-1 rounded"
+                          >
+                            Edit
+                          </button>
+                        )}
+                      </td>
+
+                    </tr>
+                  ))
+                )}
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </TeacherLayout>
+  );
 };
-
 
 export default BookSaleHistory;

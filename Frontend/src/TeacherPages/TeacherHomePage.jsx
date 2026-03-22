@@ -1,10 +1,10 @@
 import React from 'react';
-import { FaMoneyCheckAlt, FaHistory, FaExclamationCircle, FaUserTie, FaClipboardList, FaUserGraduate, FaSearch, FaCalendarAlt, FaRupeeSign, FaFileAlt, FaBell, FaQuestionCircle, FaHandPaper } from 'react-icons/fa';
+import { FaMoneyCheckAlt, FaHistory, FaExclamationCircle, FaUserTie, FaClipboardList, FaUserGraduate, FaSearch, FaCalendarAlt, FaRupeeSign, FaFileAlt, FaBell, FaQuestionCircle, FaHandPaper, FaBook } from 'react-icons/fa';
 import TeacherLayout from '../Components/TeacherLayout';
 import { useNavigate } from 'react-router-dom';
 import { UserData } from '../context/User';
 import { MdOutlineManageHistory, MdEventNote } from "react-icons/md";
-import { GiTeacher } from "react-icons/gi";
+import { GiRupee, GiTeacher } from "react-icons/gi";
 import { FiSearch } from "react-icons/fi";
 import { VscFeedback } from "react-icons/vsc";
 import { FaBookReader } from "react-icons/fa";
@@ -16,6 +16,15 @@ const TeacherHomePage = () => {
   const { user } = UserData()
   const { getStudentCount } = UserData();
   const [totalStudents, setTotalStudents] = React.useState(null);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+
+    if (hour < 12) return "Good Morning 🌅";
+    if (hour < 17) return "Good Afternoon ☀️";
+    if (hour < 21) return "Good Evening 🌇";
+    return "Good Night 🌙";
+  };
 
   React.useEffect(() => {
     let mounted = true;
@@ -33,7 +42,7 @@ const TeacherHomePage = () => {
   return (
     <TeacherLayout>
       {/* Mobile View - ONLY DESIGN ADDED */}
-      <div className="md:hidden min-h-screen p-4 pt-18">
+      <div className="md:hidden min-h-screen p-2 pt-18">
         {/* Search Bar */}
         <div className="relative mb-5">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
@@ -47,10 +56,29 @@ const TeacherHomePage = () => {
         </div>
 
         {/* Welcome Message */}
-        <div className="mb-3 flex bg-blue-300 rounded-2xl shadow-lg p-5 text-white">
-          <h1 className="text-2xl mr-2 flex font-bold text-gray-900 mb-1">Hey, <span className='ml-2 mr-2'>{user.name.split(' ')[0]}</span>
+        {/* <div className="mb-3 flex bg-blue-300 rounded-2xl shadow-lg p-5 text-white">
+          <h1 className="text-2xl mr-2 flex font-bold text-gray-900 mb-1">Hey, <span className='ml-2 mr-2'>{user.name.split(' ')[0]} Jii</span>
             <span className='text-3xl'>   <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/263a_fe0f/512.gif" alt="☺" width="40" height="35"></img> </span></h1>
-          {/* <p className="text-gray-600 text-sm">Welcome back to your dashboard</p> */}
+        </div> */}
+
+        <div className="mb-3 bg-blue-300 rounded-2xl p-5 shadow-lg">
+          <h1 className="text-lg font-bold text-gray-900">
+            {getGreeting()}
+          </h1>
+
+          <h2 className="flex items-center text-2xl font-semibold mt-1">
+            Hey,
+            <span className="ml-2 text-blue-900">
+              {user.name.split(" ")[0]} Jii
+            </span>
+
+            <img
+              src="https://fonts.gstatic.com/s/e/notoemoji/latest/263a_fe0f/512.gif"
+              alt="☺"
+              width="40"
+              className="ml-2"
+            />
+          </h2>
         </div>
 
         <div className="mb-2 bg-gradient-to-br from-pink-400 via-purple-300 to-blue-400 rounded-2xl shadow-lg p-4 text-white animate-gradient-x">
@@ -58,13 +86,12 @@ const TeacherHomePage = () => {
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-gray-200 my-6"></div>
-
-         {/* Book Sale Data */}
+        <div className="h-px bg-gray-200 my-3"></div>
+        {/* Book Sale Data */}
         <div className="mb-6">
           <div className="grid grid-cols-2 gap-4 mb-8">
-          {(
-            user.role === 'admin') &&
+            {(
+              user.role === 'accountent' || user.role === 'admin') &&
               <div onClick={() => navigate("/book-sale-data")} className="bg-gradient-to-br from-pink-200 via-yellow-200 to-orange-300 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-pink-200 shadow-md hover:scale-105 transition-transform duration-200">
                 <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
                   <FaBookReader className="text-lg text-pink-500" />
@@ -73,8 +100,8 @@ const TeacherHomePage = () => {
               </div>
             }
 
-             {( 
-              user.role === 'admin') &&
+            {(
+              user.role === 'accountent' || user.role === 'admin') &&
               <div onClick={() => navigate("/book-sale-history")} className="bg-gradient-to-br from-pink-200 via-pink-300 to-purple-300 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-pink-200 shadow-md hover:scale-105 transition-transform duration-200">
                 <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
                   <FaBookReader className="text-lg text-pink-500" />
@@ -82,7 +109,33 @@ const TeacherHomePage = () => {
                 <span className="font-medium text-gray-800 text-xs">BookSale History</span>
               </div>
             }
-        </div>
+          </div>
+
+          <div className={`grid ${user.role === 'admin' ? 'grid-cols-3' : 'grid-cols-2'} gap-4 mb-8`}>
+            {(user.role === 'admin') &&
+              <div onClick={() => navigate("/book-form")} className="bg-gradient-to-br from-green-200 to-green-400 rounded-2xl p-2 h-28 flex flex-col items-center justify-center text-center border border-green-300">
+                <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
+                  <FaBook className="text-2xl text-green-700" />
+                </div>
+                <span className="font-bold text-gray-800 text-xs">Book Form</span>
+              </div>
+            }
+            {(user.role === 'admin' || user.role === 'accountent') &&
+            <div onClick={() => navigate("/book-price")} className="bg-gradient-to-br from-blue-200 to-red-400 rounded-2xl p-2 h-28 flex flex-col items-center justify-center text-center border border-pink-300">
+              <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
+                <GiRupee className="text-2xl text-pink-600" />
+              </div>
+              <span className="font-bold text-gray-800 text-xs">Book Price</span>
+            </div>
+        }
+
+            <div onClick={() => alert("Notifications functionality coming soon!")} className="bg-gradient-to-br from-blue-200 to-blue-400 rounded-3xl p-2 h-28 flex flex-col items-center justify-center text-center border border-blue-300">
+                      <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
+                        <FaBell className="text-2xl text-blue-600" />
+                      </div>
+                      <span className="font-bold text-gray-800 text-xs">Notification</span>
+                    </div>
+          </div>
 
           <div className="flex items-center gap-3 mb-4">
             <div className="h-5 w-1 bg-blue-500 rounded-full"></div>
@@ -317,7 +370,7 @@ const TeacherHomePage = () => {
             </div>
           </div>
         </div>
-        {/* Main Boxes */} 
+        {/* Main Boxes */}
         {/* Student Data Section */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-blue-200 pb-2">Student Data</h2>
