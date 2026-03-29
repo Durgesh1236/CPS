@@ -8,6 +8,8 @@ import { GiRupee, GiTeacher } from "react-icons/gi";
 import { FiSearch } from "react-icons/fi";
 import { VscFeedback } from "react-icons/vsc";
 import { FaBookReader } from "react-icons/fa";
+import { IoMdTime } from "react-icons/io";
+import { LuBookOpenCheck } from "react-icons/lu";
 
 const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in the conference hall.";
 
@@ -205,18 +207,18 @@ const TeacherHomePage = () => {
             }
 
             {(user.role === 'admin' || user.role === 'accountent') &&
-              <div onClick={() => alert("LMS functionality coming soon!")} className="bg-gradient-to-br from-red-100 to-black-500 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
+              <div onClick={() => navigate("/set-timetable")} className="bg-gradient-to-br from-red-100 to-black-500 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
                 <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
-                  <FaUserTie className="text-xl text-blue-600" />
+                  <IoMdTime className="text-xl text-blue-600" />
                 </div>
-                <span className="font-medium text-gray-800 text-sm">LMS</span>
+                <span className="font-medium text-gray-800 text-sm">Time-Table</span>
               </div>
             }
 
             {(user.role === 'admin' || user.role === 'accountent') &&
               <div onClick={() => alert("Student Test functionality coming soon!")} className="bg-gradient-to-br from-purple-100 to-black-500 rounded-xl p-4 flex flex-col items-center justify-center text-center border border-blue-200">
                 <div className="p-3 rounded-lg bg-white shadow-sm mb-2">
-                  <FaUserTie className="text-xl text-blue-600" />
+                  <LuBookOpenCheck className="text-xl text-blue-600" />
                 </div>
                 <span className="font-medium text-gray-800 text-sm">Student Test</span>
               </div>
@@ -433,6 +435,20 @@ const TeacherHomePage = () => {
               <div onClick={() => navigate("/book-sale-history")} className="bg-white rounded-xl h-28 shadow shadow-gray-400 p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
                 <FaBookReader className="text-4xl text-pink-500" />
                 <span className="text-xl font-semibold text-gray-800">Book Sale History</span>
+              </div>
+            }
+
+            {user.role === 'admin' &&
+              <div onClick={() => navigate("/book-form")} className="bg-white rounded-xl h-28 shadow shadow-gray-400 p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <FaBook className="text-4xl text-purple-500" />
+                <span className="text-xl font-semibold text-gray-800">Book price Form</span>
+              </div>
+            }
+
+            {user.role === 'admin' &&
+              <div onClick={() => navigate("/book-price")} className="bg-white rounded-xl h-28 shadow shadow-gray-400 p-8 flex flex-row items-center gap-4 cursor-pointer hover:scale-105 transition w-full">
+                <GiRupee className="text-4xl text-red-500" />
+                <span className="text-xl font-semibold text-gray-800">Book Price</span>
               </div>
             }
           </div>

@@ -90,15 +90,24 @@ export const BookSaleSubmit = () => {
                 <label className="text-gray-700 mb-2 font-semibold flex items-center gap-2" htmlFor="studentClass">
                   <FaBook className="text-blue-500" /> Class
                 </label>
-                <input
+                <select
                   id="studentClass"
                   name="studentClass"
-                  type="text"
                   value={studentClass}
                   onChange={(e) => setStudentClass(e.target.value)}
                   className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg bg-gray-50"
                   required
-                />
+                >
+                  <option value="">Select Class</option>
+                  <option value="P.Nur">P.Nur</option>
+                  <option value="Nur">Nur</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
               </div>
               <div className="w-1/2">
                 <label className=" text-gray-700 mb-2 font-semibold flex items-center gap-2" htmlFor="totalamount">

@@ -29,6 +29,7 @@ import StudentFees from './StudentPage/StudentFees'
 import StudentTimetable from './StudentPage/StudentTimetable'
 import BookForm from './TeacherPages/BookForm'
 import BookPriceHistory from './TeacherPages/BookPriceHistory'
+import { SetStudentTimetable } from './TeacherPages/SetStudentTimetable'
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -67,6 +68,7 @@ const App = () => {
             <Route path='/book-sale-history' element= {isAuth ? <BookSaleHistory/> : <TeacherLoginPage/> } />
             <Route path='/book-form' element={isAuth ? <BookForm/> : <TeacherLoginPage/>}/>
             <Route path='/book-price' element={isAuth ? <BookPriceHistory/> : <TeacherLoginPage/>}/>
+            <Route path='/set-timetable' element={isAuth ? <SetStudentTimetable/> : <TeacherLoginPage/>}/>
             {/* student routes */}
             <Route path='/student-home' element={StudentAuth ? <StudentHome/> : <LoginPage/>}/>
             <Route path='/student-profile' element={StudentAuth ? <StudentProfile/> : <LoginPage/>}/>

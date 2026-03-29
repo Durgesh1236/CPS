@@ -469,7 +469,7 @@ export const UserProvider = ({ children }) => {
             const { data } = await axios.post("/api/student-data/student/book-sale-form", { studentClass, totalprice, diary, discount, BookQuantity });
             if(data.success){
                 toast.success(data.message);
-                setBookPrice(data.bookPrice);
+                await getallbookprice();
                 setLoading(false);
             } else {
                 toast.error(data.message);

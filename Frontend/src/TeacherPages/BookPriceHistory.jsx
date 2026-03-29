@@ -3,7 +3,7 @@ import TeacherLayout from "../Components/TeacherLayout";
 import { UserData } from "../context/User";
 
 const BookPriceHistory = () => {
-  const { bookPrice, editBookPrice, deleteBookPrice } = UserData();
+  const { bookPrice, editBookPrice, deleteBookPrice, user, bookSale } = UserData();
 
   const [editIndex, setEditIndex] = useState(null);
   const [editData, setEditData] = useState({});
@@ -24,7 +24,7 @@ const BookPriceHistory = () => {
 
   // Save
   const handleSave = () => {
-    editBookPrice(editData._id, editData.studentClass, editData.bookTotalPrice, editData.diary, editData.discount, editData.BookQuantity); // your API
+    editBookPrice(editData._id, editData.studentClass, editData.bookTotalPrice, editData.diary, editData.discount, editData.BookQuantity);
     setEditIndex(null);
     setEditData({});
   };
@@ -42,7 +42,7 @@ const BookPriceHistory = () => {
 
   return (
     <TeacherLayout>
-      <div className="p-3 md:p-8 my-14 bg-gray-100 min-h-screen">
+      <div className="p-3 md:p-8 my-14 bg-gray-100 h-full">
         
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 text-gray-800">
           📊 Book Price History
@@ -61,6 +61,7 @@ const BookPriceHistory = () => {
                 <th className="px-6 py-4 text-center">Discount</th>
                 <th className="px-6 py-4 text-center">Total</th>
                 <th className="px-6 py-4 text-center">Qty</th>
+                <th className="px-6 py-4 text-center">Total Sale Book</th>
                 <th className="px-6 py-4 text-center">Action</th>
               </tr>
             </thead>
@@ -124,7 +125,7 @@ const BookPriceHistory = () => {
                           className="border p-1 rounded w-16"
                         />
                       ) : (
-                        `${item.discount}%`
+                        `₹ ${item.discount}`
                       )}
                     </td>
 
@@ -147,7 +148,13 @@ const BookPriceHistory = () => {
                       )}
                     </td>
 
+                    {/* Total Sale Quantity */}
+                    <td className="px-6 text-center space-x-2">
+                      {bookSale.filter(sale => sale.studentClass === item.studentClass).length || 0}
+                    </td>
+
                     {/* Actions */}
+                    {user?.role === "admin" && 
                     <td className="px-6 py-4 text-center space-x-2">
                       {editIndex === index ? (
                         <>
@@ -182,7 +189,7 @@ const BookPriceHistory = () => {
                           </button>
                         </>
                       )}
-                    </td>
+                    </td> }
 
                   </tr>
                 ))

@@ -459,7 +459,7 @@ export const bookPriceForm = TryCatch(async(req, res) => {
         diary,
         discount,
         totalPayable: String(Number(totalprice) + Number(diary) - Number(discount)),
-        BookQuantity
+        BookQuantity,
     })
 
     if(!bookPrice){

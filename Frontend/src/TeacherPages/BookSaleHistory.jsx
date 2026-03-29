@@ -51,7 +51,7 @@ const BookSaleHistory = () => {
 
   return (
     <TeacherLayout>
-      <div className="w-full mx-auto mt-20 p-3 md:p-6">
+      <div className="w-full mx-auto mt-20 p-2 md:p-6">
 
         {/* 🔥 Title */}
         <h2 className="text-2xl md:text-4xl font-extrabold text-center mb-6 
@@ -64,7 +64,7 @@ const BookSaleHistory = () => {
         <div className="md:hidden mb-4">
           <button
             onClick={() => setShowSummary(!showSummary)}
-            className="w-full bg-blue-500 text-white py-2 rounded-xl shadow"
+            className="w-full bg-blue-600 text-white py-2 rounded-xl"
           >
             {showSummary ? "Hide Summary ▲" : "Show Summary ▼"}
           </button>
@@ -99,8 +99,8 @@ const BookSaleHistory = () => {
         </div>
 
         {/* 🔥 TABLE */}
-        <div className="rounded-3xl shadow-2xl bg-gradient-to-br 
-        from-blue-100 via-white to-purple-100 p-3 md:p-5">
+        <div className="rounded-2xl bg-gradient-to-br 
+        from-blue-100 via-white to-purple-100 p-2 md:p-5">
 
           <div className="overflow-x-auto">
             <table className="min-w-[1100px] w-full rounded-xl 
@@ -141,38 +141,120 @@ const BookSaleHistory = () => {
                         {index + 1}
                       </td>
 
+
+                      {/* Ledger ID */}
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {row.ledgerId}
+                        {editIndex === index ? (
+                          <input
+                            type="text"
+                            value={editRow.ledgerId}
+                            onChange={e => setEditRow({ ...editRow, ledgerId: e.target.value })}
+                            className="border p-1 rounded w-24"
+                          />
+                        ) : (
+                          row.ledgerId
+                        )}
                       </td>
 
+                      {/* Name */}
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {row.studentName}
+                        {editIndex === index ? (
+                          <input
+                            type="text"
+                            value={editRow.studentName}
+                            onChange={e => setEditRow({ ...editRow, studentName: e.target.value })}
+                            className="border p-1 rounded w-24"
+                          />
+                        ) : (
+                          row.studentName
+                        )}
                       </td>
 
+                      {/* Class */}
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {row.studentClass}
+                        {editIndex === index ? (
+                          <select
+                            value={editRow.studentClass}
+                            onChange={e => setEditRow({ ...editRow, studentClass: e.target.value })}
+                            className="border p-1 rounded w-20"
+                          >
+                            <option value="">Select Class</option>
+                            <option value="P.Nur">P.Nur</option>
+                            <option value="Nur">Nur</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                          </select>
+                        ) : (
+                          row.studentClass
+                        )}
                       </td>
 
+                      {/* Payment */}
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {row.paymentMethod}
+                        {editIndex === index ? (
+                          <input
+                            type="text"
+                            value={editRow.paymentMethod}
+                            onChange={e => setEditRow({ ...editRow, paymentMethod: e.target.value })}
+                            className="border p-1 rounded w-20"
+                          />
+                        ) : (
+                          row.paymentMethod
+                        )}
                       </td>
 
+                      {/* Total */}
                       <td className="px-6 py-4 whitespace-nowrap text-green-700 font-bold">
-                        ₹ {row.totalamount}
+                        {editIndex === index ? (
+                          <input
+                            type="number"
+                            value={editRow.totalamount}
+                            onChange={e => setEditRow({ ...editRow, totalamount: e.target.value })}
+                            className="border p-1 rounded w-20"
+                          />
+                        ) : (
+                          <>₹ {row.totalamount}</>
+                        )}
                       </td>
 
+                      {/* Submit */}
                       <td className="px-6 py-4 whitespace-nowrap text-green-700 font-bold">
-                        ₹ {row.submitAmount}
+                        {editIndex === index ? (
+                          <input
+                            type="number"
+                            value={editRow.submitAmount}
+                            onChange={e => setEditRow({ ...editRow, submitAmount: e.target.value })}
+                            className="border p-1 rounded w-20"
+                          />
+                        ) : (
+                          <>₹ {row.submitAmount}</>
+                        )}
                       </td>
 
+                      {/* Dues */}
                       <td className="px-6 py-4 whitespace-nowrap text-red-600">
-                        ₹ {row.totalamount - row.submitAmount}
+                        {editIndex === index ? (
+                          <input
+                            type="number"
+                            value={editRow.dues}
+                            onChange={e => setEditRow({ ...editRow, dues: e.target.value })}
+                            className="border p-1 rounded w-20"
+                          />
+                        ) : (
+                          <>₹ {row.totalamount - row.submitAmount}</>
+                        )}
                       </td>
 
+                      {/* Date */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         {row.date}
                       </td>
 
+                      {/* By */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         {row.submitedBy?.name}
                       </td>
