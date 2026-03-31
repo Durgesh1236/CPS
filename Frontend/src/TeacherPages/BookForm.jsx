@@ -11,6 +11,7 @@ const BookForm = () => {
   const [BookQuantity, setBookQuantity] = useState();
   const [discountAmount, setDiscountAmount] = useState(0);
   const { BookPriceForm } = UserData();
+  const [Totalbooks, setTotalBooks] = useState();
 
   useEffect(() => {
     const total = Number(price) || 0;
@@ -25,7 +26,7 @@ const BookForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    BookPriceForm(studentClass, price, diaryPrice, discountAmount, BookQuantity);
+    BookPriceForm(studentClass, Totalbooks, price, diaryPrice, discountAmount, BookQuantity);
     // reset
     setStudentClass("");
     setPrice(0);
@@ -64,6 +65,18 @@ const BookForm = () => {
             <option>5</option>
             <option>6</option>
           </select>
+
+          {/* Total Books */}
+          <label className="block text-sm font-semibold mb-1 text-gray-700">
+            Books
+          </label>
+          <input
+            type="number"
+            value={Totalbooks}
+            onChange={(e) => setTotalBooks(Number(e.target.value))}
+            className="w-full p-2 mb-4 rounded-lg border outline-none"
+            required
+          />
 
           {/* Book Price */}
           <label className="block text-sm font-semibold mb-1 text-gray-700">

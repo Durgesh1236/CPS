@@ -5,6 +5,10 @@ const bookpriceschema = mongoose.Schema({
         type: String,
         required: true
     },
+    TotalBooks: {
+        type: String,
+        required: true
+    },
     bookTotalPrice: {
         type: String,
         required: true

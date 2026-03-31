@@ -170,9 +170,6 @@ export const studentFeeHistory = TryCatch(async (req, res) => {
         studentClass: studentclass
     });
 
-    console.log(feeHistory);
-    
-
     if (feeHistory.length === 0) {
         return res.json({
             success: false,

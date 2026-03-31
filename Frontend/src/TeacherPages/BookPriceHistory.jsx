@@ -56,12 +56,13 @@ const BookPriceHistory = () => {
               <tr>
                 <th className="px-6 py-4 text-center">S.No</th>
                 <th className="px-6 py-4 text-center">Class</th>
+                <th className="px-6 py-4 text-center">Total Books</th>
                 <th className="px-6 py-4 text-center">Book Price</th>
                 <th className="px-6 py-4 text-center">Diary</th>
                 <th className="px-6 py-4 text-center">Discount</th>
                 <th className="px-6 py-4 text-center">Total</th>
                 <th className="px-6 py-4 text-center">Qty</th>
-                <th className="px-6 py-4 text-center">Total Sale Book</th>
+                <th className="px-6 py-4 text-center">Total Sale</th>
                 <th className="px-6 py-4 text-center">Action</th>
               </tr>
             </thead>
@@ -85,6 +86,10 @@ const BookPriceHistory = () => {
                       ) : (
                         item.studentClass
                       )}
+                    </td>
+
+                    <td className="px-6 py-4 text-center">
+                      {item.TotalBooks || 0}
                     </td>
 
                     {/* Book Price */}

@@ -445,8 +445,8 @@ export const deleteBookData = TryCatch(async (req, res) => {
 })
 
 export const bookPriceForm = TryCatch(async(req, res) => {
-    const { studentClass, totalprice, diary, discount, BookQuantity } = req.body;
-    if(!studentClass || !totalprice || !diary || !discount || !BookQuantity){
+    const { studentClass, Totalbooks, totalprice, diary, discount, BookQuantity } = req.body;
+    if(!studentClass || !Totalbooks || !totalprice || !diary || !discount || !BookQuantity){
         return res.status(400).json({
             success:false,
             message: "All fields are required"
@@ -455,6 +455,7 @@ export const bookPriceForm = TryCatch(async(req, res) => {
 
     const bookPrice = await BookPrice.create({
         studentClass,
+        TotalBooks: Totalbooks,
         bookTotalPrice: totalprice,
         diary,
         discount,

@@ -22,13 +22,13 @@ export const FeeSubmitPage = () => {
   const [dues, setDues] = useState('');
   const [file, setFile] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('');
-  const {FeesSubmit} = UserData();
- 
-      const fileChangeHandler = (e) => {
-        const file = e.target.files[0];
-        setFile(file);
-        setImagePreview(file ? URL.createObjectURL(file) : null);
-      }
+  const { FeesSubmit } = UserData();
+
+  const fileChangeHandler = (e) => {
+    const file = e.target.files[0];
+    setFile(file);
+    setImagePreview(file ? URL.createObjectURL(file) : null);
+  }
 
   React.useEffect(() => {
     const back = parseFloat(backDues) || 0;
@@ -40,19 +40,19 @@ export const FeeSubmitPage = () => {
   const handleSubmit = e => {
     e.preventDefault();
     const today = new Date();
-        const date =
-            String(today.getDate()).padStart(2, '0') + '-' +
-            String(today.getMonth() + 1).padStart(2, '0') + '-' +
-            today.getFullYear();
+    const date =
+      String(today.getDate()).padStart(2, '0') + '-' +
+      String(today.getMonth() + 1).padStart(2, '0') + '-' +
+      today.getFullYear();
     const formData = new FormData();
-    formData.append('ledgerId',ledgerId);
+    formData.append('ledgerId', ledgerId);
     formData.append('studentName', studentName);
     formData.append('studentClass', stuclass);
     formData.append('backDues', backDues);
-    formData.append('submitFees',submitFees);
+    formData.append('submitFees', submitFees);
     formData.append('dues', dues);
     formData.append('date', date);
-    formData.append('file', file); 
+    formData.append('file', file);
     formData.append('paymentMethod', paymentMethod || '');
     FeesSubmit(formData, setImagePreview);
   };
@@ -60,17 +60,17 @@ export const FeeSubmitPage = () => {
   return (
     <TeacherLayout>
       <div className="flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50 px-2">
-        <div className="w-full max-w-2xl bg-white shadow-2xl rounded-3xl p-10 mx-auto border-4 border-blue-300 relative animate__animated animate__fadeIn" style={{ marginTop: '80px' }}>
+        <div className="w-full max-w-2xl bg-white shadow-2xl rounded-3xl p-10 mx-auto border-4 border-blue-300 relative animate__animated animate__fadeIn" style={{ marginTop: '60px' }}>
           <h2 className="text-3xl font-extrabold mb-10 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-green-500 to-blue-700 flex items-center justify-center gap-4 drop-shadow-2xl tracking-wide animate__animated animate__fadeInDown">
             <FaRupeeSign className="text-green-500 animate-bounce" /> Student Fee Submission
           </h2>
-          <button
+          {/* <button
             type="button"
             onClick={() => window.location.href = '/teacher-home'}
             className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-5 py-2 rounded-xl font-bold shadow-lg hover:from-yellow-500 hover:to-orange-600 transition flex items-center gap-2 border-2 border-white"
           >
             &#8592; Back
-          </button>
+          </button> */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="flex gap-4">
               <div className="w-1/2">
@@ -89,7 +89,7 @@ export const FeeSubmitPage = () => {
               </div>
               <div className="w-1/2">
                 <label className="text-gray-700 mb-2 font-semibold flex items-center gap-2" htmlFor="studentName">
-                  <FaUser className="text-blue-500" /> Student Name
+                  <FaUser className="text-blue-500" /> Name
                 </label>
                 <input
                   id="studentName"
@@ -104,7 +104,7 @@ export const FeeSubmitPage = () => {
             </div>
             <div className="flex gap-4">
               <div className="w-1/2">
-                <label className="text-gray-700 mb-2 font-semibold flex items-center gap-2" htmlFor="studentClass">
+                {/* <label className="text-gray-700 mb-2 font-semibold flex items-center gap-2" htmlFor="studentClass">
                   <FaBook className="text-blue-500" /> Class
                 </label>
                 <input
@@ -115,7 +115,29 @@ export const FeeSubmitPage = () => {
                   onChange={(e) => setStuClass(e.target.value)}
                   className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg bg-gray-50"
                   required
-                />
+                /> */}
+
+                <label className="text-gray-700 mb-2 font-semibold flex items-center gap-2" htmlFor="studentClass">
+                  <FaBook className="text-blue-500" /> Class
+                </label>
+                <select
+                  id="studentClass"
+                  name="studentClass"
+                  value={stuclass}
+                  onChange={(e) => setStuClass(e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg bg-gray-50"
+                  required
+                >
+                  <option value="">Select Class</option>
+                  <option value="P.Nur">P.Nur</option>
+                  <option value="Nur">Nur</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                </select>
               </div>
               <div className="w-1/2">
                 <label className=" text-gray-700 mb-2 font-semibold flex items-center gap-2" htmlFor="backDues">
@@ -161,20 +183,20 @@ export const FeeSubmitPage = () => {
             </div>
             <div className="mt-2">
               <label className="block text-gray-700 mb-2 font-semibold">Payment Method</label>
-                <select
-                  value={paymentMethod}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg bg-gray-50"
-                  required
-                >
-                  <option value="">Select payment method</option>
-                  <option value="cash">Cash</option>
-                  <option value="account">Account</option>
-                </select>
+              <select
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg bg-gray-50"
+                required
+              >
+                <option value="">Select payment method</option>
+                <option value="cash">Cash</option>
+                <option value="account">Account</option>
+              </select>
             </div>
             <div>
               <label className="text-gray-700 mb-2 font-semibold flex items-center gap-2">Upload Fee Receipt Image?</label>
-                <input
+              <input
                 type="file"
                 name="image"
                 accept="image/*"

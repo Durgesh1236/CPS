@@ -463,10 +463,10 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function BookPriceForm(studentClass, totalprice, diary, discount, BookQuantity){
+    async function BookPriceForm(studentClass, Totalbooks, totalprice, diary, discount, BookQuantity){
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/student-data/student/book-sale-form", { studentClass, totalprice, diary, discount, BookQuantity });
+            const { data } = await axios.post("/api/student-data/student/book-sale-form", { studentClass, Totalbooks, totalprice, diary, discount, BookQuantity });
             if(data.success){
                 toast.success(data.message);
                 await getallbookprice();
