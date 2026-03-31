@@ -18,7 +18,7 @@ const BookForm = () => {
     const disc = Number(discount) || 0;
     const diary = Number(diaryPrice) || 0;
 
-    const discountAmount = (total * disc) / 100;
+    const discountAmount = disc;
     const final = total - discountAmount + diary;
     setFinalPrice(final);
     setDiscountAmount(discountAmount);
@@ -104,7 +104,7 @@ const BookForm = () => {
 
           {/* Discount */}
           <label className="block text-sm font-semibold mb-1 text-gray-700">
-            Discount (%)
+            Discount
           </label>
           <input
             type="number"
