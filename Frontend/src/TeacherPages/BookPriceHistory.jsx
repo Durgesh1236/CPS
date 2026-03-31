@@ -42,13 +42,12 @@ const BookPriceHistory = () => {
 
   return (
     <TeacherLayout>
-      <div className="p-3 md:p-8 my-14 bg-gray-100 h-full">
-        
-        <h2 className="text-2xl md:text-3xl font-bold text-center mb-6 text-gray-800">
+      <div className="p-3 md:p-8 h-fit">
+        <h2 className="text-2xl pt-14 md:text-3xl font-bold text-center mb-6 text-gray-800">
           📊 Book Price History
         </h2>
 
-        <div className="overflow-x-auto bg-white rounded-2xl shadow-lg">
+        <div className="bg-white rounded-2xl shadow-lg">
           <table className="min-w-[1000px] w-full text-sm md:text-base">
 
             {/* Head */}

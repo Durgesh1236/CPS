@@ -499,6 +499,7 @@ export const bookPriceEdit = TryCatch(async(req, res) => {
     bookPrice.bookTotalPrice = totalprice || bookPrice.bookTotalPrice;
     bookPrice.diary = diary || bookPrice.diary;
     bookPrice.discount = discount || bookPrice.discount;
+    bookPrice.totalPayable = String(Number(totalprice) + Number(diary) - Number(discount));
     bookPrice.BookQuantity = BookQuantity || bookPrice.BookQuantity;
     await bookPrice.save();
     return res.status(200).json({

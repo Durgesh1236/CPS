@@ -51,8 +51,7 @@ const BookSaleHistory = () => {
 
   return (
     <TeacherLayout>
-      <div className="w-full mx-auto mt-20 p-2 md:p-6">
-
+      <div className="w-full mx-auto mt-20 p-2 md:p-2">
         {/* 🔥 Title */}
         <h2 className="text-2xl md:text-4xl font-extrabold text-center mb-6 
         bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 
@@ -118,7 +117,7 @@ const BookSaleHistory = () => {
                   <th className="px-6 py-4 whitespace-nowrap">Submit</th>
                   <th className="px-6 py-4 whitespace-nowrap">Dues</th>
                   <th className="px-6 py-4 whitespace-nowrap">Date</th>
-                  <th className="px-6 py-4 whitespace-nowrap">By</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Submit By</th>
                   <th className="px-6 py-4 text-center whitespace-nowrap">Action</th>
                 </tr>
               </thead>
