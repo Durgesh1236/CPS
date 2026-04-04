@@ -125,6 +125,8 @@ export const BookSaleSubmit = () => {
                   <option value="">Select Class</option>
                   <option value="P.Nur">P.Nur</option>
                   <option value="Nur">Nur</option>
+                  <option value="LKG">LKG</option>
+                  <option value="UKG">UKG</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
