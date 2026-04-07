@@ -9,7 +9,7 @@ export const BookSaleSubmit = () => {
   const [studentName, setName] = useState('');
   const [studentClass, setStudentClass] = useState('');
   const [totalamount, setTotalAmount] = useState('');
-  const [submitFees, setSubmitFees] = useState('');
+  const [submitAmount, setSubmitAmount] = useState('');
   const [dues, setDues] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
 
@@ -19,10 +19,10 @@ export const BookSaleSubmit = () => {
   // ✅ dues calculation (same)
   React.useEffect(() => {
     const back = parseFloat(totalamount) || 0;
-    const submit = parseFloat(submitFees) || 0;
+    const submit = parseFloat(submitAmount) || 0;
     const due = Math.max(back - submit, 0);
     setDues(due);
-  }, [totalamount, submitFees]);
+  }, [totalamount, submitAmount]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -37,7 +37,7 @@ export const BookSaleSubmit = () => {
       studentName,
       studentClass,
       totalamount,
-      submitFees,
+      submitAmount,
       dues,
       date,
       paymentMethod
@@ -47,7 +47,7 @@ export const BookSaleSubmit = () => {
     setName('');
     setStudentClass('');
     setTotalAmount('');
-    setSubmitFees('');
+    setSubmitAmount('');
     setDues('');
     setPaymentMethod('');
   };
@@ -168,8 +168,8 @@ export const BookSaleSubmit = () => {
                 </label>
                 <input
                   type="number"
-                  value={submitFees}
-                  onChange={(e) => setSubmitFees(e.target.value)}
+                  value={submitAmount}
+                  onChange={(e) => setSubmitAmount(e.target.value)}
                   className="w-full px-4 py-3 border rounded-lg bg-gray-50"
                   required
                 />

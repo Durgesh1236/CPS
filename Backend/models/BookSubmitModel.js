@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 
 const booksubmitschema = mongoose.Schema({
     ledgerId: {
@@ -23,7 +23,8 @@ const booksubmitschema = mongoose.Schema({
     },
     dues: {
         type: String,
-        required: true
+        required: true,
+        default: "0"
     },
     date: {
         type: String,

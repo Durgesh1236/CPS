@@ -398,15 +398,16 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function BookSaleData(ledgerId, studentName, studentClass, totalamount, submitFees, dues, date, paymentMethod) {
+    async function BookSaleData(ledgerId, studentName, studentClass, totalamount, submitAmount, dues, date, paymentMethod) {
+        console.log(ledgerId, studentName, studentClass, totalamount, submitAmount, dues, date, paymentMethod);
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/student/fee/book-sale-data", {ledgerId, studentName, studentClass, totalamount, submitFees, dues, date, paymentMethod});
+            const { data } = await axios.post("/api/student/fee/book-sale-data", {ledgerId, studentName, studentClass, totalamount, submitAmount, dues, date, paymentMethod});
         if (data.success) {
             toast.success(data.message);
             setLoading(false);
             setBookSale(data);
-            await allbookdata();
+            // await allbookdata();
         } else {
             toast.error(data.message);
             setLoading(false);

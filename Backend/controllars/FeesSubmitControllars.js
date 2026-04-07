@@ -310,7 +310,7 @@ export const editStudentFeeRecord = TryCatch(async (req, res) => {
     studentFee.studentClass = studentClass || studentFee.studentClass;
     studentFee.date = date || studentFee.date;
     await studentFee.save();
-    return res.status(200).json({
+    return res.status(201).json({
         success: true,
         message: "Student Fee Record updated successfully"
     })
@@ -369,8 +369,8 @@ export const deleteSpendRecord = TryCatch(async (req, res) => {
 })
 
 export const BookSaleSubmit = TryCatch(async (req, res) => {
-    const { ledgerId, studentName, studentClass, totalamount, submitFees, dues, date, paymentMethod } = req.body;
-    if (!ledgerId || !studentName || !studentClass || !totalamount || !submitFees || !dues || !date || !paymentMethod) {
+    const { ledgerId, studentName, studentClass, totalamount, submitAmount, dues, date, paymentMethod } = req.body;
+    if (!ledgerId || !studentName || !studentClass || !totalamount || !submitAmount || !date || !paymentMethod) {
         return res.status(400).json({
             success: false,
             message: "All fields are required"
@@ -380,8 +380,8 @@ export const BookSaleSubmit = TryCatch(async (req, res) => {
         ledgerId,
         studentName,
         studentClass,
-        totalAmount: totalamount,
-        submitAmount: submitFees,
+        totalamount,
+        submitAmount,
         dues,
         date,
         paymentMethod,
@@ -394,9 +394,9 @@ export const BookSaleSubmit = TryCatch(async (req, res) => {
         })
     }
     return res.status(201).json({
-        success: true,
         bookSale,
-        message: "Book sale submitted successfully",
+        success: true,
+        message: "Book sale submitted successfully"
     })
 })
 
