@@ -43,6 +43,14 @@ export const BookSaleSubmit = () => {
       date,
       paymentMethod
     );
+    // Reset form
+    setLedgerId('');
+    setName('');
+    setStudentClass('');
+    setTotalAmount('');
+    setSubmitFees('');
+    setDues('');
+    setPaymentMethod('');
   };
 
   return (
