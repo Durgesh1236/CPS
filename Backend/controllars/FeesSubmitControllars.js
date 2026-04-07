@@ -380,7 +380,7 @@ export const BookSaleSubmit = TryCatch(async (req, res) => {
         ledgerId,
         studentName,
         studentClass,
-        totalamount,
+        totalAmount: totalamount,
         submitAmount: submitFees,
         dues,
         date,

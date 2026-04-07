@@ -3,14 +3,6 @@ import { FaRupeeSign, FaUser, FaIdBadge, FaBook, FaFileUpload } from 'react-icon
 import TeacherLayout from '../Components/TeacherLayout';
 import { UserData } from '../context/User';
 
-const initialForm = {
-  ledgerId: '',
-  studentName: '',
-  studentClass: '',
-  backDues: '',
-  submitFees: '',
-};
-
 export const FeeSubmitPage = () => {
   // const [form, setForm] = useState(initialForm);
   const [ledgerId, setLedgerId] = useState('');

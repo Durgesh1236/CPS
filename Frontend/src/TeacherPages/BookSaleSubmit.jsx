@@ -26,7 +26,6 @@ export const BookSaleSubmit = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-
     const today = new Date();
     const date =
       String(today.getDate()).padStart(2, '0') + '-' +
