@@ -3,14 +3,15 @@ import mongoose from "mongoose";
 const SpendSchema = new mongoose.Schema({
     name: { 
         type: String, 
-        required: true 
+        // required: true,
+        default: 'Pawan sir'
     }, 
     totalReceived : {
-        type: Number,
+        type: String,
         required: true
     }, 
     date: {
-        type: Date,
+        type: String,
         required: true
     },
     status: {
@@ -20,7 +21,7 @@ const SpendSchema = new mongoose.Schema({
     },
     UserId: {
         type: String,
-        required: true
+        // required: true
     },
     paymentMethod: {
         type: String,
@@ -30,6 +31,10 @@ const SpendSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: false,
+    },
+    ledgerId: {
+        type: String,
+        default: null
     }
 }, { timestamps: true })
 

@@ -255,4 +255,5 @@ export const deleteTeacherPayment = TryCatch(async(req, res) => {
         success: true,
         message: "Teacher payment record deleted successfully"
     })
-})
+}) 
+

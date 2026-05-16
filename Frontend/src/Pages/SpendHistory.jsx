@@ -14,11 +14,29 @@ const toInputDate = (iso) => {
   return `${yyyy}-${mm}-${dd}`;
 }
 
-const prettyDate = (iso) => {
-  if (!iso) return '-';
-  const d = new Date(iso);
-  return `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
-}
+// const prettyDate = (iso) => {
+//   if (!iso) return '-';
+//   const d = new Date(iso);
+//   return `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
+// }
+
+const prettyDate = (date) => {
+  if (!date) return "-";
+
+  // if already YYYY-MM-DD format
+  if (typeof date === "string" && date.includes("-")) {
+    const [year, month, day] = date.split("-");
+    return `${day}-${month}-${year}`;
+  }
+
+  const d = new Date(date);
+
+  if (isNaN(d.getTime())) return "-";
+
+  return `${String(d.getDate()).padStart(2, "0")}-${String(
+    d.getMonth() + 1
+  ).padStart(2, "0")}-${d.getFullYear()}`;
+};
 
 const SpendHistory = () => {
   
@@ -171,12 +189,12 @@ const SpendRow = ({ it, user, onUpdate, editSpendRecord, deleteSpendRecord }) =>
         {editing ? (
           <input
             type="date"
-            value={editData.date}
+            value={editData.date?.split("T")[0] || ""}
             onChange={e => setEditData(ed => ({ ...ed, date: e.target.value }))}
             className="border rounded px-2 py-1 text-sm"
           />
         ) : (
-          prettyDate(it.date)
+          prettyDate(it.date) || it.date
         )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-gray-800">

@@ -30,6 +30,7 @@ import StudentTimetable from './StudentPage/StudentTimetable'
 import BookForm from './TeacherPages/BookForm'
 import BookPriceHistory from './TeacherPages/BookPriceHistory'
 import { SetStudentTimetable } from './TeacherPages/SetStudentTimetable'
+import TeacherAttendence from './TeacherPages/TeacherAttendence'
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -69,6 +70,7 @@ const App = () => {
             <Route path='/book-form' element={isAuth ? <BookForm/> : <TeacherLoginPage/>}/>
             <Route path='/book-price' element={isAuth ? <BookPriceHistory/> : <TeacherLoginPage/>}/>
             <Route path='/set-timetable' element={isAuth ? <SetStudentTimetable/> : <TeacherLoginPage/>}/>
+            <Route path='/teacher-attendence' element={isAuth ? <TeacherAttendence/> : <TeacherLoginPage/>}/>
             {/* student routes */}
             <Route path='/student-home' element={StudentAuth ? <StudentHome/> : <LoginPage/>}/>
             <Route path='/student-profile' element={StudentAuth ? <StudentProfile/> : <LoginPage/>}/>

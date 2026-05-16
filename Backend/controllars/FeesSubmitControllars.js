@@ -57,6 +57,24 @@ export const FeesSubmit = TryCatch(async (req, res) => {
         },
         paymentMethod
     })
+
+    const spendRecord = await SpendModel.create({
+        totalReceived: submitFees,
+        date,
+        status: 'pending',
+        UserId: req.user?._id ? String(req.user._id) : undefined,
+        submittedBy: req.user?._id || undefined,
+        paymentMethod,
+        studentFeeId: feeSubmit._id ? String(feeSubmit._id) : undefined,
+        ledgerId,
+    })
+
+    if(!spendRecord){
+        return res.status(500).json({
+            success: false,
+            message: "Failed to record spend"
+        })
+    }
     if (!feeSubmit) {
         return res.status(500).json({
             success: false,
@@ -220,7 +238,11 @@ export const getStudentByLedger = TryCatch(async (req, res) => {
 export const updateFeeRecord = TryCatch(async (req, res) => {
     const { ledgerId } = req.params;
     const { year, month, backdues, paid } = req.body;
-    if (!ledgerId || year == null || !month) return res.status(400).json({ success: false, message: 'Missing required fields' });
+    if (!ledgerId || year == null || !month) 
+        return res.status(400).json({ 
+    success: false, 
+    message: 'Missing required fields' 
+});
     const student = await Student.findOne({ ledgerId });
     if (!student) return res.status(404).json({ success: false, message: 'Student not found' });
 
