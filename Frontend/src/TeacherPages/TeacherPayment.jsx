@@ -7,6 +7,7 @@ const TeacherPayment = () => {
     month: '',
     paymentDate: '',
     amount: '',
+    paymentMethod: ''
   })
 
   const handleChange = (e) => {
@@ -73,6 +74,24 @@ const TeacherPayment = () => {
                 className="w-full mt-1 p-3 border-2 border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50/60 text-gray-800 shadow-sm"
                 required
               />
+            </div>
+
+            <div>
+              <label className="block text-base font-semibold text-blue-700 mb-1">Payment Method</label>
+              <select
+                name="paymentMethod"
+                value={formData.paymentMethod}
+                onChange={handleChange}
+                className="w-full p-3 border-2 border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50/60 text-gray-800 shadow-sm"
+                required
+              >
+                <option value="">Select Payment Method</option>
+                {[
+                  "Account", "Cash"
+                ].map((m) => (
+                  <option key={m}>{m}</option>
+                ))}
+              </select>
             </div>
 
             {/* Amount */}

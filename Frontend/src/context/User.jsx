@@ -19,6 +19,8 @@ export const UserProvider = ({ children }) => {
     const [spendlist, setSpendList] = useState([]);
     const [bookSale, setBookSale] = useState([]);
     const [bookPrice, setBookPrice] = useState([]);
+    const [teacherPaymentList, setTeacherPaymentList] = useState([]);
+
     // axios.defaults.withCredentials = true;
     async function registerTeacher(name, email, password, mobileNo, role, setForm) {
         setLoading(true);
@@ -518,6 +520,24 @@ export const UserProvider = ({ children }) => {
                 toast.success(data.message);
             }
         } catch (error) {
+            setLoading(false);
+        }
+    }
+
+    async function TeacherPayment(teacherId, amount, date, paymentMethod){
+        setLoading(true);
+        try {
+            const { data } = await axios.post("/api/user/teacher-payment", { teacherId, amount, date, paymentMethod });
+            if(data.success){
+                toast.success(data.message);
+                setLoading(false);
+                await getTeacherPaymentList();
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error("Error occurred while processing payment");
+        } finally {
             setLoading(false);
         }
     }
