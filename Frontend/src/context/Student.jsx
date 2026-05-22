@@ -69,7 +69,6 @@ export const StudentProvider  = ({ children }) => {
     }
 
     async function feesHistory(ledgerId, studentclass){
-        console.log(ledgerId, studentclass);
         setLoading(true);
         try {
             const { data } = await axios.post(`/api/student-data/student/fee-history/${ledgerId}`, { studentclass });
@@ -100,7 +99,8 @@ export const StudentProvider  = ({ children }) => {
         studentData,
         // StudentRegister,
         StudentAuth,
-        studentLogout
+        studentLogout,
+        feeshistory
     }}>{children}</UserContext.Provider>;
 }
 

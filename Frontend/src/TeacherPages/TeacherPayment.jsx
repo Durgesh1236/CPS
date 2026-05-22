@@ -22,8 +22,8 @@ const TeacherPayment = () => {
 
   return (
     <TeacherLayout>
-      <div className="h-full mt-0 lg:mt-5 flex justify-center items-center">
-        <div className="backdrop-blur-lg bg-white/70 shadow-2xl rounded-3xl w-full max-w-xl p-8 border border-blue-100">
+      <div className="flex justify-center items-center">
+        <div className="backdrop-blur-lg mt-0 lg:mt-10 bg-white/70 shadow-2xl w-full p-7 border border-blue-100">
           <h1 className="text-xl lg:text-4xl font-extrabold text-blue-700 mb-5 text-center tracking-wide drop-shadow-lg flex items-center justify-center gap-2">
             <span className="text-2xl lg:text-3xl">💳</span> Teacher Payment
           </h1>

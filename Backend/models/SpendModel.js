@@ -31,11 +31,11 @@ const SpendSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: false,
-    },
-    ledgerId: {
-        type: String,
-        default: null
     }
+    // ledgerId: {
+    //     type: String,
+    //     default: null
+    // }
 }, { timestamps: true })
 
 export const SpendModel = mongoose.model("SpendModel", SpendSchema);
