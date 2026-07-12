@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaRegUser } from "react-icons/fa";
+import { FaRegUser, FaUserTie } from "react-icons/fa";
 import { UserData } from '../context/User';
 
 const NavbarTeacher = () => {

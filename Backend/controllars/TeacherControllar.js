@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import cloudinary from "cloudinary";
 import getDataurl from "../utils/urlGenerator.js";
 import { TeacherPayment } from "../models/TeacherPaymentModel.js";
+import { TestQuestion } from "../models/TestQuestionModel.js";
 
 export const registerUser = TryCatch(async(req, res) => {
     const {name, email, password, mobileNo, role} = req.body;
@@ -257,3 +258,84 @@ export const deleteTeacherPayment = TryCatch(async(req, res) => {
     })
 }) 
 
+export const StudentTestQuestion = TryCatch(async(req, res) => {
+  const { className, subject, questions } = req.body;
+
+  // Validation
+  if (!className || !subject || !Array.isArray(questions) || !questions.length) {
+    return res.status(400).json({
+      success: false,
+      message: "All fields are required",
+    });
+  }
+
+  // Validate each question before transforming
+  for (let i = 0; i < questions.length; i++) {
+    const q = questions[i];
+    const options = [q.option1, q.option2, q.option3, q.option4];
+
+    if (
+      !q.question ||
+      options.some((opt) => !opt) ||
+      !q.correctAnswer
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: `Question ${i + 1} is missing required fields`,
+      });
+    }
+
+    if (!options.includes(q.correctAnswer)) {
+      return res.status(400).json({
+        success: false,
+        message: `Question ${i + 1}: correctAnswer must match one of the options`,
+      });
+    }
+  }
+
+  // Convert frontend format → schema format
+  const formattedQuestions = questions.map((q, index) => ({
+    questionNumber: index + 1,
+    questionText: q.question,
+    options: [q.option1, q.option2, q.option3, q.option4],
+    correctAnswer: q.correctAnswer,
+  }));
+
+  // Save
+  const testQuestion = await TestQuestion.create({
+    class: className,
+    subject,
+    question: formattedQuestions,
+    teacherId: req.user._id,
+  });
+
+  return res.status(200).json({
+    success: true,
+    testQuestion,
+    message: "Questions submitted successfully",
+  });
+});
+
+export const getTestQuestions = TryCatch(async(req, res) => {
+    const { className, subject } = req.body;
+    if(!className || !subject){
+        return res.status(400).json({
+            success: false,
+            message: "Class and Subject are required"   
+        })
+    }
+
+    const testQuestion = await TestQuestion.findOne({ teacherId: req.user._id })
+    if(!testQuestion){
+        return res.status(404).json({
+            success: false,
+            message: "Test questions not found for this teacher"
+        })
+    }
+
+    return res.status(200).json({
+        success: true,
+        testQuestion,
+        message: "Test questions retrieved successfully"
+    })
+})

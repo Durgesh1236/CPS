@@ -32,6 +32,11 @@ import BookPriceHistory from './TeacherPages/BookPriceHistory'
 import { SetStudentTimetable } from './TeacherPages/SetStudentTimetable'
 import TeacherAttendence from './TeacherPages/TeacherAttendence'
 import StudentFeeReceipt from './StudentPage/StudentFeereciept'
+import StuResultSub from './TeacherPages/StuResultSub'
+import StudentQuesPaper from './TeacherPages/StudentQuesPaper'
+import SetStudentTest from './TeacherPages/SetStudentTest'
+import StudentQuesHistory from './TeacherPages/StuQuesHistory'
+import StudentTest from './StudentPage/StudentTest'
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -72,6 +77,10 @@ const App = () => {
             <Route path='/book-price' element={isAuth ? <BookPriceHistory/> : <TeacherLoginPage/>}/>
             <Route path='/set-timetable' element={isAuth ? <SetStudentTimetable/> : <TeacherLoginPage/>}/>
             <Route path='/teacher-attendence' element={isAuth ? <TeacherAttendence/> : <TeacherLoginPage/>}/>
+            <Route path='/student-result-submission' element={isAuth ? <StuResultSub/> : <TeacherLoginPage/>}/>
+            <Route path='/set-student-question-paper' element={isAuth ? <StudentQuesPaper/> : <TeacherLoginPage/>}/>
+            <Route path='/set-student-test' element={isAuth ? <SetStudentTest/> : <TeacherLoginPage/>}/>
+            <Route path='/question-history' element={isAuth ? <StudentQuesHistory/> : <TeacherLoginPage/>}/>
             {/* student routes */}
             <Route path='/student-home' element={StudentAuth ? <StudentHome/> : <LoginPage/>}/>
             <Route path='/student-profile' element={StudentAuth ? <StudentProfile/> : <LoginPage/>}/>
@@ -80,6 +89,7 @@ const App = () => {
             <Route path='/fee-submit' element={StudentAuth ? <StudentFees/> : <LoginPage/>}/>
             <Route path='/student-time-table' element={StudentAuth ? <StudentTimetable/> : <LoginPage/>}/>
             <Route path='/student-fee-receipt' element={StudentAuth ? <StudentFeeReceipt/> : <LoginPage/>}/>
+            <Route path= '/student-test' element={StudentAuth ? <StudentTest/> : <LoginPage/>}/>
           </Routes>
         </BrowserRouter>
       }

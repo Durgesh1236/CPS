@@ -17,7 +17,7 @@ const StudentSchema = new mongoose.Schema({
   mobileNo: { type: String, required: true},
   fatherName: { type: String, required: true },
   motherName: { type: String, required: true },
-  aadhar: { type: String, required: true },
+  aadhar: { type: String, default: "No Aadhar" },
   address: { type: String, required: true },
   transport: { type: Boolean, default: false, required: true },
   feeRecords: { type: [FeeRecordSchema], default: [] },

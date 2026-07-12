@@ -3,6 +3,7 @@ import { addStudent, studentFeeHistory, StudentLogin, studentLogout, studentProf
 import { StudentisAuth } from "../middlewares/StudentisAuth.js";
 import { isAuth } from "../middlewares/isAuth.js";
 import { bookPriceDelete, bookPriceEdit, bookPriceForm, getBookPrice } from "../controllars/FeesSubmitControllars.js";
+import { StudentTestQuestion } from "../controllars/TeacherControllar.js";
 
 const studentRouter = express.Router();
 
@@ -17,5 +18,6 @@ studentRouter.post("/student/book-sale-form", isAuth, bookPriceForm);
 studentRouter.post("/student/book-price-edit/:id", isAuth, bookPriceEdit);
 studentRouter.get("/student/get-all-book-price", isAuth, getBookPrice);
 studentRouter.delete("/student/delete-book-price/:id", isAuth, bookPriceDelete);
+studentRouter.post("/student-test-question", isAuth, StudentTestQuestion);
 
 export default studentRouter; 

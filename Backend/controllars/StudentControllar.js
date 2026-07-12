@@ -1,6 +1,7 @@
 import { BookSubmit } from "../models/BookSubmitModel.js";
 import { FeeSubmit } from "../models/FeeSubmitModels.js";
 import { Student } from "../models/StudentModel.js";
+import { TestQuestion } from "../models/TestQuestionModel.js";
 import generateToken from "../utils/generateToken.js";
 import TryCatch from "../utils/TryCatch.js";
 import bcrypt from 'bcrypt';
@@ -11,7 +12,7 @@ export const addStudent = TryCatch(async (req, res) => {
     if (!ledgerId || !password || !studentName || !mobileNo || !fatherName || !motherName || !aadhar || !address) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
-     if(password.length < 6){
+    if (password.length < 6) {
         return res.json({
             success: false,
             message: "Password must be at least 6 characters"
@@ -33,9 +34,9 @@ export const addStudent = TryCatch(async (req, res) => {
     }
 
     if (monthDetails && typeof monthDetails === 'object') {
-        const monthsOrder = ['April','May','June','July','August','September','October','November','December','January','February','March'];
+        const monthsOrder = ['April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March'];
 
-        const payloadNormalized = {}; 
+        const payloadNormalized = {};
         for (const key of Object.keys(monthDetails)) {
             const parts = key.split('-');
             const year = Number(parts[0]);
@@ -74,13 +75,13 @@ export const addStudent = TryCatch(async (req, res) => {
     }
 
     await student.save();
-    return res.status(201).json({  student, success: true, message: 'Student saved successfully' });
+    return res.status(201).json({ student, success: true, message: 'Student saved successfully' });
 })
 
-export const StudentProfileDelete = TryCatch(async(req, res) =>  {
+export const StudentProfileDelete = TryCatch(async (req, res) => {
     const { id } = req.params;
     const student = await Student.findById(id);
-    if(!student){
+    if (!student) {
         return res.status(404).json({
             success: false,
             message: "Student not found"
@@ -93,23 +94,23 @@ export const StudentProfileDelete = TryCatch(async(req, res) =>  {
     })
 })
 
-export const StudentLogin = TryCatch(async(req, res) => {
+export const StudentLogin = TryCatch(async (req, res) => {
     const { ledgerId, password } = req.body;
-    if(!ledgerId || !password){
+    if (!ledgerId || !password) {
         return res.json({
             success: false,
             message: "Please provide all required fields"
         })
     }
     const user = await Student.findOne({ ledgerId });
-    if(!user){
+    if (!user) {
         return res.json({
             success: false,
             message: "Student not found"
         })
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if(!isPasswordValid){
+    if (!isPasswordValid) {
         return res.json({
             success: false,
             message: "Password is incorrect"
@@ -123,7 +124,7 @@ export const StudentLogin = TryCatch(async(req, res) => {
     })
 })
 
-export const studentProfile = TryCatch(async(req, res) => {
+export const studentProfile = TryCatch(async (req, res) => {
     const user = await Student.findById(req.user._id);
     return res.json({
         user,
@@ -131,8 +132,8 @@ export const studentProfile = TryCatch(async(req, res) => {
     })
 })
 
-export const studentLogout = TryCatch(async(req,res) => {
-    res.cookie("token", "", {maxAge: 0});
+export const studentLogout = TryCatch(async (req, res) => {
+    res.cookie("token", "", { maxAge: 0 });
     return res.json({
         success: true,
         message: "Logout Successfully"
@@ -181,5 +182,29 @@ export const studentFeeHistory = TryCatch(async (req, res) => {
         feeHistory,
         success: true,
         message: "Fee history retrieved successfully",
+    });
+});
+
+const StudentQuestion = TryCatch(async (req, res) => {
+    const { studentClass, subject } = req.body;
+
+    if (!studentClass || !subject) {
+        return res.json({
+            success: false,
+            message: "Please provide all required fields"
+        });
+    }
+
+    const testQuestion = await TestQuestion.findOne({ class: studentClass, subject});
+    if (!testQuestion) {
+        return res.json({
+            success: false,
+            message: "No test questions found for this class and subject"
+        });
+    }
+    return res.status(200).json({
+        testQuestion,
+        success: true,
+        message: "Test questions retrieved successfully"
     });
 });

@@ -4,6 +4,7 @@ import {
   FaClipboardList, FaUserGraduate, FaSearch, FaRupeeSign,
   FaBell, FaBook
 } from 'react-icons/fa';
+import { FcBarChart } from "react-icons/fc";
 import TeacherLayout from '../Components/TeacherLayout';
 import { useNavigate } from 'react-router-dom';
 import { UserData } from '../context/User';
@@ -14,6 +15,7 @@ import { VscFeedback } from "react-icons/vsc";
 import { FaBookReader } from "react-icons/fa";
 import { IoMdTime } from "react-icons/io";
 import { LuBookOpenCheck } from "react-icons/lu";
+import { FaPersonCircleQuestion } from "react-icons/fa6";
 
 const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in the conference hall.";
 
@@ -173,7 +175,10 @@ const TeacherHomePage = () => {
             {isAdmin && <MobileCard icon={FaBook} label="Book Form" bg="from-violet-500 to-violet-700" delay={320} onClick={() => navigate('/book-form')} />}
             {isAdminOrAcc && <MobileCard icon={GiRupee} label="Book Price" bg="from-red-600 to-red-800" delay={360} onClick={() => navigate('/book-price')} />}
             {isAdminOrAcc && <MobileCard icon={IoMdTime} label="Timetable" bg="from-cyan-600 to-cyan-800" delay={400} onClick={() => navigate('/set-timetable')} />}
-            {isAdminOrAcc && <MobileCard icon={LuBookOpenCheck} label="Student Test" bg="from-gray-500 to-gray-700" delay={440} onClick={() => alert('Coming soon!')} badge="Soon" />}
+            {isAdminOrAcc && <MobileCard icon={LuBookOpenCheck} label="Student Test" bg="from-gray-500 to-gray-700" delay={440} onClick={() => navigate('/set-student-test')}/>}
+            {<MobileCard icon={FcBarChart} label="Results" bg="from-green-500 to-green-700" delay={480} onClick={() => navigate('/student-result-submission')} />}
+            {<MobileCard icon={FaPersonCircleQuestion} label="Question Paper" bg="from-emerald-500 to-green-700" delay={480} onClick={() => navigate('/set-student-question-paper')} />}
+              {<MobileCard icon={FaBook} label="Question History" bg="from-purple-500 to-purple-700" delay={480} onClick={() => navigate('/question-history')} />}
           </div>
         </div>
 
@@ -186,6 +191,7 @@ const TeacherHomePage = () => {
             {isAdminOrAcc && <MobileCard icon={MdOutlineManageHistory} label="Pay History" bg="from-emerald-500 to-emerald-700" delay={100} onClick={() => navigate('/spend-history')} />}
             {isAdmin && <MobileCard icon={FaUserTie} label="Reg Teacher" bg="from-amber-500 to-amber-700" delay={150} onClick={() => navigate('/teacher-registration')} />}
             {isAdmin && <MobileCard icon={FaUserTie} label="Teacher Data" bg="from-teal-500 to-teal-700" delay={200} onClick={() => navigate('/teacher-data')} />}
+              {<MobileCard icon={FaPersonCircleQuestion} label="Question Paper" bg="from-emerald-500 to-green-700" delay={480} onClick={() => navigate('/set-student-question-paper')} />}
           </div>
         </div>
 
@@ -236,7 +242,7 @@ const TeacherHomePage = () => {
         <div className="h-6" />
 
         {/* ── BOTTOM NAV ── */}
-        <div className="fixed bottom-0 left-0 right-0 h-16 bg-[#0f0a28] border-t border-white/10 flex z-50">
+        {/* <div className="fixed bottom-0 left-0 right-0 h-16 bg-[#0f0a28] border-t border-white/10 flex z-50">
           {[
             { id: 'home', emoji: '🏠', label: 'Home', action: null },
             { id: 'students', emoji: '🎓', label: 'Students', action: () => navigate('/student-data') },
@@ -256,7 +262,7 @@ const TeacherHomePage = () => {
               </span>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
 
       {/* ════════════════════════════════
@@ -321,7 +327,9 @@ const TeacherHomePage = () => {
             {isAdmin && <DesktopNavCard icon={FaBook} label="Book Price Form" sub="Set pricing" gradient="from-purple-400 to-violet-700" onClick={() => navigate('/book-form')} />}
             {isAdminOrAcc && <DesktopNavCard icon={GiRupee} label="Book Price" sub="View / update" gradient="from-red-400 to-orange-600" onClick={() => navigate('/book-price')} />}
             {isAdminOrAcc && <DesktopNavCard icon={IoMdTime} label="Timetable" sub="Schedule classes" gradient="from-sky-400 to-cyan-600" onClick={() => navigate('/set-timetable')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={LuBookOpenCheck} label="Student Test" sub="Coming soon" gradient="from-gray-500 to-slate-700" onClick={() => alert('Coming soon!')} disabled />}
+            {isAdminOrAcc && <DesktopNavCard icon={LuBookOpenCheck} label="Student Test" sub="Coming soon" gradient="from-gray-500 to-slate-700" onClick={() => navigate('/set-student-test')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={FcBarChart} label="Student Results" sub="Submit & view" gradient="from-green-500 to-emerald-700" onClick={() => navigate('/student-result-submission')} />}
+            { isAdminOrAcc && <DesktopNavCard icon={FaPersonCircleQuestion} label="Question View" sub="View & edit" gradient="from-emerald-700 to-green-700" onClick={() => navigate('/question-history')} /> }
           </DesktopSection>
 
           <RainbowDivider />
@@ -333,6 +341,7 @@ const TeacherHomePage = () => {
             {isAdminOrAcc && <DesktopNavCard icon={MdOutlineManageHistory} label="Paid History" sub="Salary log" gradient="from-lime-400 to-green-600" onClick={() => navigate('/spend-history')} />}
             {isAdmin && <DesktopNavCard icon={FaUserTie} label="Teacher Registration" sub="Add new teacher" gradient="from-yellow-400 to-orange-500" onClick={() => navigate('/teacher-registration')} />}
             {isAdmin && <DesktopNavCard icon={FaUserTie} label="Teacher Data" sub="View & edit" gradient="from-cyan-400 to-teal-600" onClick={() => navigate('/teacher-data')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={FaPersonCircleQuestion} label="Question Paper" sub="View & edit" gradient="from-emerald-500 to-green-700" onClick={() => navigate('/set-student-question-paper')} />}
           </DesktopSection>
 
           <RainbowDivider />
@@ -390,7 +399,7 @@ const TeacherHomePage = () => {
 ───────────────────────────────────────── */
 
 const RainbowDivider = () => (
-  <div className="h-px rounded-full bg-gradient-to-r from-indigo-400 via-pink-400 via-amber-400 to-emerald-400 my-6 opacity-30" />
+  <div className="h-px rounded-full bg-gradient-to-r from-indigo-400 via-pink-400 to-emerald-400 my-6 opacity-30" />
 );
 
 const MobileSectionHeader = ({ emoji, title, accentFrom }) => (

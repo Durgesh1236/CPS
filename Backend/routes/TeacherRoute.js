@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteTeacher, editTeacherProfile, getAllTeachers, getTeacherPayment, loginUser, logoutUser, MyProfile, registerUser, teacherPayment, TeacherProfile } from "../controllars/TeacherControllar.js";
+import { deleteTeacher, editTeacherProfile, getAllTeachers, getTeacherPayment, loginUser, logoutUser, MyProfile, registerUser, teacherPayment, TeacherProfile, StudentTestQuestion, getTestQuestions } from "../controllars/TeacherControllar.js";
 import { isAuth } from "../middlewares/isAuth.js";
 import { 
     FeesSubmit, getAllFeesSubmit, 
@@ -8,6 +8,7 @@ import {
     editStudentFeeRecord, editStudentProfile, 
     SpendHistoryEdit, 
     deleteSpendRecord} from "../controllars/FeesSubmitControllars.js";
+
 import uploadFile from "../middlewares/multer.js";
 
 const router = express.Router();
@@ -32,5 +33,7 @@ router.post('/edit-teacher-profile/:id', isAuth, editTeacherProfile);
 router.post('/teacher-profile-pic-upload/:id', isAuth, uploadFile, TeacherProfile);
 router.post('/teacher-payment', isAuth, teacherPayment);
 router.get('/get-all-teacher-payment', isAuth, getTeacherPayment);
+router.post('/test-question-upload', isAuth, StudentTestQuestion);
+router.get('/get-all-test-questions', isAuth, getTestQuestions);
 
 export default router;

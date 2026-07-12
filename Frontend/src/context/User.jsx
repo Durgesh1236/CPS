@@ -20,6 +20,7 @@ export const UserProvider = ({ children }) => {
     const [bookSale, setBookSale] = useState([]);
     const [bookPrice, setBookPrice] = useState([]);
     const [teacherPaymentList, setTeacherPaymentList] = useState([]);
+    const [questionList, setQuestionList] = useState([]);
 
     // axios.defaults.withCredentials = true;
     async function registerTeacher(name, email, password, mobileNo, role, setForm) {
@@ -404,28 +405,28 @@ export const UserProvider = ({ children }) => {
         console.log(ledgerId, studentName, studentClass, totalamount, submitAmount, dues, date, paymentMethod);
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/student/fee/book-sale-data", {ledgerId, studentName, studentClass, totalamount, submitAmount, dues, date, paymentMethod});
-        if (data.success) {
-            toast.success(data.message);
-            setLoading(false);
-            setBookSale(data);
-            // await allbookdata();
-        } else {
-            toast.error(data.message);
-            setLoading(false);
-        }
+            const { data } = await axios.post("/api/student/fee/book-sale-data", { ledgerId, studentName, studentClass, totalamount, submitAmount, dues, date, paymentMethod });
+            if (data.success) {
+                toast.success(data.message);
+                setLoading(false);
+                setBookSale(data);
+                // await allbookdata();
+            } else {
+                toast.error(data.message);
+                setLoading(false);
+            }
         } catch (error) {
-           setLoading(false); 
-           console.log(error.message);
-        } 
+            setLoading(false);
+            console.log(error.message);
+        }
     }
 
     async function allbookdata() {
         setLoading(true);
         try {
             const { data } = await axios.get("/api/student/fee/all-book-sale-data");
-                setBookSale(data);
-                setLoading(false);
+            setBookSale(data);
+            setLoading(false);
         } catch (error) {
             setLoading(false);
         }
@@ -436,7 +437,7 @@ export const UserProvider = ({ children }) => {
         console.log(id, ledgerId, studentName, studentClass, paymentMethod, totalamount, submitAmount, dues);
         try {
             const { data } = await axios.post(`/api/student/fee/book/data/update/${id}`, { ledgerId, studentName, studentClass, paymentMethod, totalamount, submitAmount, dues });
-            if(data.success){
+            if (data.success) {
                 toast.success(data.message);
                 setLoading(false);
                 await allbookdata();
@@ -453,7 +454,7 @@ export const UserProvider = ({ children }) => {
         setLoading(true);
         try {
             const { data } = await axios.post(`/api/student/fee/book/data/delete/${id}`);
-            if(data.success){
+            if (data.success) {
                 toast.success(data.message);
                 setLoading(false);
                 await allbookdata();
@@ -466,11 +467,11 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function BookPriceForm(studentClass, Totalbooks, totalprice, diary, discount, BookQuantity){
+    async function BookPriceForm(studentClass, Totalbooks, totalprice, diary, discount, BookQuantity) {
         setLoading(true);
         try {
             const { data } = await axios.post("/api/student-data/student/book-sale-form", { studentClass, Totalbooks, totalprice, diary, discount, BookQuantity });
-            if(data.success){
+            if (data.success) {
                 toast.success(data.message);
                 await getallbookprice();
                 setLoading(false);
@@ -494,11 +495,11 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function editBookPrice(id, studentClass, totalprice, diary, discount, BookQuantity){
+    async function editBookPrice(id, studentClass, totalprice, diary, discount, BookQuantity) {
         setLoading(true);
         try {
             const { data } = await axios.post(`/api/student-data/student/book-price-edit/${id}`, { studentClass, totalprice, diary, discount, BookQuantity });
-            if(data.success){
+            if (data.success) {
                 toast.success(data.message);
                 setLoading(false)
                 await getallbookprice();
@@ -514,7 +515,7 @@ export const UserProvider = ({ children }) => {
         setLoading(true);
         try {
             const { data } = await axios.delete(`/api/student-data/student/delete-book-price/${id}`);
-            if(data.success){
+            if (data.success) {
                 await getallbookprice();
                 setLoading(false);
                 toast.success(data.message);
@@ -524,11 +525,11 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function TeacherPayment(teacherId, amount, date, paymentMethod){
+    async function TeacherPayment(teacherId, amount, date, paymentMethod) {
         setLoading(true);
         try {
             const { data } = await axios.post("/api/user/teacher-payment", { teacherId, amount, date, paymentMethod });
-            if(data.success){
+            if (data.success) {
                 toast.success(data.message);
                 setLoading(false);
                 await getTeacherPaymentList();
@@ -542,6 +543,38 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    async function studentTestQuestion(className, subject, questions) {
+        setLoading(true);
+        try {
+            const { data } = await axios.post("/api/user/test-question-upload", { className, subject, questions });
+            if (data.success) {
+                toast.success(data.message);
+                setQuestionList(data.question); // fixed: "question" not "questions"
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error("Error occurred while submitting test questions");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function getallquestions(className, subject) {
+        setLoading(true);
+        try {
+            const { data } = await axios.get('/api/user/get-all-test-questions', {className,  subject});
+            if (data.success) {
+                setQuestionList(data.questions);
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            console.log(error);
+        } finally{
+            setLoading(false);
+        }
+    }
     useEffect(() => {
         fetchUser();
         getAllTeachers();
@@ -592,7 +625,10 @@ export const UserProvider = ({ children }) => {
         BookPriceForm,
         editBookPrice,
         deleteBookPrice,
-        bookPrice
+        bookPrice,
+        studentTestQuestion,
+        getallquestions,
+        questionList
     }}>{children}</UserContext.Provider>;
 }
 
