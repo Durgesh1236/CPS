@@ -34,6 +34,6 @@ router.post('/teacher-profile-pic-upload/:id', isAuth, uploadFile, TeacherProfil
 router.post('/teacher-payment', isAuth, teacherPayment);
 router.get('/get-all-teacher-payment', isAuth, getTeacherPayment);
 router.post('/test-question-upload', isAuth, StudentTestQuestion);
-router.get('/get-all-test-questions', isAuth, getTestQuestions);
+router.post('/get-all-test-questions', isAuth, getTestQuestions);
 
 export default router;

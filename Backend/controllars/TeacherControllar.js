@@ -332,7 +332,7 @@ export const getTestQuestions = TryCatch(async(req, res) => {
             message: "Test questions not found for this teacher"
         })
     }
-
+    //  console.log(testQuestion, className, subject)
     return res.status(200).json({
         success: true,
         testQuestion,

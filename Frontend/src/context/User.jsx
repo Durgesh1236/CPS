@@ -562,10 +562,12 @@ export const UserProvider = ({ children }) => {
 
     async function getallquestions(className, subject) {
         setLoading(true);
+        console.log(className, subject);
+        
         try {
-            const { data } = await axios.get('/api/user/get-all-test-questions', {className,  subject});
+            const { data } = await axios.post("/api/user/get-all-test-questions", {className,  subject});
             if (data.success) {
-                setQuestionList(data.questions);
+                setQuestionList(data.testQuestion);
             } else {
                 toast.error(data.message);
             }

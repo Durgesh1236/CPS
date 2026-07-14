@@ -9,7 +9,7 @@ import bcrypt from 'bcrypt';
 
 export const addStudent = TryCatch(async (req, res) => {
     const { ledgerId, password, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails } = req.body;
-    if (!ledgerId || !password || !studentName || !mobileNo || !fatherName || !motherName || !aadhar || !address) {
+    if (!ledgerId || !password || !studentName || !mobileNo || !fatherName || !motherName || !address) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
     if (password.length < 6) {
