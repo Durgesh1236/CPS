@@ -43,18 +43,34 @@ const SpendHistory = () => {
   const [filterDate, setFilterDate] = useState('');
   const { user, spendlist, loading, spendRecord, setSpendList, editSpendRecord, deleteSpendRecord } = UserData();
    
-  const filtered = spendlist.filter(item => {
-    if (!filterDate) return true;
+  // const filtered = spendlist.filter(item => {
+  //   if (!filterDate) return true;
+  //   const itemDate = toInputDate(item.date);
+  //   return itemDate === filterDate;
+  // });
+
+  const filtered = spendlist.filter((item) => {
+  // Teacher can only see their own records
+  if (user?.role !== "admin") {
+    if (item.UserId !== user?._id && item.submittedBy?._id !== user?._id) {
+      return false;
+    }
+  }
+
+  // Date filter
+  if (filterDate) {
     const itemDate = toInputDate(item.date);
     return itemDate === filterDate;
-  });
+  }
 
+  return true;
+});
   const totalFiltered = filtered.reduce((s, i) => s + (Number(i.totalReceived) || 0), 0);
 
   return (
     <TeacherLayout>
       <div className="min-h-screen pt-20 p-6 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-6xl mx-auto">
+        <div className="w-full mx-auto">
           <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
             <div className="md:col-span-2 bg-gradient-to-r from-indigo-600 to-blue-500 rounded-2xl shadow-lg p-6">
               <h2 className="text-2xl font-bold">Spend History</h2>

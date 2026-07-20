@@ -53,7 +53,7 @@ const StudentDataInput = () => {
         delete monthDetails[monthKey];
         return { ...prev, months: monthsArr, monthDetails };
       } else {
-        return { ...prev, months: [...prev.months, monthKey], monthDetails: { ...prev.monthDetails, [monthKey]: { backdues: '', paid: '', discount: '' } } };
+        return { ...prev, months: [...prev.months, monthKey], monthDetails: { ...prev.monthDetails, [monthKey]: { backdues: '', paid: '' } } };
       }
     });
   }
@@ -61,7 +61,7 @@ const StudentDataInput = () => {
   const handleMonthDetailChange = (month, field, value) => {
     // keep raw string for inputs so user can clear the field (empty string)
     setForm(prev => {
-      const prevDetails = prev.monthDetails?.[month] || { backdues: '', paid: '', discount: '' };
+      const prevDetails = prev.monthDetails?.[month] || { backdues: '', paid: '' };
       const next = { ...prev.monthDetails, [month]: { ...prevDetails, [field]: value } };
       return { ...prev, monthDetails: next };
     });
@@ -306,13 +306,9 @@ const StudentDataInput = () => {
                             <input type="number" min="0" value={form.monthDetails?.[m]?.paid ?? ''} onChange={(e) => handleMonthDetailChange(m, 'paid', e.target.value)} className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-white focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="0" />
                           </div>
                           <div>
-                            <label className="text-xs text-gray-600 block">Discount</label>
-                            <input type="number" min="0" value={form.monthDetails?.[m]?.discount ?? ''} onChange={(e) => handleMonthDetailChange(m, 'discount', e.target.value)} className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-white focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="0" />
-                          </div>
-                          <div>
                             <label className="text-xs text-gray-600 block">Dues</label>
                             {/* compute dues from current inputs so empty inputs can be cleared */}
-                            <input type="number" min="0" value={Math.max(0, Number(form.monthDetails?.[m]?.backdues || 0) - Number(form.monthDetails?.[m]?.paid || 0) - Number(form.monthDetails?.[m]?.discount || 0))} readOnly className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-indigo-50 text-indigo-700 font-semibold" placeholder="0" />
+                            <input type="number" min="0" value={Math.max(0, Number(form.monthDetails?.[m]?.backdues || 0) - Number(form.monthDetails?.[m]?.paid || 0))} readOnly className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-indigo-50 text-indigo-700 font-semibold" placeholder="0" />
                           </div>
                         </div>
                       </div>

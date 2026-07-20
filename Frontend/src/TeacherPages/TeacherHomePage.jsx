@@ -167,8 +167,8 @@ const TeacherHomePage = () => {
             {isAdminOrAcc && <MobileCard icon={FaMoneyCheckAlt} label="Fees Submit" bg="from-emerald-500 to-emerald-700" delay={0} onClick={() => navigate('/student-fee-submit')} />}
             {isAdminOrAcc && <MobileCard icon={FaHistory} label="Fees History" bg="from-indigo-500 to-indigo-700" delay={40} onClick={() => navigate('/student-fee-history')} />}
             {isAdminOrAcc && <MobileCard icon={FaClipboardList} label="Attendance" bg="from-purple-500 to-purple-700" delay={80} onClick={() => navigate('/student-attendence')} />}
-            {isAdmin && <MobileCard icon={FaUserGraduate} label="Student Data" bg="from-amber-500 to-amber-700" delay={120} onClick={() => navigate('/student-data-input')} />}
-            {isAdmin && <MobileCard icon={FaSearch} label="Search Student" bg="from-sky-500 to-sky-700" delay={160} onClick={() => navigate('/student-data')} />}
+            {isAdminOrAcc && <MobileCard icon={FaUserGraduate} label="Student Data" bg="from-amber-500 to-amber-700" delay={120} onClick={() => navigate('/student-data-input')} />}
+            {isAdminOrAcc && <MobileCard icon={FaSearch} label="Search Student" bg="from-sky-500 to-sky-700" delay={160} onClick={() => navigate('/student-data')} />}
             {isAdmin && <MobileCard icon={FaUserTie} label="Register" bg="from-teal-500 to-teal-700" delay={200} onClick={() => navigate('/student-register')} />}
             {isAdminOrAcc && <MobileCard icon={FaBookReader} label="Book Sale" bg="from-pink-500 to-pink-700" delay={240} onClick={() => navigate('/book-sale-data')} />}
             {isAdminOrAcc && <MobileCard icon={FaHistory} label="Sale History" bg="from-rose-500 to-rose-700" delay={280} onClick={() => navigate('/book-sale-history')} />}
@@ -319,8 +319,8 @@ const TeacherHomePage = () => {
             {isAdminOrAcc && <DesktopNavCard icon={FaMoneyCheckAlt} label="Fees Submit" sub="Record payments" gradient="from-emerald-400 to-green-600" onClick={() => navigate('/student-fee-submit')} />}
             {isAdminOrAcc && <DesktopNavCard icon={FaHistory} label="Fees History" sub="Past transactions" gradient="from-blue-400 to-indigo-600" onClick={() => navigate('/student-fee-history')} />}
             <DesktopNavCard icon={FaClipboardList} label="Attendance" sub="Mark & review" gradient="from-violet-500 to-purple-700" onClick={() => navigate('/student-attendence')} />
-            {isAdmin && <DesktopNavCard icon={FaUserGraduate} label="Student Data Input" sub="Add records" gradient="from-orange-400 to-amber-600" onClick={() => navigate('/student-data-input')} />}
-            {isAdmin && <DesktopNavCard icon={FaSearch} label="Search Student" sub="Find by name/ID" gradient="from-slate-400 to-gray-600" onClick={() => navigate('/student-data')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={FaUserGraduate} label="Student Data Input" sub="Add records" gradient="from-orange-400 to-amber-600" onClick={() => navigate('/student-data-input')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={FaSearch} label="Search Student" sub="Find by name/ID" gradient="from-slate-400 to-gray-600" onClick={() => navigate('/student-data')} />}
             {isAdmin && <DesktopNavCard icon={FaUserTie} label="Registration" sub="Enrol new student" gradient="from-teal-400 to-emerald-700" onClick={() => navigate('/student-register')} />}
             {isAdminOrAcc && <DesktopNavCard icon={FaBookReader} label="Book Sale" sub="Sell & track" gradient="from-pink-400 to-rose-600" onClick={() => navigate('/book-sale-data')} />}
             {isAdminOrAcc && <DesktopNavCard icon={FaHistory} label="Book Sale History" sub="Past sales log" gradient="from-rose-400 to-red-600" onClick={() => navigate('/book-sale-history')} />}

@@ -8,10 +8,10 @@ import bcrypt from 'bcrypt';
 
 
 export const addStudent = TryCatch(async (req, res) => {
-    const { ledgerId, password, studentName, studentClass, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails, discount } = req.body;
+    const { ledgerId, password, studentName, studentClass, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails } = req.body;
     if (!ledgerId || !password || !studentName || !mobileNo || !fatherName || !motherName || !address) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
-    }
+    } 
     if (password.length < 6) {
         return res.json({
             success: false,
@@ -46,9 +46,8 @@ export const addStudent = TryCatch(async (req, res) => {
             const md = monthDetails[key] || {};
             const back = Number(md.backdues || 0);
             const paid = Number(md.paid || 0);
-            const discount = Number(md.discount || 0);
             const dues = Math.max(0, back - paid);
-            payloadNormalized[key] = { year, month, back, paid, discount, dues };
+            payloadNormalized[key] = { year, month, back, paid, dues };
         }
 
         const prevKeyFor = (year, month) => {
@@ -59,7 +58,7 @@ export const addStudent = TryCatch(async (req, res) => {
         }
 
         for (const key of Object.keys(payloadNormalized)) {
-            const { year, month, back, paid, discount } = payloadNormalized[key];
+            const { year, month, back, paid } = payloadNormalized[key];
 
             const prevKey = prevKeyFor(year, month);
             let prevDues = 0;
