@@ -6,6 +6,7 @@ const FeeRecordSchema = new mongoose.Schema({
   backdues: { type: Number, default: 0 },
   paid: { type: Number, default: 0 },
   dues: { type: Number, default: 0 },
+  discount: {type: Number, default: 0},
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -15,9 +16,11 @@ const StudentSchema = new mongoose.Schema({
   password: { type: String , required: true},
   studentClass: { type: String, required: true },
   mobileNo: { type: String, required: true},
+  additionalMobileNo: { type: String, default: "No MobileNo" },
   fatherName: { type: String, required: true },
   motherName: { type: String, required: true },
   aadhar: { type: String, default: "No Aadhar" },
+  aapar: {type: String, default: "No Aapar"},
   address: { type: String, required: true },
   transport: { type: Boolean, default: false, required: true },
   feeRecords: { type: [FeeRecordSchema], default: [] },
@@ -33,9 +36,10 @@ StudentSchema.methods.upsertFeeRecord = function (year, month, backdues = 0, pai
     this.feeRecords[idx].backdues = Number(backdues || 0);
     this.feeRecords[idx].paid = Number(paid || 0);
     this.feeRecords[idx].dues = dues;
+    this.feeRecords[idx].discount = Number(discount || 0);
     this.feeRecords[idx].createdAt = new Date();
   } else {
-    this.feeRecords.push({ year: Number(year), month, backdues: Number(backdues || 0), paid: Number(paid || 0), dues, createdAt: new Date() });
+    this.feeRecords.push({ year: Number(year), month, backdues: Number(backdues || 0), paid: Number(paid || 0), dues, discount: Number(discount || 0), createdAt: new Date() });
   }
   return this;
 }

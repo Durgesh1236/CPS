@@ -160,10 +160,10 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function StudentDataInput(ledgerId, studentName, password, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails, setForm) {
+    async function StudentDataInput(ledgerId, studentName, password, studentClass, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails, setForm) {
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/student-data/create-student-account", { ledgerId, studentName, password, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails });
+            const { data } = await axios.post("/api/student-data/create-student-account", { ledgerId, studentName, password, studentClass, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails });
             if (data.success) {
                 setForm([]);
                 toast.success(data.message);

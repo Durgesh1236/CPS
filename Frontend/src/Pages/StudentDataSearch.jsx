@@ -76,6 +76,8 @@ export default function StudentDataSearch() {
       mobileNo: selected.mobileNo || "",
       fatherName: selected.fatherName || "",
       motherName: selected.motherName || "",
+      aadhar: selected.aadhar || "",
+      aapar: selected.aapar || "",
       address: selected.address || "",
       transport: selected.transport ? "Yes" : "No"
     });
@@ -440,6 +442,14 @@ export default function StudentDataSearch() {
                       <div className="text-sm text-gray-700 break-words">
                         <strong>Mobile:</strong> {selected.mobileNo}
                       </div>
+                      {
+                        console.log("Additional Mobile:", selected.additionalMobileNo)
+                      }
+                      { selected.additionalMobileNo && (
+                        <div className="text-sm text-gray-700 break-words">
+                          <strong>Additional Mobile:</strong> {selected.additionalMobileNo}
+                        </div>
+                      )}
                       <div className="text-sm text-gray-700 break-words">
                         <strong>Parents:</strong> {selected.fatherName} / {selected.motherName}
                       </div>

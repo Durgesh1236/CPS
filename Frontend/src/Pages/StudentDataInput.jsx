@@ -4,11 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import { FaSave, FaSyncAlt, FaCalendarAlt } from 'react-icons/fa';
 import { UserData } from '../context/User';
 
-const classes = Array.from({ length: 12 }, (_, i) => `${i + 1}`);
-const months = ['April','May','June','July','August','September','October','November','December','January','February','March'];
+// const classes = Array.from({ length: 12 }, (_, i) => `${i + 1}`);
+const months = ['April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March'];
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 4 }, (_, i) => `${currentYear - 2 + i}`); // e.g., currentYear-2 .. currentYear+1
-
+const classes = [
+  "P.Nur",
+  "Nur",
+  "LKG",
+  "UKG",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+];
 const StudentDataInput = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -18,9 +31,11 @@ const StudentDataInput = () => {
     password: '',
     studentClass: '',
     mobileNo: '',
+    additionalMobileNo: '',
     fatherName: '',
     motherName: '',
     aadhar: '',
+    aapar: '',
     address: '',
     transport: false,
     months: [],
@@ -38,7 +53,7 @@ const StudentDataInput = () => {
         delete monthDetails[monthKey];
         return { ...prev, months: monthsArr, monthDetails };
       } else {
-        return { ...prev, months: [...prev.months, monthKey], monthDetails: { ...prev.monthDetails, [monthKey]: { backdues: '', paid: '' } } };
+        return { ...prev, months: [...prev.months, monthKey], monthDetails: { ...prev.monthDetails, [monthKey]: { backdues: '', paid: '', discount: '' } } };
       }
     });
   }
@@ -46,7 +61,7 @@ const StudentDataInput = () => {
   const handleMonthDetailChange = (month, field, value) => {
     // keep raw string for inputs so user can clear the field (empty string)
     setForm(prev => {
-      const prevDetails = prev.monthDetails?.[month] || { backdues: '', paid: '' };
+      const prevDetails = prev.monthDetails?.[month] || { backdues: '', paid: '', discount: '' };
       const next = { ...prev.monthDetails, [month]: { ...prevDetails, [field]: value } };
       return { ...prev, monthDetails: next };
     });
@@ -63,13 +78,13 @@ const StudentDataInput = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    StudentDataInput( form.ledgerId, form.studentName, form.password, form.studentClass, form.mobileNo, form.fatherName, form.motherName, form.aadhar, form.address, form.transport, form.monthDetails, setForm)
+    StudentDataInput(form.ledgerId, form.studentName, form.password, form.studentClass, form.mobileNo, form.additionalMobileNo, form.fatherName, form.motherName,form.aadhar, form.aapar, form.address, form.transport, form.monthDetails, setForm)
   }
 
   return (
     <TeacherLayout>
       <div className="min-h-screen pt-20 p-6 bg-gradient-to-b from-slate-50 to-white">
-        <div className="max-w-3xl mx-auto">
+        <div className="w-full mx-auto">
           <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100 sm:p-10 ring-1 ring-gray-50">
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -90,15 +105,15 @@ const StudentDataInput = () => {
                   <input name="studentName" value={form.studentName} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="Full name" />
                 </div>
 
-                 <div>
+                <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Password</label>
                   <input name="password" value={form.password} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="Student Password" />
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">AAdhar Number</label>
                   <input name="aadhar" value={form.aadhar} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="12 Digit Number" />
-                </div>
+                </div> */}
 
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Class</label>
@@ -110,6 +125,10 @@ const StudentDataInput = () => {
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Mobile Number</label>
                   <input name="mobileNo" value={form.mobileNo} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="10-digit mobile" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Additional Mobile Number</label>
+                  <input name="additionalMobileNo" value={form.additionalMobileNo} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="10-digit mobile" />
                 </div>
               </div>
 
@@ -128,6 +147,100 @@ const StudentDataInput = () => {
                 <label className="text-sm font-medium text-gray-700">Aadhar Number</label>
                 <input name="aadhar" value={form.aadhar} onChange={handleChange} className="mt-1 p-3 w-full border rounded-lg" placeholder="12-digit Aadhar" />
               </div> */}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {/* Aadhar */}
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                    Aadhar Card
+                  </label>
+
+                  <div className="flex gap-6 mt-2">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="hasAadhar"
+                        value="Yes"
+                        checked={form.hasAadhar === "Yes"}
+                        onChange={handleChange}
+                      />
+                      Yes
+                    </label>
+
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="hasAadhar"
+                        value="No"
+                        checked={form.hasAadhar === "No"}
+                        onChange={handleChange}
+                      />
+                      No
+                    </label>
+                  </div>
+
+                  {form.hasAadhar === "Yes" && (
+                    <div className="mt-3">
+                      <input
+                        type="text"
+                        name="aadhar"
+                        value={form.aadhar}
+                        onChange={handleChange}
+                        maxLength={12}
+                        placeholder="Enter 12-digit Aadhar Number"
+                        className="p-3 w-full border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* APAAR */}
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                    APAAR Card
+                  </label>
+
+                  <div className="flex gap-6 mt-2">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="hasAapar"
+                        value="Yes"
+                        checked={form.hasAapar === "Yes"}
+                        onChange={handleChange}
+                      />
+                      Yes
+                    </label>
+
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="hasAapar"
+                        value="No"
+                        checked={form.hasAapar === "No"}
+                        onChange={handleChange}
+                      />
+                      No
+                    </label>
+                  </div>
+
+                  {form.hasAapar === "Yes" && (
+                    <div className="mt-3">
+                      <input
+                        type="text"
+                        name="aapar"
+                        value={form.aapar}
+                        onChange={handleChange}
+                        maxLength={12}
+                        placeholder="Enter 12-digit APAAR Number"
+                        className="p-3 w-full border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                      />
+                    </div>
+                  )}
+                </div>
+
+              </div>
 
               <div>
                 <label className="text-sm font-medium text-gray-700">Address</label>
@@ -183,7 +296,7 @@ const StudentDataInput = () => {
                           </div>
                           <div className="text-sm text-gray-500">Fill amounts (INR)</div>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
+                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-center">
                           <div>
                             <label className="text-xs text-gray-600 block">Backdues</label>
                             <input type="number" min="0" value={form.monthDetails?.[m]?.backdues ?? ''} onChange={(e) => handleMonthDetailChange(m, 'backdues', e.target.value)} className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-white focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="0" />
@@ -193,9 +306,13 @@ const StudentDataInput = () => {
                             <input type="number" min="0" value={form.monthDetails?.[m]?.paid ?? ''} onChange={(e) => handleMonthDetailChange(m, 'paid', e.target.value)} className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-white focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="0" />
                           </div>
                           <div>
+                            <label className="text-xs text-gray-600 block">Discount</label>
+                            <input type="number" min="0" value={form.monthDetails?.[m]?.discount ?? ''} onChange={(e) => handleMonthDetailChange(m, 'discount', e.target.value)} className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-white focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="0" />
+                          </div>
+                          <div>
                             <label className="text-xs text-gray-600 block">Dues</label>
                             {/* compute dues from current inputs so empty inputs can be cleared */}
-                            <input type="number" min="0" value={Math.max(0, Number(form.monthDetails?.[m]?.backdues || 0) - Number(form.monthDetails?.[m]?.paid || 0))} readOnly className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-indigo-50 text-indigo-700 font-semibold" placeholder="0" />
+                            <input type="number" min="0" value={Math.max(0, Number(form.monthDetails?.[m]?.backdues || 0) - Number(form.monthDetails?.[m]?.paid || 0) - Number(form.monthDetails?.[m]?.discount || 0))} readOnly className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-indigo-50 text-indigo-700 font-semibold" placeholder="0" />
                           </div>
                         </div>
                       </div>
@@ -207,7 +324,7 @@ const StudentDataInput = () => {
               {/* status messages removed as requested; check console for errors */}
 
               <div className="flex items-center justify-between">
-                <button type="button" onClick={() => setForm({ ledgerId: '', studentName: '', studentClass: '', mobileNo: '', fatherName: '', motherName: '', aadhar: '', address: '', transport: false, months: [], monthDetails: {} })} className="px-4 py-2 bg-white border border-indigo-200 text-indigo-600 rounded-lg hover:bg-indigo-50 transition flex items-center gap-2">
+                <button type="button" onClick={() => setForm({ ledgerId: '', studentName: '', studentClass: '', mobileNo: '', fatherName: '', motherName: '', aadhar: '', address: '', transport: false, months: [], monthDetails: {}, aapar: '', additionalMobileNo: '' })} className="px-4 py-2 bg-white border border-indigo-200 text-indigo-600 rounded-lg hover:bg-indigo-50 transition flex items-center gap-2">
                   <FaSyncAlt />
                   Reset
                 </button>

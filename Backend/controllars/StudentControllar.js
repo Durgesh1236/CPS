@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
 
 
 export const addStudent = TryCatch(async (req, res) => {
-    const { ledgerId, password, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport, monthDetails } = req.body;
+    const { ledgerId, password, studentName, studentClass, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails, discount } = req.body;
     if (!ledgerId || !password || !studentName || !mobileNo || !fatherName || !motherName || !address) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
@@ -21,14 +21,16 @@ export const addStudent = TryCatch(async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     let student = await Student.findOne({ ledgerId });
     if (!student) {
-        student = await Student.create({ ledgerId, studentName, password: hashedPassword, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport });
+        student = await Student.create({ ledgerId, studentName, password: hashedPassword, studentClass, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport });
     } else {
         student.studentName = studentName || student.studentName;
         student.studentClass = studentClass || student.studentClass;
         student.mobileNo = mobileNo || student.mobileNo;
+        student.additionalMobileNo = additionalMobileNo || student.additionalMobileNo;
         student.fatherName = fatherName || student.fatherName;
         student.motherName = motherName || student.motherName;
         student.aadhar = aadhar || student.aadhar;
+        student.aapar = aapar || student.aapar;
         student.address = address || student.address;
         student.transport = typeof transport === 'boolean' ? transport : student.transport;
     }
@@ -44,8 +46,9 @@ export const addStudent = TryCatch(async (req, res) => {
             const md = monthDetails[key] || {};
             const back = Number(md.backdues || 0);
             const paid = Number(md.paid || 0);
+            const discount = Number(md.discount || 0);
             const dues = Math.max(0, back - paid);
-            payloadNormalized[key] = { year, month, back, paid, dues };
+            payloadNormalized[key] = { year, month, back, paid, discount, dues };
         }
 
         const prevKeyFor = (year, month) => {
@@ -56,7 +59,7 @@ export const addStudent = TryCatch(async (req, res) => {
         }
 
         for (const key of Object.keys(payloadNormalized)) {
-            const { year, month, back, paid } = payloadNormalized[key];
+            const { year, month, back, paid, discount } = payloadNormalized[key];
 
             const prevKey = prevKeyFor(year, month);
             let prevDues = 0;
