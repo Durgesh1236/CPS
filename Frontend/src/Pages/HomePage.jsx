@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Layout from '../Components/Layout';
 import { assets } from '../assets/assets';
 import ContactUs from './ContactUs';
+import { FcReddit } from "react-icons/fc";
 
 // ---- Content -----------------------------------------------------------
 
@@ -221,7 +222,7 @@ const ChatBot = () => {
         {open ? (
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round"><path d="M6 6l12 12M18 6 6 18" /></svg>
         ) : (
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.5 2 2 5.9 2 10.7c0 2.6 1.4 4.9 3.6 6.5-.1.9-.5 2.3-1.5 3.7 1.7-.2 3.3-.9 4.5-1.8 1.1.3 2.2.5 3.4.5 5.5 0 10-3.9 10-8.9S17.5 2 12 2Z" /></svg>
+          <FcReddit size={30} />
         )}
       </button>
 

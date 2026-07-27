@@ -10,49 +10,59 @@
   <title>Central Public School</title>
   <title>Central Public School — Kalyanpur | CBSE School</title>
 
-<meta name="description"
-  content="Central Public School, Kalyanpur — experienced teachers, modern facilities, CBSE curriculum, and holistic student development. Admissions open." />
+  <meta name="description"
+    content="Central Public School, Kalyanpur — experienced teachers, modern facilities, CBSE curriculum, and holistic student development. Admissions open." />
 
-<meta name="keywords"
-  content="Central Public School Kalyanpur, CBSE school in Kalyanpur, best school in Kalyanpur" />
+  <meta name="keywords" content="Central Public School Kalyanpur, CBSE school in Kalyanpur, best school in Kalyanpur" />
 
-<meta property="og:title" content="Central Public School — Kalyanpur" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://centralpublicschoolkalyanpur.in/" />
-<meta property="og:site_name" content="Central Public School" />
-<meta property="og:image" content="https://centralpublicschoolkalyanpur.in/social-preview.png" />
-<meta property="og:description"
-content="Experienced teachers, CBSE curriculum, modern facilities, and holistic education in Kalyanpur." />
+  <meta property="og:title" content="Central Public School — Kalyanpur" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://centralpublicschoolkalyanpur.in/" />
+  <meta property="og:site_name" content="Central Public School" />
+  <meta property="og:image" content="https://centralpublicschoolkalyanpur.in/social-preview.png" />
+  <meta property="og:description"
+    content="Experienced teachers, CBSE curriculum, modern facilities, and holistic education in Kalyanpur." />
   <meta property="image" content="https://centralpublicschoolkalyanpur.in/social-preview.svg" />
   <meta name="theme-color" content="#0ea5e9" />
 
-  <!-- JSON-LD structured data (loaded from single external file for easier maintenance) -->
-  <!-- <script>
-    (function(){
-      // Fetch the external structured data and inject it inline as application/ld+json
+  <script>
+    (function () {
       fetch('/structured-data.json')
-        .then(function(res){ if(!res.ok) throw new Error('no json'); return res.json() })
-        .then(function(data){
-          try{
-            var s = document.createElement('script');
-            s.type = 'application/ld+json';
-            s.text = JSON.stringify(data);
-            document.head.appendChild(s);
-          }catch(e){console.error('inject ld+json', e)}
-        }).catch(function(){ 
-          // If fetching fails, fallback: nothing (existing inline JSON-LD removed to centralize data)
+        .then(function (res) {
+          if (!res.ok) throw new Error('structured-data.json not found');
+          return res.json();
+        })
+        .then(function (data) {
           var s = document.createElement('script');
-            s.type = 'application/ld+json';
-            s.text = JSON.stringify(data);
-            document.head.appendChild(s);
+          s.type = 'application/ld+json';
+          s.text = JSON.stringify(data);
+          document.head.appendChild(s);
+        })
+        .catch(function (err) {
+          console.error('Failed to load structured data:', err);
         });
     })();
-  </script> -->
-  <!-- <link rel="manifest" href="/manifest.json" /> -->
+  </script>
 </head>
 
 <body>
-  <div id="root"></div>
+  <!-- <div id="root"></div> -->
+
+  <div id="root">
+    <noscript>
+      <h1>Central Public School — Kalyanpur</h1>
+      <p>
+        Central Public School, Kalyanpur is a CBSE-affiliated school offering
+        quality education with experienced teachers and modern facilities.
+        We focus on holistic student development from [starting class] to
+        [ending class].
+      </p>
+      <p>Address: [Full school address, Kalyanpur]</p>
+      <p>Phone: [Phone number]</p>
+      <p>Email: [Email address]</p>
+    </noscript>
+  </div>
+
   <script type="module" src="/src/main.jsx"></script>
 </body>
 

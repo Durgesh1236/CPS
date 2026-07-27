@@ -1,0 +1,30 @@
+{
+  "@context": "https://schema.org",
+  "@type": "School",
+  "name": "Central Public School",
+  "alternateName": "CPS Kalyanpur",
+  "description": "Central Public School, Kalyanpur — experienced teachers, modern facilities, CBSE curriculum, and holistic student development.",
+  "url": "https://centralpublicschoolkalyanpur.in/",
+  "logo": "https://centralpublicschoolkalyanpur.in/logo.png",
+  "image": "https://centralpublicschoolkalyanpur.in/social-preview.png",
+  "telephone": "[+91-9801496128]",
+  "email": "[school email address]",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Central Public School, Kalyanpur, P.O. Kalyanpur, Dist. Samastipur",
+    "addressLocality": "Kalyanpur",
+    "addressRegion": "Bihar",
+    "postalCode": "848160",
+    "addressCountry": "IN"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "500",
+    "longitude": "600"
+  },
+  "sameAs": [
+    "[Facebook page URL, if any]",
+    "[Instagram page URL, if any]",
+    "[YouTube channel URL, if any]"
+  ]
+}
