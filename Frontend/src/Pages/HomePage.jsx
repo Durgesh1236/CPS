@@ -361,7 +361,7 @@ const HomePage = () => {
         clearInterval(yearsInterval.current);
         return yearsOfLegacy;
       });
-    }, 90);
+    }, 90); 
     return () => clearInterval(yearsInterval.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
