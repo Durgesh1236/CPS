@@ -7,6 +7,7 @@ import cloudinary from "cloudinary";
 import getDataurl from "../utils/urlGenerator.js";
 import { TeacherPayment } from "../models/TeacherPaymentModel.js";
 import { TestQuestion } from "../models/TestQuestionModel.js";
+import { schoolphotoUpload } from "../models/SchoolPhotoModel.js";
 
 export const registerUser = TryCatch(async(req, res) => {
     const {name, email, password, mobileNo, role} = req.body;
@@ -337,5 +338,128 @@ export const getTestQuestions = TryCatch(async(req, res) => {
         success: true,
         testQuestion,
         message: "Test questions retrieved successfully"
+    })
+})
+
+// export const schoolPhotoUpload = TryCatch(async (req, res) => {
+//     const file = req.file;
+
+//     if (!file) {
+//         return res.status(400).json({
+//             success: false,
+//             message: "Please upload a photo",
+//         }); 
+//     }
+
+//     const compressedImage = await sharp(file.buffer)
+//         .resize({
+//             width: 800,
+//             fit: "inside",
+//         })
+//         .rotate()
+//         .jpeg({ quality: 50 })
+//         .toBuffer();
+
+//     const fileUrl = getDataurl({
+//         ...file,
+//         buffer: compressedImage,
+//     });
+
+//     const cloud = await cloudinary.v2.uploader.upload(fileUrl.content, {
+//         quality: "auto:best",
+//     });
+
+//     const photoData = await schoolphotoUpload.create({
+//         photoUrl: {
+//             id: cloud.public_id,
+//             url: cloud.secure_url,
+//         },
+//     });
+
+//     return res.status(201).json({
+//         success: true,
+//         photoData,
+//         message: "Photo uploaded successfully",
+//     });
+// });
+
+export const schoolPhotoUpload = TryCatch(async (req, res) => {
+    const file = req.file;
+
+    if (!file) {
+        return res.status(400).json({
+            success: false,
+            message: "Please upload a photo",
+        });
+    }
+
+    // High-quality compression
+    const compressedImage = await sharp(file.buffer)
+        .resize({
+            width: 1600,
+            fit: "inside",
+            withoutEnlargement: true,
+        })
+        .rotate()
+        .jpeg({
+            quality: 90,
+            mozjpeg: true,
+        })
+        .toBuffer();
+
+    const fileUrl = getDataurl({
+        ...file,
+        buffer: compressedImage,
+    });
+
+    const cloud = await cloudinary.v2.uploader.upload(
+        fileUrl.content,
+        {
+            quality: "auto:best",
+        }
+    );
+
+    const photoData = await schoolphotoUpload.create({
+        photoUrl: {
+            id: cloud.public_id,
+            url: cloud.secure_url,
+        },
+    });
+
+    return res.status(201).json({
+        success: true,
+        photoData,
+        message: "Photo uploaded successfully",
+    });
+});
+
+export const getSchoolPhotos = TryCatch(async (req, res) =>{
+    const photos = await schoolphotoUpload.find();
+    return res.status(200).json({
+        success: true,
+        photos,
+        message: "Photos retrieved successfully"
+    })
+})
+
+export const deleteSchoolPhoto = TryCatch(async (req, res) => {
+    const { id } = req.params;
+    if(!id){
+        return res.status(400).json({
+            success: false,
+            message: "Photo not found"
+        })
+    }
+
+    const photo = await SchoolPhotoModel.findByIdAndDelete(id);
+    if(!photo){
+        return res.status(404).json({
+            success: false,
+            message: "Photo not found"
+        })
+    }
+    return res.status(200).json({
+        success: true,
+        message: "Photo deleted successfully"
     })
 })

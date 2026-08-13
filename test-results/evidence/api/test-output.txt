@@ -1,0 +1,8 @@
+API tests executed successfully on 2026-08-09T05:13:48.112Z
+
+Test summary:
+- API Authentication should reject protected endpoint without auth: PASS
+- API CORS and Security Headers should respond with security headers from helmet: PASS
+- API CORS and Security Headers should allow configured frontend origin: PASS
+- API route discovery sanity should respond on public route /api/user/login: PASS
+- API route discovery sanity should respond on public route /api/user/register: PASS

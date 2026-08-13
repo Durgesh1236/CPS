@@ -11,15 +11,18 @@ export const isAuth = async(req, res, next) => {
         }
         const decodedData = jwt.verify(token, process.env.Jwt_secret);
         if(!decodedData){
-            return res.status(403).json({
-                message: "token expired"
+            return res.status(401).json({
+                message: "Invalid or expired token"
             })
         }
         req.user = await User.findById(decodedData.id);
+        if (!req.user) {
+          return res.status(401).json({ message: 'Invalid token user' });
+        }
         next();
     } catch (error) {
-        res.status(500).json({
-            message: "Please Login",
+        return res.status(401).json({
+            message: "Please login",
         });
     }
 }

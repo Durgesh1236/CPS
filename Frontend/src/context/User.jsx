@@ -21,7 +21,7 @@ export const UserProvider = ({ children }) => {
     const [bookPrice, setBookPrice] = useState([]);
     const [teacherPaymentList, setTeacherPaymentList] = useState([]);
     const [questionList, setQuestionList] = useState([]);
-
+    const [schoolPhotos, setSchoolPhotos] = useState([]);
     // axios.defaults.withCredentials = true;
     async function registerTeacher(name, email, password, mobileNo, role, setForm) {
         setLoading(true);
@@ -577,6 +577,43 @@ export const UserProvider = ({ children }) => {
             setLoading(false);
         }
     }
+
+    async function PhotoUpload(formData){
+        setLoading(true);
+        console.log("Uploading photos with formData:", formData);
+        try{
+            const { data } = await axios.post("/api/user/school-photo-upload", formData);
+            if(data.success){
+                toast.success(data.message);
+                setSchoolPhotos(data.photos);
+                await getSchoolPhotos();
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error("Error occurred while uploading photos");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function getSchoolPhotos() {
+        setLoading(true);
+        try {
+            const { data } = await axios.get("/api/user/get-school-photos");
+            if (data.success) {
+                setSchoolPhotos(data.photos);
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            // toast.error("Error occurred while fetching school photos");
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    // console.log("schoolPhotos", schoolPhotos);
     useEffect(() => {
         fetchUser();
         getAllTeachers();
@@ -585,6 +622,7 @@ export const UserProvider = ({ children }) => {
         spendRecord();
         allbookdata();
         getallbookprice();
+        getSchoolPhotos();
     }, []);
 
     return <UserContext.Provider value={{
@@ -630,7 +668,9 @@ export const UserProvider = ({ children }) => {
         bookPrice,
         studentTestQuestion,
         getallquestions,
-        questionList
+        questionList,
+        schoolPhotos,
+        PhotoUpload
     }}>{children}</UserContext.Provider>;
 }
 

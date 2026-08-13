@@ -1,0 +1,24 @@
+{
+  "generatedAt": "{{generatedAt}}",
+  "environment": "{{environment}}",
+  "application": {
+    "frontend": "{{frontend}}",
+    "backend": "{{backend}}",
+    "database": "{{database}}"
+  },
+  "summary": {
+    "total": {{total}},
+    "passed": {{passed}},
+    "failed": {{failed}},
+    "skipped": {{skipped}}
+  },
+  "security": {
+    "critical": {{critical}},
+    "high": {{high}},
+    "medium": {{medium}},
+    "low": {{low}},
+    "informational": {{informational}}
+  },
+  "suites": [],
+  "findings": []
+}

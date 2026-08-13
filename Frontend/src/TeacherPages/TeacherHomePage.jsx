@@ -2,7 +2,7 @@ import React from 'react';
 import {
   FaMoneyCheckAlt, FaHistory, FaExclamationCircle, FaUserTie,
   FaClipboardList, FaUserGraduate, FaSearch, FaRupeeSign,
-  FaBell, FaBook
+  FaBell, FaBook, FaImages
 } from 'react-icons/fa';
 import { FcBarChart } from "react-icons/fc";
 import TeacherLayout from '../Components/TeacherLayout';
@@ -89,7 +89,6 @@ const TeacherHomePage = () => {
               </button>
               <div
                 className="relative w-11 h-11 cursor-pointer shrink-0 rounded-full p-0.5 bg-gradient-to-tr from-indigo-400 via-pink-400 to-amber-300"
-                // style={{ animation: 'spin 4s linear infinite' }}
                 onClick={() => navigate('/teacher-profile')}
               >
                 <div className="absolute inset-0.5 rounded-full bg-indigo-950 flex items-center justify-center">
@@ -164,21 +163,22 @@ const TeacherHomePage = () => {
         <div className="px-4">
           <MobileSectionHeader emoji="🎓" title="Student Data" accentFrom="indigo" />
           <div className="grid grid-cols-3 gap-2.5">
-            {isAdminOrAcc && <MobileCard icon={FaMoneyCheckAlt} label="Fees Submit" bg="from-emerald-500 to-emerald-700" delay={0} onClick={() => navigate('/student-fee-submit')} />}
-            {isAdminOrAcc && <MobileCard icon={FaHistory} label="Fees History" bg="from-indigo-500 to-indigo-700" delay={40} onClick={() => navigate('/student-fee-history')} />}
-            {isAdminOrAcc && <MobileCard icon={FaClipboardList} label="Attendance" bg="from-purple-500 to-purple-700" delay={80} onClick={() => navigate('/student-attendence')} />}
-            {isAdminOrAcc && <MobileCard icon={FaUserGraduate} label="Student Data" bg="from-amber-500 to-amber-700" delay={120} onClick={() => navigate('/student-data-input')} />}
-            {isAdminOrAcc && <MobileCard icon={FaSearch} label="Search Student" bg="from-sky-500 to-sky-700" delay={160} onClick={() => navigate('/student-data')} />}
-            {isAdmin && <MobileCard icon={FaUserTie} label="Register" bg="from-teal-500 to-teal-700" delay={200} onClick={() => navigate('/student-register')} />}
-            {isAdminOrAcc && <MobileCard icon={FaBookReader} label="Book Sale" bg="from-pink-500 to-pink-700" delay={240} onClick={() => navigate('/book-sale-data')} />}
-            {isAdminOrAcc && <MobileCard icon={FaHistory} label="Sale History" bg="from-rose-500 to-rose-700" delay={280} onClick={() => navigate('/book-sale-history')} />}
-            {isAdmin && <MobileCard icon={FaBook} label="Book Form" bg="from-violet-500 to-violet-700" delay={320} onClick={() => navigate('/book-form')} />}
-            {isAdminOrAcc && <MobileCard icon={GiRupee} label="Book Price" bg="from-red-600 to-red-800" delay={360} onClick={() => navigate('/book-price')} />}
-            {isAdminOrAcc && <MobileCard icon={IoMdTime} label="Timetable" bg="from-cyan-600 to-cyan-800" delay={400} onClick={() => navigate('/set-timetable')} />}
-            {isAdminOrAcc && <MobileCard icon={LuBookOpenCheck} label="Student Test" bg="from-gray-500 to-gray-700" delay={440} onClick={() => navigate('/set-student-test')}/>}
-            {<MobileCard icon={FcBarChart} label="Results" bg="from-green-500 to-green-700" delay={480} onClick={() => navigate('/student-result-submission')} />}
-            {<MobileCard icon={FaPersonCircleQuestion} label="Question Paper" bg="from-emerald-500 to-green-700" delay={480} onClick={() => navigate('/set-student-question-paper')} />}
-              {<MobileCard icon={FaBook} label="Question History" bg="from-purple-500 to-purple-700" delay={480} onClick={() => navigate('/question-history')} />}
+            {isAdminOrAcc && <MobileCard icon={FaMoneyCheckAlt} label="Fees Submit" bg="from-emerald-500 to-teal-700" delay={0} onClick={() => navigate('/student-fee-submit')} />}
+            {isAdminOrAcc && <MobileCard icon={FaHistory} label="Fees History" bg="from-blue-500 to-indigo-700" delay={40} onClick={() => navigate('/student-fee-history')} />}
+            {isAdminOrAcc && <MobileCard icon={FaClipboardList} label="Attendance" bg="from-fuchsia-500 to-purple-700" delay={80} onClick={() => navigate('/student-attendence')} />}
+            {isAdminOrAcc && <MobileCard icon={FaUserGraduate} label="Student Data" bg="from-amber-500 to-yellow-700" delay={120} onClick={() => navigate('/student-data-input')} />}
+            {isAdminOrAcc && <MobileCard icon={FaSearch} label="Search Student" bg="from-cyan-500 to-sky-700" delay={160} onClick={() => navigate('/student-data')} />}
+            {isAdmin && <MobileCard icon={FaUserTie} label="Register" bg="from-lime-500 to-green-700" delay={200} onClick={() => navigate('/student-register')} />}
+            {isAdminOrAcc && <MobileCard icon={FaBookReader} label="Book Sale" bg="from-pink-500 to-fuchsia-700" delay={240} onClick={() => navigate('/book-sale-data')} />}
+            {isAdminOrAcc && <MobileCard icon={FaHistory} label="Sale History" bg="from-rose-500 to-red-700" delay={280} onClick={() => navigate('/book-sale-history')} />}
+            {isAdmin && <MobileCard icon={FaBook} label="Book Form" bg="from-violet-500 to-indigo-700" delay={320} onClick={() => navigate('/book-form')} />}
+            {isAdminOrAcc && <MobileCard icon={GiRupee} label="Book Price" bg="from-orange-500 to-red-700" delay={360} onClick={() => navigate('/book-price')} />}
+            {isAdminOrAcc && <MobileCard icon={IoMdTime} label="Timetable" bg="from-teal-500 to-cyan-700" delay={400} onClick={() => navigate('/set-timetable')} />}
+            {isAdminOrAcc && <MobileCard icon={LuBookOpenCheck} label="Student Test" bg="from-slate-500 to-gray-700" delay={440} onClick={() => navigate('/set-student-test')}/>}
+            {<MobileCard icon={FcBarChart} label="Results" bg="from-green-500 to-emerald-700" delay={480} onClick={() => navigate('/student-result-submission')} />}
+            {<MobileCard icon={FaPersonCircleQuestion} label="Question Paper" bg="from-indigo-500 to-violet-700" delay={480} onClick={() => navigate('/set-student-question-paper')} />}
+            {<MobileCard icon={FaBook} label="Question History" bg="from-red-500 to-orange-700" delay={480} onClick={() => navigate('/question-history')} />}
+            {isAdminOrAcc && <MobileCard icon={FaImages} label="School Photos" bg="from-sky-500 to-blue-700" delay={520} onClick={() => navigate('/school-photo-upload')} />}
           </div>
         </div>
 
@@ -186,12 +186,12 @@ const TeacherHomePage = () => {
         <div className="px-4">
           <MobileSectionHeader emoji="👩‍🏫" title="Teacher Data" accentFrom="purple" />
           <div className="grid grid-cols-3 gap-2.5">
-            <MobileCard icon={FaClipboardList} label="Attendance" bg="from-purple-500 to-purple-700" delay={0} onClick={() => navigate('/teacher-attendenc')} />
-            {isAdminOrAcc && <MobileCard icon={GiTeacher} label="Payment" bg="from-indigo-500 to-indigo-700" delay={50} onClick={() => navigate('/teacher-payment')} />}
-            {isAdminOrAcc && <MobileCard icon={MdOutlineManageHistory} label="Pay History" bg="from-emerald-500 to-emerald-700" delay={100} onClick={() => navigate('/spend-history')} />}
-            {isAdmin && <MobileCard icon={FaUserTie} label="Reg Teacher" bg="from-amber-500 to-amber-700" delay={150} onClick={() => navigate('/teacher-registration')} />}
-            {isAdmin && <MobileCard icon={FaUserTie} label="Teacher Data" bg="from-teal-500 to-teal-700" delay={200} onClick={() => navigate('/teacher-data')} />}
-              {<MobileCard icon={FaPersonCircleQuestion} label="Question Paper" bg="from-emerald-500 to-green-700" delay={480} onClick={() => navigate('/set-student-question-paper')} />}
+            <MobileCard icon={FaClipboardList} label="Attendance" bg="from-purple-500 to-violet-700" delay={0} onClick={() => navigate('/teacher-attendenc')} />
+            {isAdminOrAcc && <MobileCard icon={GiTeacher} label="Payment" bg="from-blue-600 to-cyan-700" delay={50} onClick={() => navigate('/teacher-payment')} />}
+            {isAdminOrAcc && <MobileCard icon={MdOutlineManageHistory} label="Pay History" bg="from-lime-600 to-emerald-700" delay={100} onClick={() => navigate('/spend-history')} />}
+            {isAdmin && <MobileCard icon={FaUserTie} label="Reg Teacher" bg="from-amber-600 to-orange-700" delay={150} onClick={() => navigate('/teacher-registration')} />}
+            {isAdmin && <MobileCard icon={FaUserTie} label="Teacher Data" bg="from-cyan-600 to-teal-700" delay={200} onClick={() => navigate('/teacher-data')} />}
+              {<MobileCard icon={FaPersonCircleQuestion} label="Question Paper" bg="from-emerald-600 to-green-800" delay={480} onClick={() => navigate('/set-student-question-paper')} />}
           </div>
         </div>
 
@@ -200,8 +200,8 @@ const TeacherHomePage = () => {
           <div className="px-4">
             <MobileSectionHeader emoji="💰" title="Spend Data" accentFrom="emerald" />
             <div className="grid grid-cols-3 gap-2.5">
-              <MobileCard icon={FaRupeeSign} label="Log Spend" bg="from-emerald-500 to-emerald-700" delay={0} onClick={() => navigate('/total-spend')} />
-              <MobileCard icon={MdOutlineManageHistory} label="Spend History" bg="from-sky-500 to-sky-700" delay={60} onClick={() => navigate('/spend-history')} />
+              <MobileCard icon={FaRupeeSign} label="Log Spend" bg="from-green-600 to-lime-700" delay={0} onClick={() => navigate('/total-spend')} />
+              <MobileCard icon={MdOutlineManageHistory} label="Spend History" bg="from-teal-600 to-sky-700" delay={60} onClick={() => navigate('/spend-history')} />
             </div>
           </div>
         )}
@@ -240,35 +240,10 @@ const TeacherHomePage = () => {
         </div>
 
         <div className="h-6" />
-
-        {/* ── BOTTOM NAV ── */}
-        {/* <div className="fixed bottom-0 left-0 right-0 h-16 bg-[#0f0a28] border-t border-white/10 flex z-50">
-          {[
-            { id: 'home', emoji: '🏠', label: 'Home', action: null },
-            { id: 'students', emoji: '🎓', label: 'Students', action: () => navigate('/student-data') },
-            { id: 'fees', emoji: '💰', label: 'Fees', action: () => navigate('/student-fee-submit') },
-            { id: 'profile', emoji: '👤', label: 'Profile', action: () => navigate('/teacher-profile') },
-          ].map(tab => (
-            <div
-              key={tab.id}
-              className="flex-1 flex flex-col items-center justify-center gap-0.5 cursor-pointer active:opacity-60"
-              onClick={() => { setActiveTab(tab.id); tab.action?.(); }}
-            >
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-xl transition-all duration-200 ${activeTab === tab.id ? 'bg-gradient-to-br from-indigo-500 to-purple-500 shadow-lg shadow-indigo-500/50' : ''}`}>
-                {tab.emoji}
-              </div>
-              <span className={`text-[10px] font-extrabold transition-colors ${activeTab === tab.id ? 'text-indigo-300' : 'text-white/40'}`}>
-                {tab.label}
-              </span>
-            </div>
-          ))}
-        </div> */}
       </div>
 
       {/* ════════════════════════════════
               DESKTOP  (>= md)
-              Dark deep-space background so
-              every vivid card pops boldly.
       ════════════════════════════════ */}
       <div className="hidden md:block min-h-screen pt-20 bg-gradient-to-br from-slate-50 via-white to-indigo-50">
         <div className="w-full mx-auto py-7 px-8 pb-16">
@@ -316,32 +291,33 @@ const TeacherHomePage = () => {
 
           {/* ── STUDENT DATA ── */}
           <DesktopSection title="Student Data" emoji="🎓">
-            {isAdminOrAcc && <DesktopNavCard icon={FaMoneyCheckAlt} label="Fees Submit" sub="Record payments" gradient="from-emerald-400 to-green-600" onClick={() => navigate('/student-fee-submit')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={FaMoneyCheckAlt} label="Fees Submit" sub="Record payments" gradient="from-emerald-400 to-teal-600" onClick={() => navigate('/student-fee-submit')} />}
             {isAdminOrAcc && <DesktopNavCard icon={FaHistory} label="Fees History" sub="Past transactions" gradient="from-blue-400 to-indigo-600" onClick={() => navigate('/student-fee-history')} />}
-            <DesktopNavCard icon={FaClipboardList} label="Attendance" sub="Mark & review" gradient="from-violet-500 to-purple-700" onClick={() => navigate('/student-attendence')} />
-            {isAdminOrAcc && <DesktopNavCard icon={FaUserGraduate} label="Student Data Input" sub="Add records" gradient="from-orange-400 to-amber-600" onClick={() => navigate('/student-data-input')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FaSearch} label="Search Student" sub="Find by name/ID" gradient="from-slate-400 to-gray-600" onClick={() => navigate('/student-data')} />}
-            {isAdmin && <DesktopNavCard icon={FaUserTie} label="Registration" sub="Enrol new student" gradient="from-teal-400 to-emerald-700" onClick={() => navigate('/student-register')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FaBookReader} label="Book Sale" sub="Sell & track" gradient="from-pink-400 to-rose-600" onClick={() => navigate('/book-sale-data')} />}
+            <DesktopNavCard icon={FaClipboardList} label="Attendance" sub="Mark & review" gradient="from-fuchsia-400 to-purple-600" onClick={() => navigate('/student-attendence')} />
+            {isAdminOrAcc && <DesktopNavCard icon={FaUserGraduate} label="Student Data Input" sub="Add records" gradient="from-amber-400 to-yellow-600" onClick={() => navigate('/student-data-input')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={FaSearch} label="Search Student" sub="Find by name/ID" gradient="from-cyan-400 to-sky-600" onClick={() => navigate('/student-data')} />}
+            {isAdmin && <DesktopNavCard icon={FaUserTie} label="Registration" sub="Enrol new student" gradient="from-lime-400 to-green-600" onClick={() => navigate('/student-register')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={FaBookReader} label="Book Sale" sub="Sell & track" gradient="from-pink-400 to-fuchsia-600" onClick={() => navigate('/book-sale-data')} />}
             {isAdminOrAcc && <DesktopNavCard icon={FaHistory} label="Book Sale History" sub="Past sales log" gradient="from-rose-400 to-red-600" onClick={() => navigate('/book-sale-history')} />}
-            {isAdmin && <DesktopNavCard icon={FaBook} label="Book Price Form" sub="Set pricing" gradient="from-purple-400 to-violet-700" onClick={() => navigate('/book-form')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={GiRupee} label="Book Price" sub="View / update" gradient="from-red-400 to-orange-600" onClick={() => navigate('/book-price')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={IoMdTime} label="Timetable" sub="Schedule classes" gradient="from-sky-400 to-cyan-600" onClick={() => navigate('/set-timetable')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={LuBookOpenCheck} label="Student Test" sub="Coming soon" gradient="from-gray-500 to-slate-700" onClick={() => navigate('/set-student-test')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FcBarChart} label="Student Results" sub="Submit & view" gradient="from-green-500 to-emerald-700" onClick={() => navigate('/student-result-submission')} />}
-            { isAdminOrAcc && <DesktopNavCard icon={FaPersonCircleQuestion} label="Question View" sub="View & edit" gradient="from-emerald-700 to-green-700" onClick={() => navigate('/question-history')} /> }
+            {isAdmin && <DesktopNavCard icon={FaBook} label="Book Price Form" sub="Set pricing" gradient="from-violet-400 to-indigo-600" onClick={() => navigate('/book-form')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={GiRupee} label="Book Price" sub="View / update" gradient="from-orange-400 to-red-600" onClick={() => navigate('/book-price')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={IoMdTime} label="Timetable" sub="Schedule classes" gradient="from-teal-400 to-cyan-600" onClick={() => navigate('/set-timetable')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={LuBookOpenCheck} label="Student Test" sub="Coming soon" gradient="from-slate-400 to-gray-600" onClick={() => navigate('/set-student-test')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={FcBarChart} label="Student Results" sub="Submit & view" gradient="from-green-400 to-emerald-600" onClick={() => navigate('/student-result-submission')} />}
+            { isAdminOrAcc && <DesktopNavCard icon={FaPersonCircleQuestion} label="Question View" sub="View & edit" gradient="from-indigo-400 to-violet-600" onClick={() => navigate('/question-history')} /> }
+            { isAdminOrAcc && <DesktopNavCard icon={FaImages} label="School Photos" sub="Upload gallery" gradient="from-sky-400 to-blue-600" onClick={() => navigate('/school-photo-upload')} /> }
           </DesktopSection>
 
           <RainbowDivider />
 
           {/* ── TEACHER DATA ── */}
           <DesktopSection title="Teacher Data" emoji="👩‍🏫">
-            <DesktopNavCard icon={FaClipboardList} label="Teacher Attendance" sub="Daily roll" gradient="from-fuchsia-400 to-purple-700" onClick={() => navigate('/teacher-attendenc')} />
-            {isAdminOrAcc && <DesktopNavCard icon={GiTeacher} label="Teacher Payment" sub="Process salary" gradient="from-blue-500 to-indigo-700" onClick={() => navigate('/teacher-payment')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={MdOutlineManageHistory} label="Paid History" sub="Salary log" gradient="from-lime-400 to-green-600" onClick={() => navigate('/spend-history')} />}
-            {isAdmin && <DesktopNavCard icon={FaUserTie} label="Teacher Registration" sub="Add new teacher" gradient="from-yellow-400 to-orange-500" onClick={() => navigate('/teacher-registration')} />}
+            <DesktopNavCard icon={FaClipboardList} label="Teacher Attendance" sub="Daily roll" gradient="from-purple-400 to-violet-600" onClick={() => navigate('/teacher-attendenc')} />
+            {isAdminOrAcc && <DesktopNavCard icon={GiTeacher} label="Teacher Payment" sub="Process salary" gradient="from-blue-400 to-cyan-600" onClick={() => navigate('/teacher-payment')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={MdOutlineManageHistory} label="Paid History" sub="Salary log" gradient="from-lime-400 to-emerald-600" onClick={() => navigate('/spend-history')} />}
+            {isAdmin && <DesktopNavCard icon={FaUserTie} label="Teacher Registration" sub="Add new teacher" gradient="from-amber-400 to-orange-600" onClick={() => navigate('/teacher-registration')} />}
             {isAdmin && <DesktopNavCard icon={FaUserTie} label="Teacher Data" sub="View & edit" gradient="from-cyan-400 to-teal-600" onClick={() => navigate('/teacher-data')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FaPersonCircleQuestion} label="Question Paper" sub="View & edit" gradient="from-emerald-500 to-green-700" onClick={() => navigate('/set-student-question-paper')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={FaPersonCircleQuestion} label="Question Paper" sub="View & edit" gradient="from-emerald-400 to-green-700" onClick={() => navigate('/set-student-question-paper')} />}
           </DesktopSection>
 
           <RainbowDivider />
@@ -350,8 +326,8 @@ const TeacherHomePage = () => {
           {isAdminOrAcc && (
             <>
               <DesktopSection title="Spend Data" emoji="💰">
-                <DesktopNavCard icon={FaRupeeSign} label="Spend" sub="Log an expense" gradient="from-green-400 to-emerald-700" onClick={() => navigate('/total-spend')} />
-                <DesktopNavCard icon={MdOutlineManageHistory} label="Spend History" sub="All expenses" gradient="from-teal-400 to-cyan-700" onClick={() => navigate('/spend-history')} />
+                <DesktopNavCard icon={FaRupeeSign} label="Spend" sub="Log an expense" gradient="from-green-400 to-lime-600" onClick={() => navigate('/total-spend')} />
+                <DesktopNavCard icon={MdOutlineManageHistory} label="Spend History" sub="All expenses" gradient="from-teal-400 to-sky-600" onClick={() => navigate('/spend-history')} />
               </DesktopSection>
               <RainbowDivider />
             </>
@@ -442,11 +418,6 @@ const MobileCard = ({ icon: Icon, label, bg, onClick, delay = 0, badge }) => (
   </div>
 );
 
-/**
- * Desktop navigation card
- * Each card receives a unique vivid `gradient` (e.g. "from-emerald-400 to-green-600").
- * White text + icon on a coloured card on a dark background = maximum contrast & vibrancy.
- */
 const DesktopNavCard = ({ icon: Icon, label, sub, gradient, onClick, disabled }) => (
   <div
     className={`
@@ -460,9 +431,7 @@ const DesktopNavCard = ({ icon: Icon, label, sub, gradient, onClick, disabled })
     `}
     onClick={disabled ? undefined : onClick}
   >
-    {/* Frosted shine on hover */}
     <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-white/20 to-transparent pointer-events-none rounded-2xl" />
-    {/* Decorative blob */}
     <div className="absolute -top-5 -right-5 w-16 h-16 rounded-full bg-white/10 pointer-events-none" />
 
     <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center z-10 group-hover:scale-110 transition-transform duration-200 shadow-sm">

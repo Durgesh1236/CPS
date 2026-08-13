@@ -37,6 +37,7 @@ import StudentQuesPaper from './TeacherPages/StudentQuesPaper'
 import SetStudentTest from './TeacherPages/SetStudentTest'
 import StudentQuesHistory from './TeacherPages/StuQuesHistory'
 import StudentTest from './StudentPage/StudentTest'
+import SchoolPhotoUpload from './Pages/Schoolphotoupload'
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -81,6 +82,7 @@ const App = () => {
             <Route path='/set-student-question-paper' element={isAuth ? <StudentQuesPaper/> : <TeacherLoginPage/>}/>
             <Route path='/set-student-test' element={isAuth ? <SetStudentTest/> : <TeacherLoginPage/>}/>
             <Route path='/question-history' element={isAuth ? <StudentQuesHistory/> : <TeacherLoginPage/>}/>
+            <Route path='/school-photo-upload' element={isAuth ? <SchoolPhotoUpload/> : <TeacherLoginPage/>}/>
             {/* student routes */}
             <Route path='/student-home' element={StudentAuth ? <StudentHome/> : <LoginPage/>}/>
             <Route path='/student-profile' element={StudentAuth ? <StudentProfile/> : <LoginPage/>}/>
@@ -92,7 +94,7 @@ const App = () => {
             <Route path= '/student-test' element={StudentAuth ? <StudentTest/> : <LoginPage/>}/>
           </Routes>
         </BrowserRouter>
-      }
+      } 
     </>
   )
 }

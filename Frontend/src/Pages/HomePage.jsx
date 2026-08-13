@@ -3,10 +3,10 @@ import Layout from '../Components/Layout';
 import { assets } from '../assets/assets';
 import ContactUs from './ContactUs';
 import { FcReddit } from "react-icons/fc";
-
+import { UserData } from '../context/User';
 // ---- Content -----------------------------------------------------------
 
-const images = [assets.cps1, assets.cps2, assets.cps4, assets.cps3];
+// const images = [assets.cps1, assets.cps2, assets.cps4, assets.cps3];
 
 const teacherImages = [assets.cps1, assets.cps2, assets.cps3, assets.cps4];
 
@@ -275,10 +275,10 @@ const ChatBot = () => {
                 stage === 'name'
                   ? "Child's name..."
                   : stage === 'parent'
-                  ? "Parent's name..."
-                  : stage === 'mobile'
-                  ? '10-digit mobile number...'
-                  : 'Type your question...'
+                    ? "Parent's name..."
+                    : stage === 'mobile'
+                      ? '10-digit mobile number...'
+                      : 'Type your question...'
               }
               className="cps-chat-input"
             />
@@ -300,19 +300,26 @@ const HomePage = () => {
   const [studentCount, setStudentCount] = useState(0);
   const [teacherCount, setTeacherCount] = useState(0);
   const [yearsCount, setYearsCount] = useState(0);
+  const { schoolPhotos } = UserData();
   const studentInterval = useRef();
   const teacherInterval = useRef();
   const yearsInterval = useRef();
-
+  // const images = schoolPhotos || [];
+  const images = schoolPhotos?.map((photo) => photo.photoUrl?.[0]?.url).filter(Boolean) || [];
+  // console.log(images);
+  // console.log(schoolPhotos);
   const yearsOfLegacy = new Date().getFullYear() - foundedYear;
 
   // Image carousel auto-scroll
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+  if (images.length <= 1) return;
+
+  const interval = setInterval(() => {
+    setCurrent((prev) => (prev + 1) % images.length);
+  }, 4000);
+
+  return () => clearInterval(interval);
+}, [images.length]);
 
   // Teacher celebration carousel auto-scroll
   useEffect(() => {
@@ -589,7 +596,7 @@ const HomePage = () => {
 
         {/* ===================== Admission Banner ===================== */}
         <div className="cps-admission-banner w-full">
-          <div className="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-center gap-3 text-center">
+          <div className="w-full mx-auto px-4 py-3 flex flex-wrap items-center justify-center gap-3 text-center">
             <span className="cps-badge-pulse cps-display bg-white/20 border border-white/40 rounded-full px-3 py-1 text-xs sm:text-sm font-bold tracking-wide uppercase">
               Admissions Open
             </span>
@@ -608,7 +615,7 @@ const HomePage = () => {
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 bg-[#25D366] text-white font-bold text-sm px-4 py-1.5 rounded-full shadow hover:scale-105 transition-transform"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.2-.2-.4-.3Z"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.2-.2-.4-.3Z" /></svg>
               WhatsApp Us
             </a>
           </div>
@@ -645,12 +652,15 @@ const HomePage = () => {
           </div>
 
           <div className="flex justify-center gap-2 py-3">
-            {images.map((_, idx) => (
+            {images.map((photo, idx) => (
               <button
-                key={idx}
+                key={photo.id}
                 aria-label={`Show slide ${idx + 1}`}
                 onClick={() => setCurrent(idx)}
-                className={`h-2 rounded-full transition-all ${current === idx ? 'w-6 bg-[var(--cps-coral)]' : 'w-2 bg-[var(--cps-ink)]/20'}`}
+                className={`h-2 rounded-full transition-all ${current === idx
+                    ? 'w-6 bg-[var(--cps-coral)]'
+                    : 'w-2 bg-[var(--cps-ink)]/20'
+                  }`}
               />
             ))}
           </div>
@@ -806,7 +816,7 @@ const HomePage = () => {
           className="cps-whatsapp-fab w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
         >
           <span className="cps-whatsapp-ring" aria-hidden="true" />
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="white" className="relative"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.2-.2-.4-.3Z"/></svg>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="white" className="relative"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2 1 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.2-.2-.4-.3Z" /></svg>
         </a>
 
         {/* Chat assistant: collects student/parent/mobile, then answers admission, fee and contact questions */}

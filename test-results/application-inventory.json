@@ -1,0 +1,56 @@
+{
+  "frontendPages": [
+    "LoginPage",
+    "TeacherLoginPage",
+    "HomePage",
+    "SchoolPhotoUpload",
+    "StudentFeeHistory",
+    "TeacherProfile",
+    "StudentProfile",
+    "TeacherHomePage",
+    "StudentHome"
+  ],
+  "apiRoutes": [
+    "/api/user/register",
+    "/api/user/login",
+    "/api/user/logout",
+    "/api/user/me",
+    "/api/user/fee-submit",
+    "/api/user/get-all-fees-submits",
+    "/api/user/teacher-profile-pic-upload/:id",
+    "/api/user/school-photo-upload",
+    "/api/user/get-school-photos",
+    "/api/student/fee/create-student-account",
+    "/api/student/fee/student/login",
+    "/api/student-data/student/profile",
+    "/api/student-data/student/logout",
+    "/api/student-data/student/fee-history/:ledgerId"
+  ],
+  "models": [
+    "User",
+    "Student",
+    "FeeSubmit",
+    "BookSubmit",
+    "SchoolPhoto",
+    "Spend",
+    "TeacherPayment",
+    "TestQuestion",
+    "StudentAttendence"
+  ],
+  "roles": [
+    "teacher",
+    "student"
+  ],
+  "authMechanism": "JWT stored in an HttpOnly cookie with server-side middleware validation",
+  "uploads": [
+    "teacher-profile image upload",
+    "school photo upload"
+  ],
+  "criticalWorkflows": [
+    "Teacher registration and login",
+    "Protected teacher profile and fee-management endpoints",
+    "Student login and profile retrieval",
+    "School photo upload and retrieval",
+    "Teacher profile image upload"
+  ]
+}
