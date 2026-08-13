@@ -1,9 +1,35 @@
 import 'dotenv/config';
-import app from './app.js';
+import express from 'express';
+import cloudinary from 'cloudinary';
+import router from './routes/TeacherRoute.js';
+import cookieParser from 'cookie-parser';
+import path from 'path';
+import feeSubmitRouter from './routes/FeeSubmitRoute.js';
+import studentRouter from './routes/StudentRoute.js';
 import { connectDB } from './database/db.js';
 
-const port = process.env.PORT || 5000;
+cloudinary.v2.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API,
+    api_secret: process.env.CLOUD_SCRET,
+})
+const app = express();
+const port = process.env.PORT;
 
+app.use(express.json());
+app.use(cookieParser());
+
+// User Routes
+app.use("/api/user", router);
+app.use("/api/student/fee", feeSubmitRouter);
+app.use("/api/student-data", studentRouter);
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "/Frontend/dist")));
+
+app.get(/^\/.*/ ,(req,res) =>{
+    res.sendFile(path.join(__dirname, "Frontend","dist","index.html"));
+})
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
     connectDB();
