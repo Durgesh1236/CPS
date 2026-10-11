@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cloudinary from 'cloudinary';
+import helmet from 'helmet';
 import router from './routes/TeacherRoute.js';
 import cookieParser from 'cookie-parser';
 import path from 'path';
@@ -16,6 +17,8 @@ cloudinary.v2.config({
 const app = express();
 const port = process.env.PORT;
 
+app.disable('x-powered-by');
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 

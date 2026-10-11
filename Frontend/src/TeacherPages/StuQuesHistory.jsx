@@ -6,7 +6,7 @@ import {
 import TeacherLayout from '../Components/TeacherLayout';
 import { UserData } from '../context/User';
 
-const CLASSES = ["1", "2", "3", "Class 9", "Class 10", "Class 11", "Class 12"];
+const CLASSES = ["P.Nur", "Nur", "LKG", "UKG", "1", "2", "3", "4", "5", "6", "7", "8"];
 const SUBJECTS = ["G.K", "Science", "English", "Social Studies", "Computer Science", "Hindi"];
 
 const StuQuesHistory = () => {
@@ -50,7 +50,6 @@ const StuQuesHistory = () => {
       date: doc.createdAt,
     }))
   );
-console.log(allQuestions);
 
   const results = submitted
     ? allQuestions.filter((q) => {
@@ -117,7 +116,7 @@ console.log(allQuestions);
                   >
                     <option value="">Select subject</option>
                     {SUBJECTS.map((s) => <option key={s} value={s}>{s}</option>)}
-                  </select>
+                  </select> 
                   <FaChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-[#8B8578] pointer-events-none" />
                 </div>
               </div>

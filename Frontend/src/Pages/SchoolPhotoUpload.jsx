@@ -26,7 +26,7 @@ const SchoolPhotoUpload = () => {
   const {
     schoolPhotos,
     PhotoUpload,
-    DeleteSchoolPhoto,
+    deleteSchoolPhoto,
     getSchoolPhotos,
   } = UserData();
 
@@ -217,7 +217,7 @@ const SchoolPhotoUpload = () => {
     try {
       setDeletingId(photoId);
 
-      await DeleteSchoolPhoto(photoId);
+      await deleteSchoolPhoto(photoId);
 
       if (getSchoolPhotos) {
         await getSchoolPhotos();

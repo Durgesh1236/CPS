@@ -5,7 +5,8 @@ import { TestQuestion } from "../models/TestQuestionModel.js";
 import generateToken from "../utils/generateToken.js";
 import TryCatch from "../utils/TryCatch.js";
 import bcrypt from 'bcrypt';
-
+import { StudentAttendance } from "../models/StudentAttendanceModel.js";
+import { StudentTestSubmission } from "../models/StudentTestSubmissionModel.js";
 
 export const addStudent = TryCatch(async (req, res) => {
     const { ledgerId, password, studentName, studentClass, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails } = req.body;
@@ -166,13 +167,14 @@ export const studentLogout = TryCatch(async (req, res) => {
 
 export const studentFeeHistory = TryCatch(async (req, res) => {
     const { ledgerId } = req.params;
-    const { studentclass } = req.body;
-
+    const { studentclass, studentName } = req.body;
+    
     const feeHistory = await FeeSubmit.find({
         ledgerId: ledgerId,
-        studentClass: studentclass
+        studentClass: studentclass,
+        studentName: studentName
     });
-
+    
     if (feeHistory.length === 0) {
         return res.json({
             success: false,
@@ -187,7 +189,7 @@ export const studentFeeHistory = TryCatch(async (req, res) => {
     });
 });
 
-const StudentQuestion = TryCatch(async (req, res) => {
+export const StudentQuestion = TryCatch(async (req, res) => {
     const { studentClass, subject } = req.body;
 
     if (!studentClass || !subject) {
@@ -197,7 +199,7 @@ const StudentQuestion = TryCatch(async (req, res) => {
         });
     }
 
-    const testQuestion = await TestQuestion.findOne({ class: studentClass, subject});
+    const testQuestion = await TestQuestion.findOne({ class: studentClass, subject });
     if (!testQuestion) {
         return res.json({
             success: false,
@@ -210,3 +212,120 @@ const StudentQuestion = TryCatch(async (req, res) => {
         message: "Test questions retrieved successfully"
     });
 });
+
+export const getStudentClassTests = TryCatch(async (req, res) => {
+    const { className } = req.query;
+
+    if (!className) {
+        return res.status(400).json({
+            success: false,
+            message: "Class name is required"
+        });
+    }
+
+    const tests = await TestQuestion.find({ class: className })
+        .sort({ createdAt: -1 })
+        .lean();
+
+    return res.status(200).json({
+        success: true,
+        tests,
+        message: "Class test questions retrieved successfully"
+    });
+});
+
+export const submitStudentTest = TryCatch(async (req, res) => {
+    const { testId, answers } = req.body;
+
+    if (!testId || !answers || typeof answers !== "object" || Array.isArray(answers)) {
+        return res.status(400).json({
+            success: false,
+            message: "Test and answers are required"
+        });
+    }
+
+    const test = await TestQuestion.findById(testId).lean();
+    if (!test) {
+        return res.status(404).json({ success: false, message: "Test not found" });
+    }
+
+    let correctAnswers = 0;
+    let wrongAnswers = 0;
+    let unanswered = 0;
+
+    for (const [index, question] of test.question.entries()) {
+        const selectedAnswer = answers[index];
+        if (selectedAnswer === undefined || selectedAnswer === null || selectedAnswer === "") {
+            unanswered += 1;
+        } else if (String(selectedAnswer) === String(question.correctAnswer)) {
+            correctAnswers += 1;
+        } else {
+            wrongAnswers += 1;
+        }
+    }
+
+    const submission = await StudentTestSubmission.create({
+        testId: test._id,
+        studentId: req.user._id,
+        ledgerId: req.user.ledgerId,
+        studentName: req.user.studentName,
+        studentClass: req.user.studentClass,
+        subject: test.subject,
+        totalQuestions: test.question.length,
+        correctAnswers,
+        wrongAnswers,
+        unanswered,
+    });
+
+    return res.status(201).json({
+        success: true,
+        submission,
+        message: "Test submitted successfully"
+    });
+});
+
+export const getStudentAttendence = TryCatch(async (req, res) => {
+    const { ledgerId } = req.params;
+    const { date } = req.query;
+
+    if (!date) {
+        return res.status(400).json({
+            success: false,
+            message: "Attendance date is required"
+        });
+    }
+
+    if (req.user.ledgerId !== ledgerId) { 
+        return res.status(403).json({
+            success: false,
+            message: "You can only view your own attendance"
+        });
+    }
+
+    const attendanceDate = new Date(`${date}T00:00:00.000Z`);
+    if (Number.isNaN(attendanceDate.getTime()) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid attendance date"
+        });
+    }
+
+    const nextDate = new Date(attendanceDate);
+    nextDate.setUTCDate(nextDate.getUTCDate() + 1);
+    const studentAttendence = await StudentAttendance.findOne({
+        studentId: ledgerId,
+        date: { $gte: attendanceDate, $lt: nextDate }
+    });
+    if(!studentAttendence){
+        return res.status(404).json({
+            success: false,
+            message: "No attendance records found for this student"
+        })
+    }
+
+    return res.status(200).json({
+        studentAttendence: [studentAttendence],
+        success: true,
+        message: "Attendance records retrieved successfully"
+    })
+})

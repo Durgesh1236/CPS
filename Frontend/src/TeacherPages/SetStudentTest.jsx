@@ -24,18 +24,16 @@ const SetStudentTest = () => {
     setQuestions(newQuestions);
   };
   const classes = [
-    "P.Nursery",
-    "Nursery",
+    "P.Nur",
+    "Nur",
     "LKG",
     "UKG",
-    "Class 1",
-    "Class 2",
-    "Class 3",
-    "Class 4",
-    "Class 5",
-    "Class 6",
-    "Class 7",
-    "Class 8",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
   ];
   const handleChange = (index, field, value) => {
     const updatedQuestions = [...questions];

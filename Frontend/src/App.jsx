@@ -15,11 +15,11 @@ import TeacherProfile from './TeacherPages/TeacherProfile'
 import TeacherData from './TeacherPages/TeacherData'
 import Spend from './Pages/Spend'
 import SpendHistory from './Pages/SpendHistory'
-import StudentDataInput from './Pages/StudentDataInput'
+import StudentDataInput from './Pages/StudentDataInput' 
 import StudentDataSearch from './Pages/StudentDataSearch'
 import TeacherPayment from './TeacherPages/TeacherPayment'
 import { StudentData } from './context/Student'
-import StudentRegister from './TeacherPages/StudentRegister'
+// import StudentRegister from './TeacherPages/StudentRegister'
 import StudentProfile from './StudentPage/StudentProfile'
 import { BookSaleSubmit } from './TeacherPages/BookSaleSubmit'
 import BookSaleHistory from './TeacherPages/BookSaleHistory'
@@ -31,13 +31,15 @@ import BookForm from './TeacherPages/BookForm'
 import BookPriceHistory from './TeacherPages/BookPriceHistory'
 import { SetStudentTimetable } from './TeacherPages/SetStudentTimetable'
 import TeacherAttendence from './TeacherPages/TeacherAttendence'
+import TeacherAttendanceHistory from './TeacherPages/TeacherAttendanceHistory'
 import StudentFeeReceipt from './StudentPage/StudentFeereciept'
 import StuResultSub from './TeacherPages/StuResultSub'
 import StudentQuesPaper from './TeacherPages/StudentQuesPaper'
 import SetStudentTest from './TeacherPages/SetStudentTest'
 import StudentQuesHistory from './TeacherPages/StuQuesHistory'
+import StudentTestResults from './TeacherPages/StudentTestResults'
 import StudentTest from './StudentPage/StudentTest'
-import SchoolPhotoUpload from './Pages/Schoolphotoupload'
+import SchoolPhotoUpload from './Pages/SchoolPhotoUpload'
 
 const App = () => {
   const { isAuth, loading } = UserData();
@@ -71,17 +73,19 @@ const App = () => {
             <Route path='/student-data' element={isAuth ? <StudentDataSearch/> : <TeacherLoginPage/>}/> 
             <Route path='/student-attendence' element={isAuth ? <TakeStudentAttendence/> : <TeacherLoginPage/>}/>
             <Route path='/teacher-payment' element={isAuth ? <TeacherPayment/> : <TeacherLoginPage/>}/>
-            <Route path='/student-register' element={ isAuth ? <StudentRegister/> : <TeacherLoginPage/> }/>
+            {/* <Route path='/student-register' element={ isAuth ? <StudentRegister/> : <TeacherLoginPage/> }/> */}
             <Route path='/book-sale-data' element={ isAuth ? <BookSaleSubmit/> : <TeacherLoginPage/> }/>
             <Route path='/book-sale-history' element= {isAuth ? <BookSaleHistory/> : <TeacherLoginPage/> } />
             <Route path='/book-form' element={isAuth ? <BookForm/> : <TeacherLoginPage/>}/>
             <Route path='/book-price' element={isAuth ? <BookPriceHistory/> : <TeacherLoginPage/>}/>
             <Route path='/set-timetable' element={isAuth ? <SetStudentTimetable/> : <TeacherLoginPage/>}/>
-            <Route path='/teacher-attendence' element={isAuth ? <TeacherAttendence/> : <TeacherLoginPage/>}/>
+            <Route path='/teacher-attendance' element={isAuth ? <TeacherAttendence/> : <TeacherLoginPage/>}/>
+            <Route path='/teacher-attendance-history' element={isAuth ? <TeacherAttendanceHistory/> : <TeacherLoginPage/>}/>
             <Route path='/student-result-submission' element={isAuth ? <StuResultSub/> : <TeacherLoginPage/>}/>
             <Route path='/set-student-question-paper' element={isAuth ? <StudentQuesPaper/> : <TeacherLoginPage/>}/>
             <Route path='/set-student-test' element={isAuth ? <SetStudentTest/> : <TeacherLoginPage/>}/>
             <Route path='/question-history' element={isAuth ? <StudentQuesHistory/> : <TeacherLoginPage/>}/>
+            <Route path='/student-test-results' element={isAuth ? <StudentTestResults/> : <TeacherLoginPage/>}/>
             <Route path='/school-photo-upload' element={isAuth ? <SchoolPhotoUpload/> : <TeacherLoginPage/>}/>
             {/* student routes */}
             <Route path='/student-home' element={StudentAuth ? <StudentHome/> : <LoginPage/>}/>
@@ -93,7 +97,7 @@ const App = () => {
             <Route path='/student-fee-receipt' element={StudentAuth ? <StudentFeeReceipt/> : <LoginPage/>}/>
             <Route path= '/student-test' element={StudentAuth ? <StudentTest/> : <LoginPage/>}/>
           </Routes>
-        </BrowserRouter>
+        </BrowserRouter> 
       } 
     </>
   )

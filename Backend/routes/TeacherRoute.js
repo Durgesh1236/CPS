@@ -1,12 +1,23 @@
 import express from "express";
-import { deleteTeacher, editTeacherProfile, getAllTeachers, getTeacherPayment, loginUser, logoutUser, MyProfile, registerUser, teacherPayment, TeacherProfile, StudentTestQuestion, getTestQuestions, getSchoolPhotos, schoolPhotoUpload } from "../controllars/TeacherControllar.js";
+import { 
+    deleteTeacher, editTeacherProfile, 
+    getAllTeachers, getTeacherPayment, 
+    loginUser, logoutUser, MyProfile, 
+    registerUser, teacherPayment, 
+    TeacherProfile, StudentTestQuestion, 
+    getTestQuestions, getStudentTestSubmissions, 
+    getSchoolPhotos, schoolPhotoUpload, 
+    deleteSchoolPhoto, getstudentAttendence, 
+    studentAttendence, teacherAttendance, 
+    scanTeacherAttendance, getTeacherAttendance 
+} from "../controllars/TeacherControllar.js";
 import { isAuth } from "../middlewares/isAuth.js";
 import { 
     FeesSubmit, getAllFeesSubmit, 
     getAllSpend, totalSpend, 
     markSpendReceived, deleteFeeSubmit, 
     editStudentFeeRecord, editStudentProfile, 
-    SpendHistoryEdit, 
+    SpendHistoryEdit,
     deleteSpendRecord} from "../controllars/FeesSubmitControllars.js";
 
 import uploadFile from "../middlewares/multer.js";
@@ -35,6 +46,14 @@ router.post('/teacher-payment', isAuth, teacherPayment);
 router.get('/get-all-teacher-payment', isAuth, getTeacherPayment);
 router.post('/test-question-upload', isAuth, StudentTestQuestion);
 router.post('/get-all-test-questions', isAuth, getTestQuestions);
+router.post('/test-submissions', isAuth, getStudentTestSubmissions);
 router.post('/school-photo-upload', isAuth, uploadFile, schoolPhotoUpload); 
 router.get('/get-school-photos', getSchoolPhotos);
+router.delete('/delete-school-photo/:id', isAuth, deleteSchoolPhoto);
+router.get('/get-student-attendance', isAuth, getstudentAttendence);
+router.post('/student-attendance', isAuth, studentAttendence);
+router.get('/teacher-attendance', isAuth, getTeacherAttendance);
+router.post('/teacher-attendance', isAuth, teacherAttendance);
+router.post('/teacher-attendance/scan', isAuth, scanTeacherAttendance);
+
 export default router; 

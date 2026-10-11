@@ -14,17 +14,19 @@ import { toast } from "react-toastify";
 const TeacherData = () => {
   const { teacherList, deleteTeacher, editTeacherProfile } = UserData();
   const [editIdx, setEditIdx] = React.useState(null);
+
   const [editData, setEditData] = React.useState({
     name: "",
     email: "",
     mobileNo: "",
     role: "",
+    password: "",
   });
 
   const handleEdit = (idx) => {
     setEditIdx(idx);
     const { name, email, mobileNo, role } = teacherList[idx];
-    setEditData({ name, email, mobileNo, role });
+    setEditData({ name, email, mobileNo, role, password: "" });
   };
   const handleCancel = () => {
     setEditIdx(null);
@@ -32,8 +34,8 @@ const TeacherData = () => {
     toast.info("Edit cancelled");
   };
   const handleSave = (id) => {
-    editTeacherProfile(id, editData.name, editData.email, editData.mobileNo, editData.role);
-    setEditIdx(null);
+    editTeacherProfile(id, editData.name, editData.email, editData.mobileNo, editData.role, editData.password);
+    setEditIdx(null); 
     setEditData({});
   };
   const handleDelete = (id) => {
@@ -84,7 +86,7 @@ const TeacherData = () => {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-[#1F2E4A]">
-                      {["S.No", "Teacher ID", "Name", "Email", "Mobile No", "Role", "Actions"].map(
+                      {["S.No", "Teacher ID", "Name", "Email", "Mobile No", "Role", "Password", "Actions"].map(
                         (h) => (
                           <th
                             key={h}
@@ -136,11 +138,27 @@ const TeacherData = () => {
                         </td>
                         <td className="px-4 py-3.5">
                           {editIdx === idx ? (
-                            <input name="role" value={editData.role} onChange={handleChange} className={inputCls} />
+                            <select name="role" value={editData.role} onChange={handleChange} className={inputCls}>
+                              <option value="teacher">Teacher</option>
+                              <option value="admin">Admin</option>
+                              <option value="accountent">Accountent</option>
+                            </select>
                           ) : (
                             <span className="inline-block px-2.5 py-1 rounded-full text-xs font-semibold bg-[#F3E0B0] text-[#8A5E10]">
                               {teacher.role}
                             </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3.5">
+                          {editIdx === idx && (
+                            <input
+                              type="password"
+                              name="password"
+                              value={editData.password}
+                              onChange={handleChange}
+                              placeholder="New password"
+                              className={inputCls}
+                            />
                           )}
                         </td>
                         <td className="px-4 py-3.5">
@@ -149,14 +167,14 @@ const TeacherData = () => {
                               <>
                                 <button
                                   onClick={() => handleSave(teacher._id)}
-                                  className="p-2 rounded-lg bg-[#2F6B4F] text-white hover:bg-[#265940] transition"
+                                  className="p-2 cursor-pointer rounded-lg bg-[#2F6B4F] text-white hover:bg-[#265940] transition"
                                   title="Save"
                                 >
                                   <MdSave />
                                 </button>
                                 <button
                                   onClick={handleCancel}
-                                  className="p-2 rounded-lg bg-[#BDB29A] text-white hover:bg-[#a99e87] transition"
+                                  className="p-2 cursor-pointer rounded-lg bg-[#BDB29A] text-white hover:bg-[#a99e87] transition"
                                   title="Cancel"
                                 >
                                   <MdClose />
@@ -166,14 +184,14 @@ const TeacherData = () => {
                               <>
                                 <button
                                   onClick={() => handleEdit(idx)}
-                                  className="p-2 rounded-lg bg-[#1F2E4A] text-white hover:bg-[#16223a] transition"
+                                  className="p-2 cursor-pointer rounded-lg bg-[#1F2E4A] text-white hover:bg-[#16223a] transition"
                                   title="Edit"
                                 >
                                   <MdEdit />
                                 </button>
                                 <button
                                   onClick={() => handleDelete(teacher._id)}
-                                  className="p-2 rounded-lg bg-[#B04A3B] text-white hover:bg-[#963d30] transition"
+                                  className="p-2 cursor-pointer rounded-lg bg-[#B04A3B] text-white hover:bg-[#963d30] transition"
                                   title="Delete"
                                 >
                                   <MdDeleteForever />
@@ -232,13 +250,30 @@ const TeacherData = () => {
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-semibold uppercase text-[#8A7F65] shrink-0">Role</span>
                     {editIdx === idx ? (
-                      <input name="role" value={editData.role} onChange={handleChange} className={inputCls} />
+                      <select name="role" value={editData.role} onChange={handleChange} className={inputCls}>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
+                        <option value="accountent">Accountent</option>
+                      </select>
                     ) : (
                       <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F3E0B0] text-[#8A5E10]">
                         {teacher.role}
                       </span>
                     )}
                   </div>
+                  {editIdx === idx && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold uppercase text-[#8A7F65] shrink-0">Password</span>
+                      <input
+                        type="password"
+                        name="password"
+                        value={editData.password}
+                        onChange={handleChange}
+                        placeholder="New password"
+                        className={inputCls}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex gap-2 mt-4">

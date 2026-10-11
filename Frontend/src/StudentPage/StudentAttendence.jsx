@@ -1,138 +1,170 @@
-import React, { useEffect, useState } from 'react';
-import { FaCheckCircle, FaTimesCircle, FaCalendarAlt, FaBook } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+import { FaCalendarAlt, FaCheckCircle, FaClipboardCheck, FaBook, FaTimesCircle } from 'react-icons/fa';
 import LayoutStu from '../Components/LayoutStu';
+import { StudentData } from '../context/Student';
 import './StudentAttendence.css';
 
-const dummyAttendance = [
-  {
-    date: '2026-03-16',
-    subjects: [
-      { subject: 'Mathematics', status: 'present' },
-      { subject: 'Science', status: 'absent' },
-      { subject: 'English', status: 'present' },
-    ],
-    teacher: [
-      { subject: 'Mathematics', name: 'Mr. Smith' },
-      { subject: 'Science', name: 'Ms. Johnson' },
-      { subject: 'English', name: 'Mrs. Lee' },
-    ]
-  },
-  {
-    date: '2026-03-02',
-    subjects: [
-      { subject: 'Mathematics', status: 'present', teacher: 'Mr. Smith' },
-      { subject: 'Science', status: 'present', teacher: 'Ms. Johnson' },
-      { subject: 'English', status: 'absent', teacher: 'Mrs. Lee' },
-    ]
-  },
-];
-
 const StudentAttendence = () => {
-
-  const [attendance, setAttendance] = useState([]);
-  const [selectedDate, setSelectedDate] = useState('');
+  const { studentData, getStudentAttendance } = StudentData();
+  const [attendance, setAttendance] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    setAttendance(dummyAttendance);
+    if (!studentData?.ledgerId || !selectedDate) return;
 
-    const today = new Date().toISOString().split('T')[0];
-    setSelectedDate(today);
-  }, []);
+    const fetchAttendance = async () => {
+      setLoading(true);
+      setErrorMessage('');
+      setAttendance(null);
+
+      try {
+        const result = await getStudentAttendance(studentData.ledgerId, selectedDate);
+        setAttendance(result);
+      } catch (error) {
+        setErrorMessage(error.response?.data?.message || 'Unable to load attendance');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAttendance();
+  }, [selectedDate, studentData?.ledgerId]);
 
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
   };
 
-  const selectedAttendance = attendance.find(a => a.date === selectedDate);
+  const selectedAttendance = attendance;
+  const subjects = selectedAttendance?.subjects || [];
+  const presentCount = subjects.filter(subject => subject.status === 'present').length;
+  const absentCount = subjects.length - presentCount;
+  const formattedDate = new Date(`${selectedDate}T00:00:00`).toLocaleDateString('en-IN', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+
+  const statusContent = (status, compact = false) => {
+    const isPresent = status === 'present';
+    return (
+      <span className={`inline-flex items-center gap-2 font-bold ${isPresent ? 'text-emerald-700' : 'text-rose-600'}`}>
+        <span className={`flex items-center justify-center rounded-full ${compact ? 'h-9 w-9 text-sm' : 'h-8 w-8 text-xs'} ${isPresent ? 'bg-emerald-100' : 'bg-rose-100'}`}>
+          {isPresent ? <FaCheckCircle /> : <FaTimesCircle />}
+        </span>
+        <span>{compact ? (isPresent ? 'P' : 'A') : (isPresent ? 'Present' : 'Absent')}</span>
+      </span>
+    );
+  };
 
   return (
     <LayoutStu>
+      <div className="min-h-screen bg-[#F7F4EC] px-3 pb-8 pt-20 sm:px-6 lg:px-5">
+        <div className="mx-auto w-full">
+          <section className="overflow-hidden rounded-3xl bg-[#182036] text-white shadow-[0_16px_40px_rgba(24,32,54,0.2)]">
+            <div className="flex flex-col gap-6 p-5 sm:p-8 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[#F4A73C]/15 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[#F4A73C]">
+                  <FaClipboardCheck />
+                  Daily record
+                </div>
+                <h1 className="text-2xl font-black tracking-tight sm:text-4xl">Student attendance</h1>
+                <p className="mt-2 text-sm text-white/60">Check your subject-wise attendance for any previous date.</p>
+              </div>
 
-      <div className="h-full bg-gradient-to-br from-blue-100 via-white to-blue-200">
-        <div className="w-full mt-10 lg:mt-14.5 mx-auto bg-white shadow-2xl rounded-3xl p-8 transition hover:shadow-blue-200">
-          <h2 className="text-2xl font-bold md:text-2xl lg:text-2xl text-blue-700 flex items-center gap-3 mb-6">
-            <FaCalendarAlt className="text-blue-500 text-md md:text-2xl lg:text-2xl" />
-            Student Attendance
-          </h2>
-          {/* Date Picker */}
-          <div className="flex flex-col md:flex-row items-center gap-4 mb-8">
-            <label className="font-semibold text-gray-700">
-              Select Date
-            </label>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={handleDateChange}
-              className="border border-blue-300 px-4 py-2 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 outline-none"
-            />
+              <label className="flex w-full flex-col gap-2 text-xs font-bold uppercase tracking-wider text-white/60 lg:max-w-xs">
+                Choose date
+                <span className="relative">
+                  <FaCalendarAlt className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#F4A73C]" />
+                  <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    max={new Date().toISOString().slice(0, 10)}
+                    className="w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 pl-11 text-sm font-semibold normal-case tracking-normal text-white outline-none transition focus:border-[#F4A73C] focus:ring-2 focus:ring-[#F4A73C]/30"
+                  />
+                </span>
+              </label>
+            </div>
+          </section>
 
-          </div>
+          <section className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-[#E7E0CF] bg-white p-4 shadow-sm sm:p-5">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#8B8578]">Selected date</p>
+              <p className="mt-2 text-sm font-bold text-[#2B2B2B] sm:text-base">{formattedDate}</p>
+            </div>
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 shadow-sm sm:p-5">
+              <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">Present</p>
+              <p className="mt-2 text-2xl font-black text-emerald-800">{presentCount}</p>
+            </div>
+            <div className="col-span-2 rounded-2xl border border-rose-200 bg-rose-50 p-4 shadow-sm sm:col-span-1 sm:p-5">
+              <p className="text-xs font-bold uppercase tracking-wider text-rose-700">Absent</p>
+              <p className="mt-2 text-2xl font-black text-rose-800">{absentCount}</p>
+            </div>
+          </section>
 
-          {/* Attendance Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full rounded-xl overflow-hidden">
-              <thead>
-                <tr className="bg-blue-500 text-white">
-                  <th className="py-3 px-6 text-left flex items-center gap-2">
-                    <FaBook />
-                    Subject
-                  </th>
-                  <th className="py-3 px-6 text-center">
-                    Status
-                  </th>
+          <section className="mt-4 rounded-3xl border border-[#E7E0CF] bg-white p-4 shadow-sm sm:p-6">
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#F4A73C]">Subject record</p>
+                <h2 className="mt-1 text-xl font-black text-[#2B2B2B] sm:text-2xl">Attendance details</h2>
+              </div>
+              <span className="rounded-full bg-[#FBF7EE] px-3 py-1.5 text-xs font-bold text-[#8B8578]">{subjects.length} subjects</span>
+            </div>
 
-                  <th className="py-3 px-6 text-center">
-                    Teacher Name
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedAttendance ? (
-                  selectedAttendance.subjects.map((subject, idx) => (
-                    <tr
-                      key={idx}
-                      className="border-b hover:bg-blue-50 transition"
-                    >
-                      <td className="py-3 px-6 flex items-center gap-2">
-                        <FaBook className="text-blue-400" />
-                        {subject.subject}
-                      </td>
-                      <td className="py-3 px-6 text-center">
-                        {subject.status === 'present' ? (
-                          <span className="text-green-600 font-semibold flex items-center justify-center gap-2">
-                            <FaCheckCircle />
-                            Present
-                          </span>
-                        ) : (
-                          <span className="text-red-500 font-semibold flex items-center justify-center gap-2">
-                            <FaTimesCircle />
-                            Absent
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-3 px-6 text-center">
-                        {/* Show teacher name for each subject */}
-                        {subject.teacher ? subject.teacher : (() => {
-                          // For 2026-03-16, teacher info is in selectedAttendance.teacher array
-                          if (selectedAttendance.teacher && Array.isArray(selectedAttendance.teacher)) {
-                            const teacherObj = selectedAttendance.teacher.find(t => t.subject === subject.subject);
-                            return teacherObj ? teacherObj.name : 'N/A';
-                          }
-                          return 'N/A';
-                        })()}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="3" className="py-8 text-center text-gray-400 text-lg">
-                      ❌ Data not found for selected date
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+            {loading ? (
+              <div className="flex min-h-48 flex-col items-center justify-center gap-3 rounded-2xl bg-[#FBF7EE] text-center text-sm font-semibold text-[#8B8578]">
+                <span className="h-8 w-8 animate-spin rounded-full border-4 border-[#E7E0CF] border-t-[#F4A73C]" />
+                Loading attendance...
+              </div>
+            ) : selectedAttendance ? (
+              <>
+                <div className="hidden overflow-hidden rounded-2xl border border-[#EEE8DA] md:block">
+                  <table className="w-full text-left">
+                    <thead className="bg-[#182036] text-xs uppercase tracking-wider text-white/70">
+                      <tr>
+                        <th className="px-5 py-4">Subject</th>
+                        <th className="px-5 py-4 text-right">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {subjects.map((subject, index) => (
+                        <tr key={`${subject.subject}-${index}`} className="border-t border-[#EEE8DA] transition hover:bg-[#FBF7EE]">
+                          <td className="px-5 py-4">
+                            <span className="flex items-center gap-3 font-bold text-[#2B2B2B]">
+                              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E6F1FB] text-[#185FA5]"><FaBook /></span>
+                              {subject.subject}
+                            </span>
+                          </td>
+                          <td className="px-5 py-4 text-right">{statusContent(subject.status)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="space-y-3 md:hidden">
+                  {subjects.map((subject, index) => (
+                    <div key={`${subject.subject}-${index}`} className="flex items-center justify-between gap-3 rounded-2xl border border-[#EEE8DA] bg-[#FBF7EE] p-3.5">
+                      <span className="flex min-w-0 items-center gap-3 font-bold text-[#2B2B2B]">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#E6F1FB] text-[#185FA5]"><FaBook /></span>
+                        <span className="truncate">{subject.subject}</span>
+                      </span>
+                      {statusContent(subject.status, true)}
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="flex min-h-48 flex-col items-center justify-center rounded-2xl bg-[#FBF7EE] px-5 text-center">
+                <FaCalendarAlt className="text-3xl text-[#F4A73C]" />
+                <p className="mt-3 font-bold text-[#2B2B2B]">{errorMessage || 'No attendance recorded for selected date'}</p>
+                <p className="mt-1 text-sm text-[#8B8578]">Try selecting another date.</p>
+              </div>
+            )}
+          </section>
         </div>
       </div>
     </LayoutStu>

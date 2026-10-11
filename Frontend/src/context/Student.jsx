@@ -18,7 +18,7 @@ export const StudentProvider  = ({ children }) => {
         try {
             const {data} = await axios.post("/api/student-data/student/login", {ledgerId, password});
             if(data.success){
-                setStudentData(data);
+                setStudentData(data.user);
                 toast.success(data.message);
                 setStudentAuth(true);
                 navigate('/student-home');
@@ -69,23 +69,53 @@ export const StudentProvider  = ({ children }) => {
     }
 
     async function feesHistory(ledgerId, studentclass){
-        setLoading(true);
         try {
             const { data } = await axios.post(`/api/student-data/student/fee-history/${ledgerId}`, { studentclass });
             if(data.success){
-                // if(data.studentClass == studentclass){
                 setFeesHistory(data.feeHistory);
-            //  }
-                setLoading(false);
+            } else {
+                setFeesHistory([]);
             }
         } catch (error) {
-            setLoading(false);
+            setFeesHistory([]);
         }
     }
 
+    async function getStudentAttendance(ledgerId, date){
+        try{
+            const { data } = await axios.get(`/api/student-data/student-attendance/${ledgerId}`, {
+                params: { date },
+            });
+            return data.studentAttendence?.[0] || null;
+        } catch (error) {
+            throw error;
+        } 
+    }
+
+    async function getStudentTests(className){
+        try {
+            const { data } = await axios.get('/api/student-data/student/test-questions', {
+                params: { className },
+            });
+            return data.tests || [];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function submitStudentTest(testId, answers){
+        try {
+            const { data } = await axios.post('/api/student-data/student/test-submit', { testId, answers });
+            if (!data.success) throw new Error(data.message || 'Test submission failed');
+            return data.submission;
+        } catch (error) {
+            toast.error(error.response?.data?.message || error.message || 'Unable to submit test');
+            throw error;
+        }
+    }
     useEffect(() => {
     if (ledgerId) {
-        feesHistory(ledgerId, studentclass);
+        feesHistory(ledgerId, studentclass, studentData?.studentName);
     }
    }, [ledgerId, studentclass]);
 
@@ -100,7 +130,10 @@ export const StudentProvider  = ({ children }) => {
         // StudentRegister,
         StudentAuth,
         studentLogout,
-        feeshistory
+        feeshistory,
+        getStudentAttendance,
+        getStudentTests,
+        submitStudentTest,
     }}>{children}</UserContext.Provider>;
 }
 

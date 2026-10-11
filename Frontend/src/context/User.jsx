@@ -22,6 +22,11 @@ export const UserProvider = ({ children }) => {
     const [teacherPaymentList, setTeacherPaymentList] = useState([]);
     const [questionList, setQuestionList] = useState([]);
     const [schoolPhotos, setSchoolPhotos] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [teacherAttendanceRecords, setTeacherAttendanceRecords] = useState([]);
+    const [teacherAttendanceLoading, setTeacherAttendanceLoading] = useState(false);
+    const [submissions, setSubmissions] = useState([]);
+    
     // axios.defaults.withCredentials = true;
     async function registerTeacher(name, email, password, mobileNo, role, setForm) {
         setLoading(true);
@@ -51,6 +56,14 @@ export const UserProvider = ({ children }) => {
                 setUser(data.user);
                 setisAuth(true);
                 setLoading(false);
+                await fetchUser();
+                await getAllTeachers();
+                await getAllFeesSubmit();
+                await getAllStudents();
+                await spendRecord();
+                await allbookdata();
+                await getallbookprice();
+                await getSchoolPhotos();
                 navigate('/teacher-home');
             } else {
                 toast.error(data.message);
@@ -346,10 +359,10 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function editTeacherProfile(id, name, email, mobileNo, role) {
+    async function editTeacherProfile(id, name, email, mobileNo, role, password) {
         setLoading(true);
         try {
-            const { data } = await axios.post(`/api/user/edit-teacher-profile/${id}`, { name, email, mobileNo, role });
+            const { data } = await axios.post(`/api/user/edit-teacher-profile/${id}`, { name, email, mobileNo, role, password });
             if (data.success) {
                 toast.success(data.message);
                 await getAllTeachers();
@@ -578,6 +591,18 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    async function getStudentTestSubmissions(studentClass, subject) {
+        setLoading(true);
+        try {
+            const { data } = await axios.post('/api/user/test-submissions', { studentClass, subject });
+            setSubmissions(data.submissions);
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Unable to load test submissions');
+        } finally {
+            setLoading(false);
+        }
+    } 
+
     async function PhotoUpload(formData){
         setLoading(true);
         console.log("Uploading photos with formData:", formData);
@@ -613,6 +638,97 @@ export const UserProvider = ({ children }) => {
             setLoading(false);
         }
     }
+
+    async function deleteSchoolPhoto(id) {
+        setLoading(true);
+        console.log(id);
+        try{
+            const { data } = await axios.delete(`/api/user/delete-school-photo/${id}`);
+            if(data.success){
+                toast.success(data.message);
+                await getSchoolPhotos();
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function getStudentAttendence(className){
+        
+        setLoading(true);
+        try {
+            const { data } = await axios.get('/api/user/get-student-attendance', { params: { className } });
+            setStudents(data.students || []);
+        } catch (error) {
+            toast.error(error.response?.data?.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function submitTeacherAttendance(attendanceData) {
+        setLoading(true);
+        try {
+            const requests = attendanceData.map(async (item) => {
+                try {
+                    return await axios.post('/api/user/teacher-attendance', {
+                        teacherId: item.teacherId,
+                        date: item.date,
+                        status: item.status,
+                    });
+                } catch (error) {
+                    const message = error.response?.data?.message || error.message || 'Request failed';
+                    throw new Error(`${item.teacherName || item.teacherId}: ${message}`);
+                }
+            });
+
+            const responses = await Promise.all(requests);
+            const firstResponse = responses[0]?.data;
+            toast.success(firstResponse?.message || 'Teacher attendance submitted successfully');
+            return responses;
+        } catch (error) {
+            const message = error.message || 'Failed to submit teacher attendance';
+            toast.error(message);
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function getTeacherAttendance(date = "") {
+        setTeacherAttendanceLoading(true);
+        try {
+            const { data } = await axios.get('/api/user/teacher-attendance', {
+                params: date ? { date } : {},
+            });
+            const records = data.teacherAttendance || [];
+            setTeacherAttendanceRecords(records);
+            return records;
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Unable to load teacher attendance');
+            setTeacherAttendanceRecords([]);
+            return [];
+        } finally {
+            setTeacherAttendanceLoading(false);
+        }
+    }
+
+    async function scanTeacherAttendance(date) {
+        setLoading(true);
+        try {
+            const { data } = await axios.post('/api/user/teacher-attendance/scan', { date });
+            return data;
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Unable to mark attendance');
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    }
     // console.log("schoolPhotos", schoolPhotos);
     useEffect(() => {
         fetchUser();
@@ -633,6 +749,7 @@ export const UserProvider = ({ children }) => {
         loading,
         registerTeacher,
         teacherList,
+        getAllTeachers,
         FeesSubmit,
         FeesSubmitList,
         getAllFeesSubmit,
@@ -668,9 +785,20 @@ export const UserProvider = ({ children }) => {
         bookPrice,
         studentTestQuestion,
         getallquestions,
+        getStudentTestSubmissions,
         questionList,
         schoolPhotos,
-        PhotoUpload
+        PhotoUpload,
+        deleteSchoolPhoto,
+        getStudentAttendence,
+        students,
+        setStudents,
+        submitTeacherAttendance,
+        scanTeacherAttendance,
+        getTeacherAttendance,
+        teacherAttendanceRecords,
+        teacherAttendanceLoading,
+        submissions
     }}>{children}</UserContext.Provider>;
 }
 

@@ -23,6 +23,7 @@ const StudentSchema = new mongoose.Schema({
   address: { type: String, required: true },
   transport: { type: Boolean, default: false, required: true },
   feeRecords: { type: [FeeRecordSchema], default: [] },
+  attendanceId: { type: String, default: "" },
 }, {
   timestamps: true,
 });

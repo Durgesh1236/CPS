@@ -1,101 +1,60 @@
-
-import { FaUserGraduate, FaCheckCircle, FaTimesCircle, FaBookOpen, FaChalkboardTeacher } from 'react-icons/fa';
-import { UserData } from '../context/User';
-import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
+import { FaCalendarAlt, FaChalkboardTeacher, FaCheckCircle, FaUsers } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import TeacherLayout from '../Components/TeacherLayout';
-const classOptions = Array.from({ length: 12 }, (_, i) => `${i + 1}`);
-const subjectOptions = [
-    { value: 'Math', topics: ['Algebra', 'Geometry', 'Trigonometry', 'Arithmetic', 'Other'] },
-    { value: 'Science', topics: ['Physics', 'Chemistry', 'Biology', 'Other'] },
-    { value: 'English', topics: ['Grammar', 'Literature', 'Writing', 'Other'] },
-    { value: 'Hindi', topics: ['Grammar', 'Literature', 'Writing', 'Other'] },
-    { value: 'Social Studies', topics: ['History', 'Geography', 'Civics', 'Other'] },
-    { value: 'Computer', topics: ['Programming', 'Theory', 'Practical', 'Other'] },
-    { value: 'Art', topics: ['Drawing', 'Painting', 'Craft', 'Other'] },
-    { value: 'Physical Education', topics: ['Sports', 'Yoga', 'Other'] },
-    { value: 'Other', topics: ['General', 'Other'] },
-];
-const placeholderImg = '/src/assets/cps1.jpg';
+import { UserData } from '../context/User';
 
-const exampleStudents = [
-    {
-        ledgerId: '1001',
-        studentName: 'Amit Sharma',
-        studentClass: '5',
-        imageUrl: '',
-    },
-    {
-        ledgerId: '1002',
-        studentName: 'Priya Singh',
-        studentClass: '5',
-        imageUrl: '',
-    },
-    {
-        ledgerId: '1003',
-        studentName: 'Rahul Verma',
-        studentClass: '6',
-        imageUrl: '',
-    },
-    {
-        ledgerId: '1004',
-        studentName: 'Sneha Gupta',
-        studentClass: '6',
-        imageUrl: '',
-    },
-];
-
+const classOptions = ['P.Nur', 'Nur', 'LKG', 'UKG', '1', '2', '3', '4', '5', '6', '7', '8'];
+const subjectOptions = ['Math', 'Science', 'English', 'Hindi', 'Social Studies', 'Computer', 'Art', 'Physical Education', 'Other'];
+ 
 const TakeStudentAttendence = () => {
-    const { getAllStudents, results } = UserData();
     const [selectedClass, setSelectedClass] = useState('');
-    const [selectedSubject, setSelectedSubject] = useState('');
-    const [selectedTopic, setSelectedTopic] = useState('');
-    const [students, setStudents] = useState(exampleStudents);
+    const [selectedSubject, setSelectedSubject] = useState('Math');
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
     const [attendance, setAttendance] = useState({});
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const { getStudentAttendence, loading, students, setStudents } = UserData();
 
-    useEffect(() => {
-        // if (selectedClass) {
-        // 	getAllStudents().then(() => {
-        // 		setStudents(results.filter(s => s.studentClass === selectedClass));
-        // 		setAttendance({});
-        // 	});
-        // } else {
-        setStudents(exampleStudents);
+    const handleClassChange = async (event) => {
+        const className = event.target.value;
+        setSelectedClass(className);
+        setStudents([]);
         setAttendance({});
-        // }
         setSubmitted(false);
-    }, [selectedClass]);
 
-    useEffect(() => {
-        setSelectedTopic('');
-    }, [selectedSubject]);
+        if (!className) return;
 
-    const handleMark = (ledgerId, status) => {
-        setAttendance(prev => ({ ...prev, [ledgerId]: status }));
+        // setLoadingStudents(true);
+       await getStudentAttendence(className);
     };
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (!selectedClass || !selectedSubject || !selectedDate || students.length === 0) return;
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
         setSubmitting(true);
-        // Here you would send attendance data to backend
-        setTimeout(() => {
-            setSubmitting(false);
+        try {
+            await Promise.all(students.map(student => axios.post('/api/user/student-attendance', {
+                studentId: student.ledgerId,
+                date: selectedDate,
+                subjects: [{
+                    subject: selectedSubject,
+                    status: attendance[student.ledgerId] ? 'present' : 'absent',
+                }],
+            })));
             setSubmitted(true);
-            // Reset all fields after submit
-            setSelectedClass('');
-            setSelectedSubject('');
-            setSelectedTopic('');
-            setStudents(exampleStudents);
-            setAttendance({});
-        }, 1200);
+            toast.success('Attendance submitted successfully');
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Unable to submit attendance');
+        } finally {
+            setSubmitting(false);
+        }
     };
 
-    const handleCancel = () => {
+    const handleReset = () => {
         setSelectedClass('');
-        setSelectedSubject('');
-        setSelectedTopic('');
         setStudents([]);
         setAttendance({});
         setSubmitted(false);
@@ -103,128 +62,81 @@ const TakeStudentAttendence = () => {
 
     return (
         <TeacherLayout>
-            <div className="min-h-screen pt-24 p-2 bg-gradient-to-br from-green-50 to-blue-50">
-                <div className="w-full mx-auto">
-                    <div className="bg-white rounded-3xl shadow-xl p-8 border border-blue-100 ring-1 ring-blue-50">
-                        <h1 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-500 mb-6 flex items-center gap-3">
-                            <FaChalkboardTeacher className="text-blue-500" /> Take Student Attendance
-                        </h1>
-                        <form onSubmit={handleSubmit} className="space-y-8">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-600 mb-2">Select Class</label>
-                                    <select
-                                        className="w-full cursor-pointer p-3 border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                                        value={selectedClass}
-                                        onChange={e => setSelectedClass(e.target.value)}
-                                    >
-                                        <option value="">-- Choose Class --</option>
-                                        {classOptions.map(c => <option key={c} value={c}>{c}</option>)}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-600 mb-2">Select Subject</label>
-                                    <select
-                                        className="w-full p-3 cursor-pointer border rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                                        value={selectedSubject}
-                                        onChange={e => setSelectedSubject(e.target.value)}
-                                    >
-                                        <option value="">-- Choose Subject --</option>
-                                        {subjectOptions.map(s => <option key={s.value} value={s.value}>{s.value}</option>)}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-600 mb-2">Select Topic</label>
-                                    <select
-                                        className="w-full p-3 border cursor-pointer rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                                        value={selectedTopic}
-                                        onChange={e => setSelectedTopic(e.target.value)}
-                                        disabled={!selectedSubject}
-                                    >
-                                        <option value="">-- Choose Topic --</option>
-                                        {selectedSubject && subjectOptions.find(s => s.value === selectedSubject)?.topics.map(t => (
-                                            <option key={t} value={t}>{t}</option>
-                                        ))}
-                                    </select>
-                                </div>
+            <main className="min-h-screen bg-slate-50 px-3 pb-10 pt-24 sm:px-6">
+                <div className="mx-auto max-w-6xl">
+                    <header className="mb-6 rounded-2xl bg-slate-900 p-5 text-white shadow-lg sm:p-7">
+                        <div className="flex items-start gap-4">
+                            <span className="rounded-xl bg-emerald-400/20 p-3 text-emerald-300"><FaChalkboardTeacher /></span>
+                            <div>
+                                <p className="text-sm font-semibold uppercase tracking-widest text-emerald-300">Teacher workspace</p>
+                                <h1 className="mt-1 text-2xl font-bold sm:text-3xl">Student attendance</h1>
+                                <p className="mt-2 max-w-2xl text-sm text-slate-300">Choose a class, then mark each student present. Students left unchecked will be recorded absent.</p>
                             </div>
+                        </div>
+                    </header>
 
-                            {selectedClass && selectedSubject && selectedTopic && (
-                                <div className="mt-8">
-                                    <h2 className="text-xl font-bold text-blue-700 mb-4 flex items-center gap-2"><FaBookOpen /> Students List</h2>
-                                    <div className="overflow-x-auto">
-                                        <table className="min-w-full bg-white rounded-xl shadow border border-blue-100">
-                                            <thead>
-                                                <tr className="bg-blue-50">
-                                                    <th className="py-3 px-4 text-left font-semibold text-gray-700">Photo</th>
-                                                    <th className="py-3 px-4 text-left font-semibold text-gray-700">Name</th>
-                                                    <th className="py-3 px-4 text-left font-semibold text-gray-700">Ledger ID</th>
-                                                    <th className="py-3 px-4 text-center font-semibold text-gray-700">Mark Attendance</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {students.length === 0 && (
-                                                    <tr>
-                                                        <td colSpan="4" className="text-center text-gray-500 text-lg py-6">No students found for this class.</td>
-                                                    </tr>
-                                                )}
-                                                {students.map(stu => (
-                                                    <tr key={stu.ledgerId} className="border-b border-blue-50 hover:bg-blue-50">
-                                                        <td className="py-3 px-4">
-                                                            <img src={stu.imageUrl || placeholderImg} alt={stu.studentName} className="w-12 h-12 rounded-full object-cover border-2 border-blue-300 shadow" />
-                                                        </td>
-                                                        <td className="py-3 px-4 font-bold text-gray-800">{stu.studentName}</td>
-                                                        <td className="py-3 px-4 text-gray-500">{stu.ledgerId}</td>
-                                                        <td className="py-3 px-4 text-center">
-                                                            <button
-                                                                type="button"
-                                                                className={`px-4 cursor-pointer py-2 rounded-lg font-bold text-white mr-2 ${attendance[stu.ledgerId] === 'present' ? 'bg-green-600' : 'bg-gray-300'} transition`}
-                                                                onClick={() => handleMark(stu.ledgerId, 'present')}
-                                                            >
-                                                                <FaCheckCircle className="inline mr-1" /> Present
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className={`px-4 py-2 cursor-pointer rounded-lg font-bold text-white ${attendance[stu.ledgerId] === 'absent' ? 'bg-red-600' : 'bg-gray-300'} transition`}
-                                                                onClick={() => handleMark(stu.ledgerId, 'absent')}
-                                                            >
-                                                                <FaTimesCircle className="inline mr-1" /> Absent
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            )}
+                    <form onSubmit={handleSubmit} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                            <label className="text-sm font-semibold text-slate-700">
+                                Class
+                                <select value={selectedClass} onChange={handleClassChange} className="mt-2 w-full rounded-xl border border-slate-300 bg-white p-3 font-normal outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100">
+                                    <option value="">Choose class</option>
+                                    {classOptions.map(className => <option key={className} value={className}>Class {className}</option>)}
+                                </select>
+                            </label>
+                            <label className="text-sm font-semibold text-slate-700">
+                                Subject
+                                <select value={selectedSubject} onChange={event => setSelectedSubject(event.target.value)} className="mt-2 w-full rounded-xl border border-slate-300 bg-white p-3 font-normal outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100">
+                                    {subjectOptions.map(subject => <option key={subject} value={subject}>{subject}</option>)}
+                                </select>
+                            </label>
+                            <label className="text-sm font-semibold text-slate-700">
+                                Attendance date
+                                <span className="relative mt-2 block">
+                                    <FaCalendarAlt className="pointer-events-none absolute left-3 top-3.5 text-slate-400" />
+                                    <input type="date" value={selectedDate} onChange={event => setSelectedDate(event.target.value)} className="w-full rounded-xl border border-slate-300 p-3 pl-10 font-normal outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100" />
+                                </span>
+                            </label>
+                        </div>
 
-                            {selectedClass && selectedSubject && selectedTopic && students.length > 0 && (
-                                <div className="flex justify-end gap-4 mt-8">
-                                    <button
-                                        type="submit"
-                                        className="px-8 py-3 cursor-pointer rounded-xl font-bold text-lg bg-gradient-to-r from-green-500 to-blue-500 text-white shadow-lg hover:from-green-600 hover:to-blue-600 transition"
-                                        disabled={submitting}
-                                    >
-                                        {submitting ? 'Submitting...' : 'Submit Attendance'}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="px-8 py-3 cursor-pointer rounded-xl font-bold text-lg bg-gradient-to-r from-gray-400 to-gray-600 text-white shadow-lg hover:from-gray-500 hover:to-gray-700 transition"
-                                        onClick={handleCancel}
-                                        disabled={submitting}
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
-                            )}
-                            {submitted && (
-                                <div className="mt-6 text-center text-green-600 font-bold text-lg">Attendance submitted successfully!</div>
-                            )}
-                        </form>
-                    </div>
+                        <div className="mt-8 overflow-hidden rounded-xl border border-slate-200">
+                            <div className="flex flex-col gap-2 bg-slate-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                                <h2 className="flex items-center gap-2 font-bold text-slate-800"><FaUsers className="text-emerald-600" /> Student list</h2>
+                                {selectedClass && <span className="text-sm text-slate-500">{students.length} student{students.length === 1 ? '' : 's'}</span>}
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full min-w-[620px] text-left">
+                                    <thead className="bg-slate-800 text-sm text-white">
+                                        <tr><th className="px-4 py-3">S.No</th><th className="px-4 py-3">Student name</th><th className="px-4 py-3">Ledger ID</th><th className="px-4 py-3 text-center">Present</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        {loading && <tr><td colSpan="4" className="px-4 py-10 text-center text-slate-500">Loading students...</td></tr>}
+                                        {!loading && !selectedClass && <tr><td colSpan="4" className="px-4 py-10 text-center text-slate-500">Choose a class to load students.</td></tr>}
+                                        {!loading && selectedClass && students.length === 0 && <tr><td colSpan="4" className="px-4 py-10 text-center text-slate-500">No students found for this class.</td></tr>}
+                                        {!loading && students.map((student, index) => <tr key={student.ledgerId} className="border-t border-slate-100 hover:bg-emerald-50/50">
+                                            <td className="px-4 py-4 text-slate-500">{index + 1}</td>
+                                            <td className="px-4 py-4 font-semibold text-slate-800">{student.studentName}</td>
+                                            <td className="px-4 py-4 font-mono text-sm text-slate-500">{student.ledgerId}</td>
+                                            <td className="px-4 py-4 text-center">
+                                                <label className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-100">
+                                                    <input type="checkbox" checked={Boolean(attendance[student.ledgerId])} onChange={event => setAttendance(previous => ({ ...previous, [student.ledgerId]: event.target.checked }))} className="h-5 w-5 accent-emerald-600" />
+                                                    <FaCheckCircle /> Present
+                                                </label>
+                                            </td>
+                                        </tr>)}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {students.length > 0 && <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                            <button type="button" onClick={handleReset} disabled={submitting} className="rounded-xl border border-slate-300 px-5 py-3 font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-50">Reset</button>
+                            <button type="submit" disabled={submitting} className="rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white shadow-sm hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50">{submitting ? 'Submitting...' : 'Submit attendance'}</button>
+                        </div>}
+                        {submitted && <p className="mt-4 text-center font-semibold text-emerald-600">Attendance saved for Class {selectedClass}.</p>}
+                    </form>
                 </div>
-            </div>
+            </main>
         </TeacherLayout>
     );
 };

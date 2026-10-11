@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import TeacherLayout from '../Components/TeacherLayout';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaFilter, FaTimes, FaUserGraduate, FaIdCard, FaChevronRight } from 'react-icons/fa';
 import { UserData } from '../context/User';
 import { FaDeleteLeft } from "react-icons/fa6";
 
@@ -52,6 +52,13 @@ export default function StudentDataSearch() {
     }
   };
 
+  const clearFilters = () => {
+    setLedgerId('');
+    setName('');
+    setResults([]);
+    setSelected(null);
+  };
+
   const loadStudent = async (ledger) => {
     setLoading(true);
     try {
@@ -89,7 +96,7 @@ export default function StudentDataSearch() {
     if (years.length > 0) setSelectedYear(years[0]);
     else setSelectedYear(currentYear);
 
-  }, [selected]);
+  }, [selected, currentYear]);
 
   const saveStudentDetails = async (e) => {
     e.preventDefault();
@@ -104,7 +111,7 @@ export default function StudentDataSearch() {
       studentForm.address,
       studentForm.transport
     )
-    setStudentForm('')
+    setEditStudent(false);
   };
 
   const cancelStudentEdit = () => {
@@ -154,71 +161,100 @@ export default function StudentDataSearch() {
 
   return (
     <TeacherLayout>
-      <div className="min-h-screen pt-20 p-3 sm:p-6 bg-gradient-to-b from-slate-50 to-white w-full">
+      <div className="min-h-screen w-full bg-[#f4f7fb] px-3 py-5 pb-24 sm:px-6 sm:py-8 lg:px-8">
 
         {/* Search Section */}
-        <div className="bg-white rounded-2xl shadow p-4 sm:p-6 mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold mb-4">Search Student</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+        <form
+          onSubmit={e => { e.preventDefault(); search(); }}
+          className="mb-6 overflow-hidden rounded-3xl border border-slate-200 bg-[#132238] shadow-xl shadow-slate-200/60"
+        >
+          <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-5 sm:px-6 sm:py-6">
             <div>
-              <label className="text-xs text-gray-500">Ledger ID</label>
+              <div className="mb-1 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-cyan-300">
+                <FaFilter /> Student directory
+              </div>
+              <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">Find a student</h2>
+              <p className="mt-1 text-sm text-slate-300">Search by ledger ID or student name.</p>
+            </div>
+            <div className="hidden h-14 w-14 items-center justify-center rounded-2xl bg-cyan-400/15 text-2xl text-cyan-300 sm:flex">
+              <FaUserGraduate />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 px-4 py-4 sm:px-6 sm:py-5 md:grid-cols-[1fr_1fr_auto] md:items-end">
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wide text-slate-300" htmlFor="ledger-filter">Ledger ID</label>
               <input
+                id="ledger-filter"
                 value={ledgerId}
                 onChange={e => setLedgerId(e.target.value)}
-                className="mt-1 p-2 w-full border rounded"
-                placeholder="Ledger ID"
+                className="mt-1.5 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/20"
+                placeholder="e.g. LDR-001"
               />
             </div>
 
             <div>
-              <label className="text-xs text-gray-500">Student Name</label>
+              <label className="text-xs font-bold uppercase tracking-wide text-slate-300" htmlFor="student-filter">Student name</label>
               <input
+                id="student-filter"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                className="mt-1 p-2 w-full border rounded"
-                placeholder="Name (partial ok)"
+                className="mt-1.5 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-300/20"
+                placeholder="Type all or part of a name"
               />
             </div>
 
-            <button
-              onClick={search}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2 w-full md:w-auto bg-indigo-600 text-white rounded shadow"
-            >
-              <FaSearch /> {loading ? "Searching..." : "Search"}
-            </button>
+            <div className="flex gap-2">
+              <button type="submit" className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-cyan-300 px-5 py-3 text-sm font-extrabold text-[#132238] transition hover:bg-cyan-200 md:flex-none">
+                <FaSearch /> {loading ? "Searching..." : "Search"}
+              </button>
+              {(ledgerId || name || results.length > 0) && (
+                <button type="button" onClick={clearFilters} aria-label="Clear filters" title="Clear filters" className="inline-flex min-h-12 w-12 items-center justify-center rounded-xl border border-white/15 text-slate-300 transition hover:bg-white/10 hover:text-white">
+                  <FaTimes />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        </form>
 
         {/* Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(280px,0.8fr)_minmax(0,2fr)]">
 
           {/* Student Results */}
-          <div className="col-span-1">
-            <div className="bg-white rounded-xl p-4 shadow">
-
-              <h3 className="font-semibold mb-2">Results</h3>
+          <div className="min-w-0">
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-black text-slate-900">Matches</h3>
+                  <p className="text-xs text-slate-500">{results.length} student{results.length === 1 ? '' : 's'} found</p>
+                </div>
+                <FaIdCard className="text-xl text-cyan-600" />
+              </div>
 
               {results.length === 0 && (
-                <div className="text-sm text-gray-500">No results</div>
+                <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
+                  Run a search to see students here.
+                </div>
               )}
 
               {results.length > 0 && (
                 <div
-                  className="bg-white rounded-lg shadow p-2 hide-scrollbar"
-                  style={{ maxHeight: "60vh", overflowY: "auto" }}
+                  className="hide-scrollbar max-h-[42vh] overflow-y-auto pr-1 sm:max-h-[60vh]"
                 >
                   <div className="flex flex-col gap-3">
                     {results.map(s => (
                       <div
                         key={s._id}
                         onClick={() => loadStudent(s.ledgerId)}
-                        className="bg-white rounded md p-3 shadow-sm hover:shadow-md cursor-pointer"
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') loadStudent(s.ledgerId); }}
+                        role="button"
+                        tabIndex={0}
+                        className={`group relative cursor-pointer rounded-xl border p-3 transition hover:-translate-y-0.5 hover:border-cyan-300 hover:shadow-md ${selected?.ledgerId === s.ledgerId ? 'border-cyan-400 bg-cyan-50/60' : 'border-slate-100 bg-slate-50/70'}`}
                       >
                         <div className="flex justify-between gap-2">
                           <div className="min-w-0">
-                            <div className="text-md font-semibold truncate">{s.studentName}</div>
-                            <div className="text-xs text-gray-500 truncate">
+                            <div className="truncate text-sm font-extrabold text-slate-900">{s.studentName}</div>
+                            <div className="truncate text-xs text-slate-500">
                               Ledger: {s.ledgerId}
                             </div>
                           </div>
@@ -228,14 +264,11 @@ export default function StudentDataSearch() {
                           </div>
                         </div>
 
-                        <div className="text-sm text-gray-700 mt-2 break-words">
-                          <div><strong>Mobile:</strong> {s.mobileNo || "-"}</div>
-                          <div className="mt-1">
-                            <strong>Parents:</strong> {s.fatherName || "-"} / {s.motherName || "-"}
-                          </div>
-                          <div className="mt-1"><strong>Address:</strong> {s.address || "-"}</div>
-                          <div className="mt-1"><strong>Transport:</strong> {s.transport ? "Yes" : "No"}</div>
+                        <div className="mt-2 space-y-1 break-words text-xs text-slate-600">
+                          <div><strong className="text-slate-700">Mobile:</strong> {s.mobileNo || "-"}</div>
+                          <div><strong className="text-slate-700">Parents:</strong> {s.fatherName || "-"} / {s.motherName || "-"}</div>
                         </div>
+                        <FaChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-cyan-500" />
 
                       </div>
                     ))}
@@ -246,25 +279,27 @@ export default function StudentDataSearch() {
           </div>
 
           {/* Student Details + Fee Table */}
-          <div className="col-span-1 md:col-span-3">
-            <div className="bg-white rounded-xl p-4 sm:p-6 shadow">
+          <div className="min-w-0">
+            <div className="min-h-[260px] rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
 
               {!selected && (
-                <div className="text-center text-gray-500">
-                  Select a student to view details
+                <div className="flex min-h-[220px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50 px-5 text-center text-slate-500">
+                  <FaUserGraduate className="mb-3 text-3xl text-slate-300" />
+                  <p className="font-bold text-slate-700">Select a student</p>
+                  <p className="mt-1 text-sm">Choose a match to view profile and fee records.</p>
                 </div>
-              )}
+              )} 
 
               {selected && (
                 <>
-                  <div className="flex flex-col md:flex-row md:justify-between gap-4 mb-6">
+                  <div className="mb-6 flex flex-col gap-4 border-b border-slate-100 pb-5 md:flex-row md:items-start md:justify-between">
 
                     <div className="min-w-0">
                       {/* NAME */}
                       {!editStudent ? (
-                        <div className="text-xl font-bold break-words">
+                        <div className="break-words text-2xl font-black tracking-tight text-slate-900">
                           {selected.studentName}{" "}
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm font-medium text-slate-400">
                             ({selected.ledgerId})
                           </span>
                         </div>
@@ -283,7 +318,7 @@ export default function StudentDataSearch() {
 
                       {/* CLASS + MOBILE */}
                       {!editStudent ? (
-                        <div className="text-sm text-gray-600 mt-1 break-words">
+                        <div className="mt-1 break-words text-sm text-slate-500">
                           Class: {selected.studentClass} • Mobile: {selected.mobileNo}
                         </div>
                       ) : (
@@ -316,7 +351,7 @@ export default function StudentDataSearch() {
 
                       {/* PARENTS */}
                       {!editStudent ? (
-                        <div className="text-sm text-gray-600 mt-1 break-words">
+                        <div className="mt-1 break-words text-sm text-slate-500">
                           Parents: {selected.fatherName} / {selected.motherName}
                         </div>
                       ) : (
@@ -349,7 +384,7 @@ export default function StudentDataSearch() {
 
                       {/* ADDRESS */}
                       {!editStudent ? (
-                        <div className="text-sm text-gray-600 mt-1 break-words">
+                        <div className="mt-1 break-words text-sm text-slate-500">
                           Address: {selected.address}
                         </div>
                       ) : (
@@ -373,7 +408,7 @@ export default function StudentDataSearch() {
                       {!editStudent ? (
                         <button
                           onClick={() => setEditStudent(true)}
-                          className="px-4 py-2 cursor-pointer bg-blue-600 text-white rounded shadow w-full sm:w-auto"
+                          className="w-full cursor-pointer rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-slate-700 sm:w-auto"
                         >
                           Edit
                         </button>
@@ -381,20 +416,20 @@ export default function StudentDataSearch() {
                         <div className="flex flex-wrap gap-2">
                           <button
                             onClick={saveStudentDetails}
-                            className="px-4 py-2 cursor-pointer bg-green-600 text-white rounded"
+                            className="cursor-pointer rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white"
                           >
                             Save
                           </button>
                           <button
                             onClick={cancelStudentEdit}
-                            className="px-4 py-2 cursor-pointer border rounded"
+                            className="cursor-pointer rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-600"
                           >
                             Cancel
                           </button>
 
                           <button
                             onClick={() => StudentAccountDelete(selected._id)}
-                            className="bg-red-600 cursor-pointer text-white px-3 rounded flex items-center justify-center"
+                            className="flex cursor-pointer items-center justify-center rounded-xl bg-rose-600 px-3 text-white"
                           >
                             <FaDeleteLeft />
                           </button>
@@ -415,7 +450,7 @@ export default function StudentDataSearch() {
                               transport: e.target.value
                             })
                           }
-                          className="mt-3 p-1 border rounded w-full sm:w-auto"
+                          className="mt-3 w-full rounded-xl border border-slate-200 bg-white p-2 text-sm sm:w-auto"
                         >
                           <option value="Yes">Yes</option>
                           <option value="No">No</option>
@@ -424,9 +459,9 @@ export default function StudentDataSearch() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="md:col-span-1 bg-white rounded-lg p-4 shadow">
-                      <h4 className="text-lg font-semibold mb-2">
+                  <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(220px,0.8fr)_minmax(0,1.8fr)]">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+                      <h4 className="mb-3 text-base font-black text-slate-900">
                         Student Details
                       </h4>
 
@@ -442,9 +477,6 @@ export default function StudentDataSearch() {
                       <div className="text-sm text-gray-700 break-words">
                         <strong>Mobile:</strong> {selected.mobileNo}
                       </div>
-                      {
-                        console.log("Additional Mobile:", selected.additionalMobileNo)
-                      }
                       { selected.additionalMobileNo && (
                         <div className="text-sm text-gray-700 break-words">
                           <strong>Additional Mobile:</strong> {selected.additionalMobileNo}
@@ -458,13 +490,13 @@ export default function StudentDataSearch() {
                       </div>
 
                       <div className="mt-4">
-                        <label className="text-sm text-gray-600">
+                        <label className="text-xs font-bold uppercase tracking-wide text-slate-500">
                           Select Year
                         </label>
                         <select
                           value={selectedYear}
                           onChange={e => setSelectedYear(Number(e.target.value))}
-                          className="w-full mt-1 p-2 border rounded"
+                          className="mt-1 w-full rounded-xl border border-slate-200 bg-white p-2.5 text-sm font-semibold"
                         >
                           {[...new Set([...(selected.feeRecords || []).map(r => r.year), currentYear])]
                             .sort((a, b) => b - a)
@@ -476,15 +508,15 @@ export default function StudentDataSearch() {
                     </div>
 
                     {/* Fees Month Table */}
-                    <div className="md:col-span-2 bg-white rounded-lg p-4 shadow">
-                      <h4 className="text-lg font-semibold mb-2">
+                    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4">
+                      <h4 className="mb-3 text-base font-black text-slate-900">
                         {selectedYear} - Month Fees
                       </h4>
 
                       <div className="overflow-x-auto">
                         <table className="w-full min-w-[560px] text-left">
-                          <thead>
-                            <tr className="text-sm text-gray-600">
+                          <thead className="bg-slate-50">
+                            <tr className="text-xs font-bold uppercase tracking-wide text-slate-500">
                               <th className="py-2 px-3">Month</th>
                               <th className="py-2 px-3">Backdues (₹)</th>
                               <th className="py-2 px-3">Paid (₹)</th>

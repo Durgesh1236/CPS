@@ -9,7 +9,7 @@ const LayoutStu = ({ children }) => {
       <NavbarStu />
       <div className="flex flex-1">
         {/* <Sidebar sidebarOpen = {sidebarOpen} /> */}
-        <main className="flex-1 p-2 bg-gray-200 overflow-auto">
+        <main className="min-w-0 flex-1 overflow-auto bg-[#F6F3EC]">
           {children}
         </main>
       </div>

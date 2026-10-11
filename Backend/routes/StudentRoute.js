@@ -1,5 +1,5 @@
 import express from "express";
-import { addStudent, studentFeeHistory, StudentLogin, studentLogout, studentProfile } from "../controllars/StudentControllar.js";
+import { addStudent, getStudentAttendence, getStudentClassTests, studentFeeHistory, StudentLogin, studentLogout, studentProfile, submitStudentTest } from "../controllars/StudentControllar.js";
 import { StudentisAuth } from "../middlewares/StudentisAuth.js";
 import { isAuth } from "../middlewares/isAuth.js";
 import { bookPriceDelete, bookPriceEdit, bookPriceForm, getBookPrice } from "../controllars/FeesSubmitControllars.js";
@@ -19,5 +19,8 @@ studentRouter.post("/student/book-price-edit/:id", isAuth, bookPriceEdit);
 studentRouter.get("/student/get-all-book-price", isAuth, getBookPrice);
 studentRouter.delete("/student/delete-book-price/:id", isAuth, bookPriceDelete);
 studentRouter.post("/student-test-question", isAuth, StudentTestQuestion);
+studentRouter.get("/student/test-questions", StudentisAuth, getStudentClassTests);
+studentRouter.post("/student/test-submit", StudentisAuth, submitStudentTest);
+studentRouter.get("/student-attendance/:ledgerId", StudentisAuth, getStudentAttendence);
 
 export default studentRouter; 

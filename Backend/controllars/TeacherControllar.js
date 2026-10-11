@@ -8,6 +8,10 @@ import getDataurl from "../utils/urlGenerator.js";
 import { TeacherPayment } from "../models/TeacherPaymentModel.js";
 import { TestQuestion } from "../models/TestQuestionModel.js";
 import { schoolphotoUpload } from "../models/SchoolPhotoModel.js";
+import { Student } from "../models/StudentModel.js";
+import { StudentAttendance } from "../models/StudentAttendanceModel.js";
+import { TeacherAttendance } from "../models/TeacherAttendence.js";
+import { StudentTestSubmission } from "../models/StudentTestSubmissionModel.js";
 
 export const registerUser = TryCatch(async(req, res) => {
     const {name, email, password, mobileNo, role} = req.body;
@@ -46,7 +50,7 @@ export const registerUser = TryCatch(async(req, res) => {
         message: "Account Created Successfully"
     })
 })
-
+ 
 export const loginUser = TryCatch(async(req, res) => {
     const {email, password} = req.body;
     if(!email || !password) {
@@ -97,7 +101,7 @@ export const getAllTeachers = TryCatch(async(req, res) => {
 
 export const editTeacherProfile = TryCatch(async(req, res) => {
     const { id } = req.params;
-    const { name, email, mobileNo, role } = req.body;
+    const { name, email, mobileNo, role, password } = req.body;
     const user = await User.findById(id);
     if(!user){
         return res.status(404).json({
@@ -109,6 +113,9 @@ export const editTeacherProfile = TryCatch(async(req, res) => {
     user.email = email || user.email;
     user.mobileNo = mobileNo || user.mobileNo;
     user.role = role || user.role;
+    if(password) {
+        user.password = await bcrypt.hash(password, 10);
+    }
     await user.save();
     return res.status(200).json({
         success: true,
@@ -341,47 +348,31 @@ export const getTestQuestions = TryCatch(async(req, res) => {
     })
 })
 
-// export const schoolPhotoUpload = TryCatch(async (req, res) => {
-//     const file = req.file;
+export const getStudentTestSubmissions = TryCatch(async (req, res) => {
+    const { studentClass, subject } = req.body;
+    if (!studentClass || !subject) {
+        return res.status(400).json({
+            success: false,
+            message: "Class and Subject are required"
+        })
+    }
 
-//     if (!file) {
-//         return res.status(400).json({
-//             success: false,
-//             message: "Please upload a photo",
-//         }); 
-//     }
-
-//     const compressedImage = await sharp(file.buffer)
-//         .resize({
-//             width: 800,
-//             fit: "inside",
-//         })
-//         .rotate()
-//         .jpeg({ quality: 50 })
-//         .toBuffer();
-
-//     const fileUrl = getDataurl({
-//         ...file,
-//         buffer: compressedImage,
-//     });
-
-//     const cloud = await cloudinary.v2.uploader.upload(fileUrl.content, {
-//         quality: "auto:best",
-//     });
-
-//     const photoData = await schoolphotoUpload.create({
-//         photoUrl: {
-//             id: cloud.public_id,
-//             url: cloud.secure_url,
-//         },
-//     });
-
-//     return res.status(201).json({
-//         success: true,
-//         photoData,
-//         message: "Photo uploaded successfully",
-//     });
-// });
+    const submissions = await StudentTestSubmission.find({
+         studentClass: studentClass || studentClass,
+         subject: subject || subject }); 
+    if(submissions.length === 0){
+        return res.status(404).json({
+            success: false,
+            message: "No test submissions found for this class and subject"
+        })
+    }
+    // console.log(submissions);
+    return res.status(200).json({
+        submissions,
+        success: true,
+        message: "Test submissions retrieved successfully"
+    });
+});
 
 export const schoolPhotoUpload = TryCatch(async (req, res) => {
     const file = req.file;
@@ -451,7 +442,7 @@ export const deleteSchoolPhoto = TryCatch(async (req, res) => {
         })
     }
 
-    const photo = await SchoolPhotoModel.findByIdAndDelete(id);
+    const photo = await schoolphotoUpload.findByIdAndDelete(id);
     if(!photo){
         return res.status(404).json({
             success: false,
@@ -463,3 +454,221 @@ export const deleteSchoolPhoto = TryCatch(async (req, res) => {
         message: "Photo deleted successfully"
     })
 })
+
+export const getstudentAttendence = TryCatch(async (req, res) => {
+    const { className } = req.query;
+    if(!className) {
+        return res.status(400).json({
+            success: false,
+            message: "Class name is required"
+        })
+    }
+
+    const students = await Student.find({ studentClass: className })
+        .select("ledgerId studentName studentClass")
+        .sort({ studentName: 1 });
+    if(students.length === 0){
+        return res.status(404).json({
+            success: false,
+            message: "Students not found"
+        })
+    }
+
+    return res.status(200).json({
+        success: true,
+        students,
+        message: "Students retrieved successfully"
+    })
+})
+
+export const studentAttendence = TryCatch(async(req, res) => {
+    const { studentId, subject, status, subjects, date } = req.body;
+    const attendanceSubjects = Array.isArray(subjects)
+        ? subjects
+        : [{ subject, status }];
+
+    if(!studentId || !date || attendanceSubjects.length === 0 || attendanceSubjects.some(item => !item.subject || !item.status)) {
+        return res.status(400).json({
+            success: false,
+            message: "studentId, date, and at least one subject with status are required"
+        })
+    }
+
+    const attendanceDate = new Date(date);
+    if (Number.isNaN(attendanceDate.getTime())) {
+        return res.status(400).json({ success: false, message: "Invalid attendance date" });
+    }
+    attendanceDate.setUTCHours(0, 0, 0, 0);
+
+    let student = await StudentAttendance.findOne({ studentId, date: attendanceDate });
+    if (!student) {
+        student = await StudentAttendance.create({
+            studentId,
+            date: attendanceDate,
+            subjects: attendanceSubjects
+        });
+    } else {
+        const subjectsByName = new Map(student.subjects.map(item => [item.subject, item.status]));
+        attendanceSubjects.forEach(item => subjectsByName.set(item.subject, item.status));
+        student.subjects = [...subjectsByName].map(([subjectName, subjectStatus]) => ({
+            subject: subjectName,
+            status: subjectStatus,
+            teacherId: req.user._id
+        }));
+        await student.save();
+    }
+
+    await TeacherAttendance.updateOne(
+        { teacherId: req.user._id, date: attendanceDate },
+        {
+            $setOnInsert: {
+                teacherId: req.user._id,
+                date: attendanceDate,
+                status: "present",
+                markedAt: new Date()
+            }
+        },
+        { upsert: true }
+    );
+
+    return res.status(201).json({
+        success: true,
+        student,
+        message: "Attendance submitted successfully"
+    })
+})
+
+export const getTeacherAttendance = TryCatch(async (req, res) => {
+    const { teacherId, date } = req.query;
+    const filter = {};
+
+    if (req.user.role === "admin") {
+        if (teacherId) filter.teacherId = teacherId;
+    } else {
+        filter.teacherId = req.user._id;
+    }
+
+    if (date) {
+        const attendanceDate = new Date(date);
+        if (Number.isNaN(attendanceDate.getTime())) {
+            return res.status(400).json({ success: false, message: "Invalid attendance date" });
+        }
+        attendanceDate.setUTCHours(0, 0, 0, 0);
+        filter.date = attendanceDate;
+    }
+
+    const records = await TeacherAttendance.find(filter)
+        .sort({ date: -1 })
+        .populate("teacherId", "name email mobileNo role");
+
+    return res.status(200).json({
+        success: true,
+        teacherAttendance: records,
+        message: "Teacher attendance fetched successfully"
+    });
+});
+
+export const teacherAttendance = TryCatch(async(req, res) => {
+    if (req.user?.role !== "admin") {
+        return res.status(403).json({
+            success: false,
+            message: "Only administrators can manually mark teacher attendance"
+        });
+    }
+
+    const { teacherId, date, status } = req.body;
+    const targetTeacherId = teacherId || req.user?._id;
+
+    if(!targetTeacherId || !date || !status){
+        return res.status(400).json({
+            success: false,
+            message: "teacherId, date, and status are required"
+        })
+    }
+
+    const attendanceDate = new Date(date);
+    if (Number.isNaN(attendanceDate.getTime())) {
+        return res.status(400).json({ success: false, message: "Invalid attendance date" });
+    }
+    attendanceDate.setUTCHours(0, 0, 0, 0);
+
+    const normalizedStatus = String(status).trim().toLowerCase();
+    if (!['present', 'absent', 'late'].includes(normalizedStatus)) {
+        return res.status(400).json({
+            success: false,
+            message: "status must be present, absent, or late"
+        });
+    }
+
+    let teacherRecord = await TeacherAttendance.findOne({ teacherId: targetTeacherId, date: attendanceDate });
+
+    if (!teacherRecord) {
+        teacherRecord = await TeacherAttendance.create({
+            teacherId: targetTeacherId,
+            date: attendanceDate,
+            status: normalizedStatus,
+            markedAt: new Date()
+        });
+
+        return res.status(201).json({
+            success: true,
+            teacherAttendance: teacherRecord,
+            message: "Teacher attendance submitted successfully"
+        });
+    }
+
+    teacherRecord.status = normalizedStatus;
+    teacherRecord.markedAt = new Date();
+    await teacherRecord.save();
+
+    return res.status(200).json({
+        success: true,
+        teacherAttendance: teacherRecord,
+        message: "Teacher attendance updated successfully"
+    });
+})
+
+export const scanTeacherAttendance = TryCatch(async(req, res) => {
+    const { date } = req.body;
+    if (!req.user?._id || !date) {
+        return res.status(400).json({
+            success: false,
+            message: "date is required"
+        });
+    }
+
+    const attendanceDate = new Date(date);
+    if (Number.isNaN(attendanceDate.getTime())) {
+        return res.status(400).json({ success: false, message: "Invalid attendance date" });
+    }
+    attendanceDate.setUTCHours(0, 0, 0, 0);
+
+    let teacherRecord = await TeacherAttendance.findOne({
+        teacherId: req.user._id,
+        date: attendanceDate
+    });
+
+    if (!teacherRecord) {
+        teacherRecord = await TeacherAttendance.create({
+            teacherId: req.user._id,
+            date: attendanceDate,
+            status: "present",
+            markedAt: new Date()
+        });
+        return res.status(201).json({
+            success: true,
+            teacherAttendance: teacherRecord,
+            message: "Attendance marked present successfully"
+        });
+    }
+
+    teacherRecord.status = "present";
+    teacherRecord.markedAt = new Date();
+    await teacherRecord.save();
+
+    return res.status(200).json({
+        success: true,
+        teacherAttendance: teacherRecord,
+        message: "Attendance marked present successfully"
+    });
+});

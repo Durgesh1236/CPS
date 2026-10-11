@@ -2,7 +2,8 @@ import React from 'react';
 import {
   FaMoneyCheckAlt, FaHistory, FaExclamationCircle, FaUserTie,
   FaClipboardList, FaUserGraduate, FaSearch, FaRupeeSign,
-  FaBell, FaBook, FaImages
+  FaBell, FaBook, FaImages, FaComments, FaPaperPlane, FaTimes,
+  FaHeadset, FaCopy, FaRobot
 } from 'react-icons/fa';
 import { FcBarChart } from "react-icons/fc";
 import TeacherLayout from '../Components/TeacherLayout';
@@ -24,7 +25,7 @@ const TeacherHomePage = () => {
   const navigate = useNavigate();
   const { user, getStudentCount } = UserData();
   const [totalStudents, setTotalStudents] = React.useState(null);
-  const [activeTab, setActiveTab] = React.useState('home');
+  // const [activeTab, setActiveTab] = React.useState('home');
 
   const getGreeting = () => {
     const h = new Date().getHours();
@@ -176,6 +177,7 @@ const TeacherHomePage = () => {
             {isAdminOrAcc && <MobileCard icon={IoMdTime} label="Timetable" bg="from-teal-500 to-cyan-700" delay={400} onClick={() => navigate('/set-timetable')} />}
             {isAdminOrAcc && <MobileCard icon={LuBookOpenCheck} label="Student Test" bg="from-slate-500 to-gray-700" delay={440} onClick={() => navigate('/set-student-test')}/>}
             {<MobileCard icon={FcBarChart} label="Results" bg="from-green-500 to-emerald-700" delay={480} onClick={() => navigate('/student-result-submission')} />}
+            {isAdminOrAcc && <MobileCard icon={FcBarChart} label="Test Results" bg="from-cyan-500 to-blue-700" delay={500} onClick={() => navigate('/student-test-results')} />}
             {<MobileCard icon={FaPersonCircleQuestion} label="Question Paper" bg="from-indigo-500 to-violet-700" delay={480} onClick={() => navigate('/set-student-question-paper')} />}
             {<MobileCard icon={FaBook} label="Question History" bg="from-red-500 to-orange-700" delay={480} onClick={() => navigate('/question-history')} />}
             {isAdminOrAcc && <MobileCard icon={FaImages} label="School Photos" bg="from-sky-500 to-blue-700" delay={520} onClick={() => navigate('/school-photo-upload')} />}
@@ -186,7 +188,8 @@ const TeacherHomePage = () => {
         <div className="px-4">
           <MobileSectionHeader emoji="👩‍🏫" title="Teacher Data" accentFrom="purple" />
           <div className="grid grid-cols-3 gap-2.5">
-            <MobileCard icon={FaClipboardList} label="Attendance" bg="from-purple-500 to-violet-700" delay={0} onClick={() => navigate('/teacher-attendenc')} />
+            <MobileCard icon={FaClipboardList} label="Attendance" bg="from-purple-500 to-violet-700" delay={0} onClick={() => navigate('/teacher-attendance')} />
+            {isAdminOrAcc && <MobileCard icon={MdOutlineManageHistory} label="History" bg="from-cyan-500 to-blue-700" delay={40} onClick={() => navigate('/teacher-attendance-history')} />}
             {isAdminOrAcc && <MobileCard icon={GiTeacher} label="Payment" bg="from-blue-600 to-cyan-700" delay={50} onClick={() => navigate('/teacher-payment')} />}
             {isAdminOrAcc && <MobileCard icon={MdOutlineManageHistory} label="Pay History" bg="from-lime-600 to-emerald-700" delay={100} onClick={() => navigate('/spend-history')} />}
             {isAdmin && <MobileCard icon={FaUserTie} label="Reg Teacher" bg="from-amber-600 to-orange-700" delay={150} onClick={() => navigate('/teacher-registration')} />}
@@ -293,7 +296,7 @@ const TeacherHomePage = () => {
           <DesktopSection title="Student Data" emoji="🎓">
             {isAdminOrAcc && <DesktopNavCard icon={FaMoneyCheckAlt} label="Fees Submit" sub="Record payments" gradient="from-emerald-400 to-teal-600" onClick={() => navigate('/student-fee-submit')} />}
             {isAdminOrAcc && <DesktopNavCard icon={FaHistory} label="Fees History" sub="Past transactions" gradient="from-blue-400 to-indigo-600" onClick={() => navigate('/student-fee-history')} />}
-            <DesktopNavCard icon={FaClipboardList} label="Attendance" sub="Mark & review" gradient="from-fuchsia-400 to-purple-600" onClick={() => navigate('/student-attendence')} />
+            {isAdminOrAcc && <DesktopNavCard icon={FaClipboardList} label="Attendance" sub="Mark & review" gradient="from-fuchsia-400 to-purple-600" onClick={() => navigate('/student-attendance')} />}
             {isAdminOrAcc && <DesktopNavCard icon={FaUserGraduate} label="Student Data Input" sub="Add records" gradient="from-amber-400 to-yellow-600" onClick={() => navigate('/student-data-input')} />}
             {isAdminOrAcc && <DesktopNavCard icon={FaSearch} label="Search Student" sub="Find by name/ID" gradient="from-cyan-400 to-sky-600" onClick={() => navigate('/student-data')} />}
             {isAdmin && <DesktopNavCard icon={FaUserTie} label="Registration" sub="Enrol new student" gradient="from-lime-400 to-green-600" onClick={() => navigate('/student-register')} />}
@@ -304,6 +307,7 @@ const TeacherHomePage = () => {
             {isAdminOrAcc && <DesktopNavCard icon={IoMdTime} label="Timetable" sub="Schedule classes" gradient="from-teal-400 to-cyan-600" onClick={() => navigate('/set-timetable')} />}
             {isAdminOrAcc && <DesktopNavCard icon={LuBookOpenCheck} label="Student Test" sub="Coming soon" gradient="from-slate-400 to-gray-600" onClick={() => navigate('/set-student-test')} />}
             {isAdminOrAcc && <DesktopNavCard icon={FcBarChart} label="Student Results" sub="Submit & view" gradient="from-green-400 to-emerald-600" onClick={() => navigate('/student-result-submission')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={FcBarChart} label="Test Results" sub="Correct & wrong" gradient="from-cyan-400 to-blue-600" onClick={() => navigate('/student-test-results')} />}
             { isAdminOrAcc && <DesktopNavCard icon={FaPersonCircleQuestion} label="Question View" sub="View & edit" gradient="from-indigo-400 to-violet-600" onClick={() => navigate('/question-history')} /> }
             { isAdminOrAcc && <DesktopNavCard icon={FaImages} label="School Photos" sub="Upload gallery" gradient="from-sky-400 to-blue-600" onClick={() => navigate('/school-photo-upload')} /> }
           </DesktopSection>
@@ -312,9 +316,10 @@ const TeacherHomePage = () => {
 
           {/* ── TEACHER DATA ── */}
           <DesktopSection title="Teacher Data" emoji="👩‍🏫">
-            <DesktopNavCard icon={FaClipboardList} label="Teacher Attendance" sub="Daily roll" gradient="from-purple-400 to-violet-600" onClick={() => navigate('/teacher-attendenc')} />
+            {isAdminOrAcc && <DesktopNavCard icon={FaClipboardList} label="Teacher Attendance" sub="Daily roll" gradient="from-purple-400 to-violet-600" onClick={() => navigate('/teacher-attendance')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={MdOutlineManageHistory} label="Attendance History" sub="Date-wise records" gradient="from-cyan-400 to-blue-600" onClick={() => navigate('/teacher-attendance-history')} />}
             {isAdminOrAcc && <DesktopNavCard icon={GiTeacher} label="Teacher Payment" sub="Process salary" gradient="from-blue-400 to-cyan-600" onClick={() => navigate('/teacher-payment')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={MdOutlineManageHistory} label="Paid History" sub="Salary log" gradient="from-lime-400 to-emerald-600" onClick={() => navigate('/spend-history')} />}
+            {isAdminOrAcc && <DesktopNavCard icon={MdOutlineManageHistory} label="Paid History" sub="Salary log" gradient="from-lime-400 to-emerald-600" onClick={() => alert('Paid History clicked')} />}
             {isAdmin && <DesktopNavCard icon={FaUserTie} label="Teacher Registration" sub="Add new teacher" gradient="from-amber-400 to-orange-600" onClick={() => navigate('/teacher-registration')} />}
             {isAdmin && <DesktopNavCard icon={FaUserTie} label="Teacher Data" sub="View & edit" gradient="from-cyan-400 to-teal-600" onClick={() => navigate('/teacher-data')} />}
             {isAdminOrAcc && <DesktopNavCard icon={FaPersonCircleQuestion} label="Question Paper" sub="View & edit" gradient="from-emerald-400 to-green-700" onClick={() => navigate('/set-student-question-paper')} />}
@@ -366,7 +371,269 @@ const TeacherHomePage = () => {
 
         </div>
       </div>
+      <TeacherHelpAssistant />
     </TeacherLayout>
+  );
+};
+
+const getTeacherHelpReply = (question) => {
+  const text = question.toLowerCase();
+
+  if (/fee|payment|receipt/.test(text)) {
+    return 'For student fees, open Fees Submit to record a payment or Fees History to review past transactions. Teacher salary payments are under Teacher Data.';
+  }
+  if (/attendance|present|absent|roll/.test(text)) {
+    return 'Use Attendance to mark student attendance. Teacher attendance and its history are available in the Teacher Data section.';
+  }
+  if (/student|search|record|admission/.test(text)) {
+    return 'Use Search Student to find a record, or Student Data Input to add records. Available options depend on your account role.';
+  }
+  if (/timetable|schedule|class time/.test(text)) {
+    return 'Open Timetable in the Student Data section to schedule classes.';
+  }
+  if (/salary|teacher payment|pay/.test(text)) {
+    return 'Teacher payments and payment history are available in Teacher Data for accounts with access.';
+  }
+  if (/book|price|sale/.test(text)) {
+    return 'Book Sale and Book Sale History are in Student Data. Book Price is available there too.';
+  }
+  if (/question|test|result|exam/.test(text)) {
+    return 'Use Question Paper to manage question papers, Student Test to set a test, and Student Results or Test Results to review results.';
+  }
+  if (/profile|account|password|login/.test(text)) {
+    return 'Open View Profile in the dashboard header to review your teacher profile. If you cannot sign in or update your account, send a help-desk query.';
+  }
+
+  return 'I can help with fees, attendance, student records, timetables, teacher payments, books, tests, results, and profile navigation. For anything else, switch to Help Desk and prepare a query for your school administrator.';
+};
+
+const TeacherHelpAssistant = () => {
+  const [open, setOpen] = React.useState(false);
+  const [activeTab, setActiveTab] = React.useState('chat');
+  const [messages, setMessages] = React.useState([
+    {
+      from: 'assistant',
+      text: 'Hi! Ask me how to find or use a CPS dashboard feature. I use built-in help topics and do not connect to a live AI service.'
+    }
+  ]);
+  const [chatInput, setChatInput] = React.useState('');
+  const [subject, setSubject] = React.useState('');
+  const [details, setDetails] = React.useState('');
+  const [preparedQuery, setPreparedQuery] = React.useState('');
+  const [copyStatus, setCopyStatus] = React.useState('');
+  const messagesEndRef = React.useRef(null);
+
+  React.useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, [messages, open, activeTab]);
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+    const question = chatInput.trim();
+    if (!question) return;
+
+    setMessages((current) => [
+      ...current,
+      { from: 'user', text: question },
+      { from: 'assistant', text: getTeacherHelpReply(question) }
+    ]);
+    setChatInput('');
+  };
+
+  const prepareQuery = (event) => {
+    event.preventDefault();
+    const trimmedSubject = subject.trim();
+    const trimmedDetails = details.trim();
+    if (!trimmedSubject || !trimmedDetails) return;
+
+    setPreparedQuery(`CPS Teacher Help Desk Query\nSubject: ${trimmedSubject}\n\n${trimmedDetails}`);
+    setCopyStatus('');
+  };
+
+  const copyQuery = async () => {
+    try {
+      await navigator.clipboard.writeText(preparedQuery);
+      setCopyStatus('Copied. Share it with your school administrator; it has not been sent automatically.');
+    } catch {
+      setCopyStatus('Clipboard access is unavailable. Select and copy the query text below; it has not been sent automatically.');
+    }
+  };
+
+  return (
+    <div className="fixed bottom-20 right-4 z-[60] md:bottom-6 md:right-6">
+      {open && (
+        <section
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="teacher-help-title"
+          className="mb-3 flex h-[min(70vh,34rem)] w-[min(92vw,24rem)] flex-col overflow-hidden rounded-2xl border border-indigo-100 bg-white shadow-2xl"
+        >
+          <header className="bg-gradient-to-r from-indigo-950 via-indigo-800 to-violet-700 p-4 text-white">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 id="teacher-help-title" className="flex items-center gap-2 text-base font-black">
+                  <FaRobot aria-hidden="true" />
+                  CPS Help Assistant
+                </h2>
+                <p className="mt-1 text-xs text-white/75">Dashboard help and query preparation</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Close help assistant"
+                className="rounded-lg cursor-pointer p-2 text-white/80 transition hover:bg-white/15 hover:text-white"
+              >
+                <FaTimes aria-hidden="true" />
+              </button>
+            </div>
+            <div className="mt-3 flex rounded-lg bg-white/10 p-1" role="tablist" aria-label="Help assistant">
+              {[
+                { id: 'chat', label: 'Ask a question', icon: FaComments },
+                { id: 'helpdesk', label: 'Help desk', icon: FaHeadset }
+              ].map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  id={`teacher-help-tab-${id}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === id}
+                  aria-controls={`teacher-help-panel-${id}`}
+                  onClick={() => setActiveTab(id)}
+                  className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-md px-2 py-2 text-xs font-bold transition ${
+                    activeTab === id ? 'bg-white text-indigo-950 shadow' : 'text-white/80 hover:bg-white/10'
+                  }`}
+                >
+                  <Icon aria-hidden="true" />
+                  {label}
+                </button>
+              ))}
+            </div>
+          </header>
+
+          {activeTab === 'chat' ? (
+            <div
+              id="teacher-help-panel-chat"
+              role="tabpanel"
+              aria-labelledby="teacher-help-tab-chat"
+              className="flex min-h-0 flex-1 flex-col"
+            >
+              <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 p-4">
+                <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
+                  Built-in dashboard help only. This is not a live AI service and may not know the answer to every question.
+                </p>
+                {messages.map((message, index) => (
+                  <div
+                    key={`${message.from}-${index}`}
+                    className={`max-w-[90%] whitespace-pre-wrap rounded-2xl px-3 py-2.5 text-sm leading-relaxed ${
+                      message.from === 'user'
+                        ? 'ml-auto rounded-br-sm bg-indigo-700 text-white'
+                        : 'mr-auto rounded-bl-sm border border-slate-200 bg-white text-slate-800 shadow-sm'
+                    }`}
+                  >
+                    {message.text}
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+              <form onSubmit={sendMessage} className="flex gap-2 border-t border-slate-100 bg-white p-3">
+                <label className="sr-only" htmlFor="teacher-help-chat-input">Ask a dashboard question</label>
+                <input
+                  id="teacher-help-chat-input"
+                  value={chatInput}
+                  onChange={(event) => setChatInput(event.target.value)}
+                  maxLength={500}
+                  placeholder="Ask about dashboard features..."
+                  className="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                />
+                <button
+                  type="submit"
+                  disabled={!chatInput.trim()}
+                  aria-label="Send question"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-700 text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <FaPaperPlane aria-hidden="true" />
+                </button>
+              </form>
+            </div>
+          ) : (
+            <div
+              id="teacher-help-panel-helpdesk"
+              role="tabpanel"
+              aria-labelledby="teacher-help-tab-helpdesk"
+              className="flex min-h-0 flex-1 flex-col overflow-y-auto p-4"
+            >
+              <p className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
+                No support inbox is connected. Prepare and copy your query here, then share it with your school administrator. Avoid including sensitive student information.
+              </p>
+              <form onSubmit={prepareQuery} className="space-y-3">
+                <div>
+                  <label htmlFor="teacher-help-subject" className="mb-1 block text-xs font-bold text-slate-700">Subject</label>
+                  <input
+                    id="teacher-help-subject"
+                    required
+                    maxLength={120}
+                    value={subject}
+                    onChange={(event) => setSubject(event.target.value)}
+                    placeholder="What do you need help with?"
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="teacher-help-details" className="mb-1 block text-xs font-bold text-slate-700">Query details</label>
+                  <textarea
+                    id="teacher-help-details"
+                    required
+                    maxLength={2000}
+                    rows={4}
+                    value={details}
+                    onChange={(event) => setDetails(event.target.value)}
+                    placeholder="Describe the issue or question..."
+                    className="w-full resize-y rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full rounded-xl bg-indigo-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-800"
+                >
+                  Prepare query
+                </button>
+              </form>
+              {preparedQuery && (
+                <div className="mt-4">
+                  <label htmlFor="teacher-help-prepared-query" className="mb-1 block text-xs font-bold text-slate-700">Your query (not sent)</label>
+                  <textarea
+                    id="teacher-help-prepared-query"
+                    readOnly
+                    rows={5}
+                    value={preparedQuery}
+                    className="w-full resize-y rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700"
+                  />
+                  <button
+                    type="button"
+                    onClick={copyQuery}
+                    className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-indigo-200 px-4 py-2.5 text-sm font-bold text-indigo-800 transition hover:bg-indigo-50"
+                  >
+                    <FaCopy aria-hidden="true" />
+                    Copy query
+                  </button>
+                  {copyStatus && <p role="status" className="mt-2 text-xs leading-relaxed text-slate-600">{copyStatus}</p>}
+                </div>
+              )}
+            </div>
+          )}
+        </section>
+      )}
+
+      <button
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        aria-label={open ? 'Close help assistant' : 'Open help assistant'}
+        aria-expanded={open}
+        className="ml-auto flex cursor-pointer h-18 w-18 items-center justify-center rounded-full bg-gradient-to-br from-indigo-700 to-violet-700 text-white shadow-lg shadow-indigo-900/30 transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-indigo-300"
+      >
+        {open ? <FaTimes aria-hidden="true" /> : <FaComments className="text-xl" aria-hidden="true" />}
+      </button>
+    </div>
   );
 };
 
