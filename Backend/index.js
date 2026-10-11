@@ -18,7 +18,13 @@ const app = express();
 const port = process.env.PORT;
 
 app.disable('x-powered-by');
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
+        },
+    },
+}));
 app.use(express.json());
 app.use(cookieParser());
 
