@@ -52,10 +52,14 @@ const TeacherAttendence = () => {
           setAttendance((previous) => ({ ...previous, [user?._id]: "present" }));
           setScanSuccess(data.message || "Attendance marked present.");
           toast.success("Your attendance is marked present");
-          await scanner.stop();
+          try {
+            await scanner.stop();
+          } catch {
+            setScanError("Attendance was marked, but the camera could not be stopped. Close the scanner to continue.");
+          }
         } catch (error) {
           scanLockedRef.current = false;
-          setScanError(error.message || error.response?.data?.message || "Unable to mark attendance");
+          setScanError(error.response?.data?.message || error.message || "Unable to mark attendance");
           if (!error.response) toast.error("Unable to mark attendance");
         }
       },
@@ -257,8 +261,8 @@ const TeacherAttendence = () => {
                           </td>
                           <td className="p-4 text-gray-600">{selectedDate}</td>
                           <td className="p-4">
-                            <div className="flex flex-col md:flex-row items-center justify-center gap-3">
-                              <label className="flex items-center gap-2 bg-green-100 px-4 py-2 rounded-xl cursor-pointer hover:bg-green-200">
+                            <div className="flex flex-row flex-nowrap items-center justify-center gap-2">
+                              <label className="flex shrink-0 items-center gap-1 rounded-xl bg-green-100 px-2 py-2 cursor-pointer hover:bg-green-200 sm:gap-2 sm:px-4">
                                 <input
                                   type="radio"
                                   name={`attendance-${teacher._id}`}
@@ -268,7 +272,7 @@ const TeacherAttendence = () => {
                                 <span className="text-green-700 font-medium">Present</span>
                               </label>
 
-                              <label className="flex cursor-pointer items-center gap-2 bg-red-100 px-4 py-2 rounded-xl hover:bg-red-200">
+                              <label className="flex shrink-0 cursor-pointer items-center gap-1 rounded-xl bg-red-100 px-2 py-2 hover:bg-red-200 sm:gap-2 sm:px-4">
                                 <input
                                   type="radio"
                                   name={`attendance-${teacher._id}`}
@@ -278,7 +282,7 @@ const TeacherAttendence = () => {
                                 <span className="text-red-700 font-medium">Absent</span>
                               </label>
 
-                              <label className="flex cursor-pointer items-center gap-2 bg-yellow-100 px-4 py-2 rounded-xl hover:bg-yellow-200">
+                              <label className="flex shrink-0 cursor-pointer items-center gap-1 rounded-xl bg-yellow-100 px-2 py-2 hover:bg-yellow-200 sm:gap-2 sm:px-4">
                                 <input
                                   type="radio"
                                   name={`attendance-${teacher._id}`}
