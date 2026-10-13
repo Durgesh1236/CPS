@@ -9,23 +9,39 @@ import { StudentAttendance } from "../models/StudentAttendanceModel.js";
 import { StudentTestSubmission } from "../models/StudentTestSubmissionModel.js";
 
 export const addStudent = TryCatch(async (req, res) => {
-    const { ledgerId, password, studentName, studentClass, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails } = req.body;
-    if (!ledgerId || !password || !studentName || !mobileNo || !fatherName || !motherName || !address) {
+    const { ledgerId, admissionNumber, password, studentName, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails } = req.body;
+    if (!ledgerId || !password || !studentName || !studentClass || !dateofBirth || !mobileNo || !fatherName || !motherName || !address) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
-    } 
+    }
+    if (Number.isNaN(new Date(dateofBirth).getTime())) {
+        return res.status(400).json({ success: false, message: 'Enter a valid date of birth' });
+    }
     if (password.length < 6) {
         return res.json({
             success: false,
             message: "Password must be at least 6 characters"
         })
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
     let student = await Student.findOne({ ledgerId });
+    const normalizedAdmissionNumber = typeof admissionNumber === 'string' ? admissionNumber.trim() : '';
+    if (!student && !normalizedAdmissionNumber) {
+        return res.status(400).json({ success: false, message: 'Admission number is required' });
+    }
+    if (normalizedAdmissionNumber) {
+        const existingAdmission = await Student.findOne({ admissionNumber: normalizedAdmissionNumber });
+        if (existingAdmission && String(existingAdmission._id) !== String(student?._id)) {
+            return res.status(409).json({ success: false, message: 'Admission number is already in use' });
+        }
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
     if (!student) {
-        student = await Student.create({ ledgerId, studentName, password: hashedPassword, studentClass, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport });
+        student = new Student({ ledgerId, admissionNumber: normalizedAdmissionNumber, studentName, password: hashedPassword, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport });
     } else {
+        student.admissionNumber = normalizedAdmissionNumber || student.admissionNumber;
         student.studentName = studentName || student.studentName;
         student.studentClass = studentClass || student.studentClass;
+        student.dateofBirth = dateofBirth || student.dateofBirth;
         student.mobileNo = mobileNo || student.mobileNo;
         student.additionalMobileNo = additionalMobileNo || student.additionalMobileNo;
         student.fatherName = fatherName || student.fatherName;
@@ -77,7 +93,14 @@ export const addStudent = TryCatch(async (req, res) => {
         }
     }
 
-    await student.save();
+    try {
+        await student.save();
+    } catch (error) {
+        if (error?.code === 11000 && error?.keyPattern?.admissionNumber) {
+            return res.status(409).json({ success: false, message: 'Admission number is already in use' });
+        }
+        throw error;
+    }
     return res.status(201).json({ student, success: true, message: 'Student saved successfully' });
 })
 

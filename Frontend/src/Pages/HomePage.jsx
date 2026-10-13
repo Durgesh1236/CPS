@@ -6,10 +6,6 @@ import { FcReddit } from "react-icons/fc";
 import { UserData } from '../context/User';
 // ---- Content -----------------------------------------------------------
 
-// const images = [assets.cps1, assets.cps2, assets.cps4, assets.cps3];
-
-const teacherImages = [assets.cps1, assets.cps2, assets.cps3, assets.cps4];
-
 const totalStudents = 600;
 const totalTeachers = 25;
 const foundedYear = 2009;
@@ -297,6 +293,7 @@ const ChatBot = () => {
 const HomePage = () => {
   const [current, setCurrent] = useState(0);
   const [teacherCurrent, setTeacherCurrent] = useState(0);
+  const [unavailableCelebrationImages, setUnavailableCelebrationImages] = useState([]);
   const [studentCount, setStudentCount] = useState(0);
   const [teacherCount, setTeacherCount] = useState(0);
   const [yearsCount, setYearsCount] = useState(0);
@@ -305,7 +302,9 @@ const HomePage = () => {
   const teacherInterval = useRef();
   const yearsInterval = useRef();
   // const images = schoolPhotos || [];
-  const images = schoolPhotos?.map((photo) => photo.photoUrl?.[0]?.url).filter(Boolean) || [];
+  const images = schoolPhotos?.flatMap((photo) => photo.photoUrl?.map(({ url }) => url) || [])
+    .filter((url) => typeof url === 'string' && url.trim()) || [];
+  const celebrationImages = images.filter((url) => !unavailableCelebrationImages.includes(url));
   // console.log(images);
   // console.log(schoolPhotos);
   const yearsOfLegacy = new Date().getFullYear() - foundedYear;
@@ -323,11 +322,19 @@ const HomePage = () => {
 
   // Teacher celebration carousel auto-scroll
   useEffect(() => {
+    if (celebrationImages.length <= 1) return;
+
     const interval = setInterval(() => {
-      setTeacherCurrent((prev) => (prev + 1) % teacherImages.length);
+      setTeacherCurrent((prev) => (prev + 1) % celebrationImages.length);
     }, 3500);
     return () => clearInterval(interval);
-  }, []);
+  }, [celebrationImages.length]);
+
+  useEffect(() => {
+    if (teacherCurrent >= celebrationImages.length) {
+      setTeacherCurrent(0);
+    }
+  }, [celebrationImages.length, teacherCurrent]);
 
   // Animated student count
   useEffect(() => {
@@ -779,13 +786,25 @@ const HomePage = () => {
             </h2>
           </Reveal>
           <Reveal className="relative rounded-2xl overflow-hidden shadow-lg">
-            <img
-              src={teacherImages[teacherCurrent]}
-              alt={`School celebration ${teacherCurrent + 1}`}
-              className="w-full h-[260px] sm:h-[360px] object-cover transition-all duration-700"
-            />
+            {celebrationImages.length > 0 ? (
+              <img
+                src={celebrationImages[teacherCurrent]}
+                alt={`School celebration ${teacherCurrent + 1}`}
+                className="w-full h-[460px] sm:h-[360px] object-cover transition-all duration-700"
+                onError={(event) => {
+                  const failedImage = event.currentTarget.src;
+                  setUnavailableCelebrationImages((failedImages) =>
+                    failedImages.includes(failedImage) ? failedImages : [...failedImages, failedImage]
+                  );
+                }}
+              />
+            ) : (
+              <div className="flex h-[260px] items-center justify-center bg-slate-100 text-slate-500 sm:h-[360px]">
+                No celebration photos available
+              </div>
+            )}
             <div className="flex justify-center gap-2 py-3 bg-white">
-              {teacherImages.map((_, idx) => (
+              {celebrationImages.map((_, idx) => (
                 <span
                   key={idx}
                   className={`h-2 w-2 rounded-full ${teacherCurrent === idx ? 'bg-[var(--cps-leaf)]' : 'bg-slate-200'}`}

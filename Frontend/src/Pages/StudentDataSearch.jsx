@@ -257,6 +257,11 @@ export default function StudentDataSearch() {
                             <div className="truncate text-xs text-slate-500">
                               Ledger: {s.ledgerId}
                             </div>
+                            {s.admissionNumber && (
+                              <div className="truncate text-xs text-slate-500">
+                                Admission: {s.admissionNumber}
+                              </div>
+                            )}
                           </div>
 
                           <div className="text-sm text-gray-500 shrink-0">
@@ -471,6 +476,11 @@ export default function StudentDataSearch() {
                       <div className="text-sm text-gray-700 break-words">
                         <strong>Ledger:</strong> {selected.ledgerId}
                       </div>
+                      {selected.admissionNumber && (
+                        <div className="text-sm text-gray-700 break-words">
+                          <strong>Admission:</strong> {selected.admissionNumber}
+                        </div>
+                      )}
                       <div className="text-sm text-gray-700 break-words">
                         <strong>Class:</strong> {selected.studentClass}
                       </div>

@@ -11,10 +11,12 @@ const FeeRecordSchema = new mongoose.Schema({
 
 const StudentSchema = new mongoose.Schema({
   ledgerId: { type: String, required: true, index: true },
+  admissionNumber: { type: String, trim: true },
   studentName: { type: String, required: true },
   password: { type: String , required: true},
   studentClass: { type: String, required: true },
   mobileNo: { type: String, required: true},
+  dateofBirth: { type: Date, required: true },
   additionalMobileNo: { type: String, default: "No MobileNo" },
   fatherName: { type: String, required: true },
   motherName: { type: String, required: true },
@@ -27,6 +29,8 @@ const StudentSchema = new mongoose.Schema({
 }, {
   timestamps: true,
 });
+
+StudentSchema.index({ admissionNumber: 1 }, { unique: true, sparse: true });
 
 // Optional helper: add a method to add or update a fee record for a given year+month
 StudentSchema.methods.upsertFeeRecord = function (year, month, backdues = 0, paid = 0) {

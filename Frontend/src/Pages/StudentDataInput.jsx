@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import TeacherLayout from '../Components/TeacherLayout';
 import { useNavigate } from 'react-router-dom';
 import { FaSave, FaSyncAlt, FaCalendarAlt } from 'react-icons/fa';
@@ -22,25 +22,31 @@ const classes = [
   "7",
   "8",
 ];
+const initialFormState = {
+  ledgerId: '',
+  admissionNumber: '',
+  year: '',
+  studentName: '',
+  password: '',
+  studentClass: '',
+  dateofBirth: '',
+  mobileNo: '',
+  additionalMobileNo: '',
+  fatherName: '',
+  motherName: '',
+  aadhar: '',
+  aapar: '',
+  address: '',
+  transport: false,
+  months: [],
+  monthDetails: {},
+  hasAadhar: 'No',
+  hasAapar: 'No',
+};
+
 const StudentDataInput = () => {
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    ledgerId: '',
-    year: '',
-    studentName: '',
-    password: '',
-    studentClass: '',
-    mobileNo: '',
-    additionalMobileNo: '',
-    fatherName: '',
-    motherName: '',
-    aadhar: '',
-    aapar: '',
-    address: '',
-    transport: false,
-    months: [],
-    monthDetails: {},
-  });
+  const [form, setForm] = useState(initialFormState);
   const { loading, StudentDataInput } = UserData();
 
   // toggles a monthKey like '2025-April'
@@ -78,36 +84,41 @@ const StudentDataInput = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    StudentDataInput(form.ledgerId, form.studentName, form.password, form.studentClass, form.mobileNo, form.additionalMobileNo, form.fatherName, form.motherName,form.aadhar, form.aapar, form.address, form.transport, form.monthDetails, setForm)
+    const saved = await StudentDataInput(form.ledgerId, form.admissionNumber, form.studentName, form.password, form.studentClass, form.dateofBirth, form.mobileNo, form.additionalMobileNo, form.fatherName, form.motherName, form.aadhar, form.aapar, form.address, form.transport, form.monthDetails);
+    if (saved) setForm({ ...initialFormState });
   }
 
   return (
     <TeacherLayout>
-      <div className="min-h-screen pt-20 p-6 bg-gradient-to-b from-slate-50 to-white">
-        <div className="w-full mx-auto">
-          <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100 sm:p-10 ring-1 ring-gray-50">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl md:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-teal-500">Student Data Input</h1>
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white px-3 pb-6 pt-20 sm:px-5 sm:pb-8 lg:px-6">
+        <div className="mx-auto w-full min-w-0">
+          <div className="min-w-0 rounded-2xl border border-gray-100 bg-white p-4 shadow-lg ring-1 ring-gray-50 sm:rounded-3xl sm:p-6 lg:p-10">
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <h1 className="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-teal-500 sm:text-3xl md:text-4xl">Student Data Input</h1>
                 {/* <p className="text-sm text-gray-500 italic">Add new student profile and select months for fees.</p> */}
               </div>
-              <button onClick={() => navigate('/teacher-home')} className="text-sm px-3 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition">Back</button>
+              <button type="button" onClick={() => navigate('/teacher-home')} className="min-h-11 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm transition hover:bg-gray-50 sm:min-h-0 sm:px-3">Back</button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Ledger ID</label>
-                  <input name="ledgerId" value={form.ledgerId} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="e.g., LDR-001" />
+                  <input name="ledgerId" value={form.ledgerId} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 placeholder-gray-400 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="e.g., LDR-001" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Admission Number</label>
+                  <input name="admissionNumber" value={form.admissionNumber} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 placeholder-gray-400 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Enter admission number" />
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Student Name</label>
-                  <input name="studentName" value={form.studentName} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="Full name" />
+                  <input name="studentName" value={form.studentName} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 placeholder-gray-400 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Full name" />
                 </div>
 
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Password</label>
-                  <input name="password" value={form.password} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="Student Password" />
+                  <input name="password" type="password" value={form.password} onChange={handleChange} required minLength={6} className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 placeholder-gray-400 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="At least 6 characters" />
                 </div>
 
                 {/* <div>
@@ -117,29 +128,40 @@ const StudentDataInput = () => {
 
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Class</label>
-                  <select name="studentClass" value={form.studentClass} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition">
+                  <select name="studentClass" value={form.studentClass} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 transition focus:outline-none focus:ring-2 focus:ring-indigo-200">
                     <option value="">-- Select class --</option>
                     {classes.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Date of Birth</label>
+                  <input
+                    type="date"
+                    name="dateofBirth"
+                    value={form.dateofBirth}
+                    onChange={handleChange}
+                    required
+                    className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 transition focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                  />
+                </div>
+                <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Mobile Number</label>
-                  <input name="mobileNo" value={form.mobileNo} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="10-digit mobile" />
+                  <input name="mobileNo" value={form.mobileNo} onChange={handleChange} required inputMode="tel" className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 placeholder-gray-400 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="10-digit mobile" />
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Additional Mobile Number</label>
-                  <input name="additionalMobileNo" value={form.additionalMobileNo} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="10-digit mobile" />
+                  <input name="additionalMobileNo" value={form.additionalMobileNo} onChange={handleChange} inputMode="tel" className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 placeholder-gray-400 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="10-digit mobile" />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Father's Name</label>
-                  <input name="fatherName" value={form.fatherName} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" />
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Father&apos;s Name</label>
+                  <input name="fatherName" value={form.fatherName} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Mother's Name</label>
-                  <input name="motherName" value={form.motherName} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" />
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Mother&apos;s Name</label>
+                  <input name="motherName" value={form.motherName} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" />
                 </div>
               </div>
 
@@ -148,7 +170,7 @@ const StudentDataInput = () => {
                 <input name="aadhar" value={form.aadhar} onChange={handleChange} className="mt-1 p-3 w-full border rounded-lg" placeholder="12-digit Aadhar" />
               </div> */}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid min-w-0 grid-cols-1 gap-6 md:grid-cols-2">
 
                 {/* Aadhar */}
                 <div>
@@ -244,18 +266,18 @@ const StudentDataInput = () => {
 
               <div>
                 <label className="text-sm font-medium text-gray-700">Address</label>
-                <textarea name="address" value={form.address} onChange={handleChange} rows={3} className="mt-1 p-3 w-full border rounded-lg" />
+                <textarea name="address" value={form.address} onChange={handleChange} rows={3} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 p-3" />
               </div>
 
-              <div className="flex items-center gap-6">
-                <label className="flex items-center gap-2">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+                <label className="flex min-h-11 items-center gap-2">
                   <input type="checkbox" name="transport" checked={form.transport} onChange={handleChange} className="w-4 h-4" />
                   <span className="text-sm">Transport required</span>
                 </label>
-                <div className="ml-auto text-sm text-gray-500">Select months for fee</div>
+                <div className="text-sm text-gray-500 sm:ml-auto">Select months for fee</div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-center">
+              <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-2">
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Year</label>
                   <select name="year" value={form.year} onChange={(e) => setForm(prev => ({ ...prev, year: e.target.value, months: [], monthDetails: {} }))} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition">
@@ -286,7 +308,7 @@ const StudentDataInput = () => {
               {form.months.length > 0 && (
                 <div className="mt-4">
                   <h3 className="text-lg font-semibold text-gray-700 mb-2">Month fee details</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     {form.months.map(m => (
                       <div key={m} className="bg-gradient-to-br from-white to-indigo-50 border border-indigo-100 rounded-xl p-4 shadow-md hover:shadow-lg transition">
                         <div className="flex items-center justify-between mb-3">
@@ -296,19 +318,19 @@ const StudentDataInput = () => {
                           </div>
                           <div className="text-sm text-gray-500">Fill amounts (INR)</div>
                         </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-center">
+                        <div className="grid grid-cols-1 gap-3 text-center sm:grid-cols-3">
                           <div>
                             <label className="text-xs text-gray-600 block">Backdues</label>
-                            <input type="number" min="0" value={form.monthDetails?.[m]?.backdues ?? ''} onChange={(e) => handleMonthDetailChange(m, 'backdues', e.target.value)} className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-white focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="0" />
+                            <input type="number" min="0" value={form.monthDetails?.[m]?.backdues ?? ''} onChange={(e) => handleMonthDetailChange(m, 'backdues', e.target.value)} className="mt-1 w-full rounded-md border border-gray-200 bg-white p-2 text-center transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="0" />
                           </div>
                           <div>
                             <label className="text-xs text-gray-600 block">Paid</label>
-                            <input type="number" min="0" value={form.monthDetails?.[m]?.paid ?? ''} onChange={(e) => handleMonthDetailChange(m, 'paid', e.target.value)} className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-white focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="0" />
+                            <input type="number" min="0" value={form.monthDetails?.[m]?.paid ?? ''} onChange={(e) => handleMonthDetailChange(m, 'paid', e.target.value)} className="mt-1 w-full rounded-md border border-gray-200 bg-white p-2 text-center transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="0" />
                           </div>
                           <div>
                             <label className="text-xs text-gray-600 block">Dues</label>
                             {/* compute dues from current inputs so empty inputs can be cleared */}
-                            <input type="number" min="0" value={Math.max(0, Number(form.monthDetails?.[m]?.backdues || 0) - Number(form.monthDetails?.[m]?.paid || 0))} readOnly className="mt-1 p-2 w-24 border border-gray-200 rounded-md mx-auto text-center bg-indigo-50 text-indigo-700 font-semibold" placeholder="0" />
+                            <input type="number" min="0" value={Math.max(0, Number(form.monthDetails?.[m]?.backdues || 0) - Number(form.monthDetails?.[m]?.paid || 0))} readOnly className="mt-1 w-full rounded-md border border-gray-200 bg-indigo-50 p-2 text-center font-semibold text-indigo-700" placeholder="0" />
                           </div>
                         </div>
                       </div>
@@ -319,12 +341,12 @@ const StudentDataInput = () => {
 
               {/* status messages removed as requested; check console for errors */}
 
-              <div className="flex items-center justify-between">
-                <button type="button" onClick={() => setForm({ ledgerId: '', studentName: '', studentClass: '', mobileNo: '', fatherName: '', motherName: '', aadhar: '', address: '', transport: false, months: [], monthDetails: {}, aapar: '', additionalMobileNo: '' })} className="px-4 py-2 bg-white border border-indigo-200 text-indigo-600 rounded-lg hover:bg-indigo-50 transition flex items-center gap-2">
+              <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <button type="button" onClick={() => setForm({ ...initialFormState })} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-indigo-200 bg-white px-4 py-2 text-indigo-600 transition hover:bg-indigo-50 sm:w-auto">
                   <FaSyncAlt />
                   Reset
                 </button>
-                <button type="submit" disabled={loading} className="px-6 cursor-pointer py-3 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-lg shadow-lg hover:scale-105 transform transition flex items-center gap-2">
+                <button type="submit" disabled={loading} className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-500 px-6 py-3 text-white shadow-lg transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">
                   <FaSave />
                   {loading ? 'Saving...' : 'Submit'}
                 </button>
