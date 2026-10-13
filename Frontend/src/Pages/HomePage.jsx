@@ -788,9 +788,9 @@ const HomePage = () => {
           <Reveal className="relative rounded-2xl overflow-hidden shadow-lg">
             {celebrationImages.length > 0 ? (
               <img
-                src={celebrationImages[teacherCurrent]}
-                alt={`School celebration ${teacherCurrent + 1}`}
-                className="w-full h-[460px] sm:h-[360px] object-cover transition-all duration-700"
+                src={images[current]}
+                alt={`School celebration ${current + 1}`}
+                className="w-full h-[460px] sm:h-[360px] md:h-[450px] object-cover transition-all duration-700"
                 onError={(event) => {
                   const failedImage = event.currentTarget.src;
                   setUnavailableCelebrationImages((failedImages) =>
@@ -807,7 +807,7 @@ const HomePage = () => {
               {celebrationImages.map((_, idx) => (
                 <span
                   key={idx}
-                  className={`h-2 w-2 rounded-full ${teacherCurrent === idx ? 'bg-[var(--cps-leaf)]' : 'bg-slate-200'}`}
+                  className={`h-2 w-2 rounded-full ${current === idx ? 'bg-[var(--cps-leaf)]' : 'bg-slate-200'}`}
                 />
               ))}
             </div>
