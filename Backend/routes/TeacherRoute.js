@@ -21,11 +21,12 @@ import {
     deleteSpendRecord} from "../controllars/FeesSubmitControllars.js";
 
 import uploadFile from "../middlewares/multer.js";
+import { loginLimiter } from "../middlewares/loginRateLimit.js";
 
 const router = express.Router();
 
 router.post("/register", registerUser);
-router.post("/login", loginUser);
+router.post("/login", loginLimiter, loginUser);
 router.get("/logout", isAuth, logoutUser);
 router.get("/me", isAuth, MyProfile);
 router.get("/all-teachers", isAuth, getAllTeachers);

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   return (
-    <nav className="relative z-40 flex w-full items-center justify-between gap-3 bg-white px-3 py-3 shadow sm:px-5 sm:py-4 lg:px-8">
+    <nav className="fixed inset-x-0 top-0 z-50 flex w-full items-center justify-between gap-3 bg-white px-3 py-3 shadow sm:px-5 sm:py-4 lg:px-8">
       <button
         type="button"
         onClick={() => navigate("/")}
@@ -17,6 +17,9 @@ import { useNavigate } from 'react-router-dom';
         <span>School</span>
       </button>
       <div className="hidden shrink-0 items-center gap-3 md:flex lg:gap-4">
+        <a href="/demo" className="rounded border border-blue-500 px-4 py-2 text-blue-700 transition hover:bg-blue-50">
+          Live demo
+        </a>
         <button onClick={()=> navigate("/login")} className="rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600">
           Login
         </button>
@@ -39,10 +42,11 @@ import { useNavigate } from 'react-router-dom';
       </div>
       {menuOpen && (
         <div className="absolute right-3 top-full z-50 flex min-w-40 flex-col gap-2 rounded-lg bg-white p-3 shadow-lg md:hidden">
-          <button onClick={()=> { setMenuOpen(false); navigate("/login"); }} className="rounded bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600">
+          <a href="/demo" className="rounded px-4 py-2 text-center text-blue-700 bg-blue-500 transition cursor-pointer">Live demo</a>
+          <button onClick={()=> { setMenuOpen(false); navigate("/login"); }} className="rounded bg-blue-500 px-4 py-2 text-white transition cursor-pointer hover:bg-blue-600">
             Login
           </button>
-          <a href='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://warehouse.appilix.com/uploads/app-apk-68c30d6f45ceb-1757613423.apk' className="rounded bg-blue-500 px-4 py-2 text-center text-white transition hover:bg-blue-600">Install app</a>
+          <a href='https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://warehouse.appilix.com/uploads/app-apk-68c30d6f45ceb-1757613423.apk' className="rounded bg-blue-500 px-4 py-2 text-center text-white transition cursor-pointer hover:bg-blue-600">Install app</a>
         </div>
       )}
     </nav>

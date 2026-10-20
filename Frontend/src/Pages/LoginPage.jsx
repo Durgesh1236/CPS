@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../Components/Layout';
 import { StudentData } from '../context/Student';
+import { useMathChallenge } from '../hooks/useMathChallenge';
 
 const LoginPage = () => {
   const [studentId, setStudentId] = useState('');
   const [password, setPassword] = useState('');
   const [agree, setAgree] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const mathChallenge = useMathChallenge();
   const navigate = useNavigate();
   const { StudentLogin } = StudentData();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!mathChallenge.verify()) return;
     StudentLogin(studentId, password, navigate);
     setStudentId('');
     setPassword('');
@@ -38,8 +41,8 @@ const LoginPage = () => {
         }
       `}</style>
 
-      <div className="font-body h-full w-full flex items-center justify-center bg-[#F3F1EC] px-4 overflow-y-auto">
-  <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(30,37,64,0.35)] bg-white my-4">
+      <div className="font-body flex h-full min-h-0 w-full items-center justify-center overflow-hidden bg-[#F3F1EC] px-3 sm:px-4">
+  <div className="my-0 grid max-h-full w-full max-w-4xl grid-cols-1 overflow-y-auto rounded-2xl bg-white shadow-[0_20px_60px_-15px_rgba(30,37,64,0.35)] sm:rounded-3xl lg:grid-cols-[0.85fr_1.15fr]">
           {/* Badge / branding panel */}
           <div className="relative bg-[#1E2540] px-6 py-6 lg:py-10 flex lg:flex-col items-center lg:items-start justify-between lg:justify-start gap-4 lg:gap-8">
             {/* punch hole + clip, desktop only */}
@@ -68,8 +71,8 @@ const LoginPage = () => {
           </div>
 
           {/* Form panel */}
-          <div className="px-6 sm:px-10 py-8 sm:py-10 lg:py-12">
-            <div className="mb-6 sm:mb-8">
+          <div className="px-5 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-7">
+            <div className="mb-4 sm:mb-5">
               <h2 className="font-display font-700 text-2xl sm:text-3xl text-[#1E2540]">
                 Welcome back
               </h2>
@@ -78,7 +81,7 @@ const LoginPage = () => {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
               <div>
                 <label
                   htmlFor="loginId"
@@ -124,6 +127,46 @@ const LoginPage = () => {
                 </div>
               </div>
 
+              <div>
+                <label
+                  htmlFor="studentCaptchaAnswer"
+                  className="block text-[11px] font-display font-600 tracking-wider uppercase text-slate-500 mb-1.5"
+                >
+                  Hexadecimal verification
+                </label>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="rounded-lg border border-[#E8C46A] bg-[#FFF8E7] px-3 py-2 font-semibold text-[#1E2540]" aria-live="polite">
+                    Enter <span className="ml-1 font-mono tracking-widest">{mathChallenge.code}</span>
+                  </span>
+                  <input
+                    id="studentCaptchaAnswer"
+                    type="text"
+                    autoComplete="off"
+                    spellCheck="false"
+                    maxLength={4}
+                    value={mathChallenge.answer}
+                    onChange={(e) => mathChallenge.updateAnswer(e.target.value)}
+                    aria-describedby={mathChallenge.error ? 'studentCaptchaError' : undefined}
+                    aria-invalid={Boolean(mathChallenge.error)}
+                    placeholder="Enter code"
+                    className="w-32 rounded-lg border border-[#E8C46A] bg-white px-3 py-2 font-mono uppercase tracking-widest text-[#1E2540] outline-none transition focus:border-[#D9A441] focus:ring-2 focus:ring-[#D9A441]/20"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={mathChallenge.refresh}
+                    className="text-sm font-semibold text-[#1E2540] underline underline-offset-2 hover:text-[#D9A441]"
+                  >
+                    New code
+                  </button>
+                </div>
+                {mathChallenge.error && (
+                  <p id="studentCaptchaError" role="alert" className="mt-2 text-sm text-red-600">
+                    {mathChallenge.error}
+                  </p>
+                )}
+              </div>
+
               <div className="flex items-start gap-2 pt-1">
                 <input
                   id="terms"
@@ -150,11 +193,11 @@ const LoginPage = () => {
             </form>
 
             {/* barcode divider */}
-            <div className="my-6 sm:my-8 h-6 barcode-strip rounded-sm" />
+            <div className="my-3 h-4 barcode-strip rounded-sm sm:my-4" />
 
             <button
               onClick={() => navigate('/teacher-login')}
-              className="w-full cursor-pointer flex items-center justify-center gap-2 border-2 border-[#D9A441] text-[#1E2540] font-display font-600 text-sm py-2.5 rounded-lg hover:bg-[#D9A441]/10 transition-colors"
+              className="w-full cursor-pointer flex items-center justify-center gap-2 border-2 border-[#D9A441] text-[#1E2540] font-display font-600 text-sm py-2 rounded-lg hover:bg-[#D9A441]/10 transition-colors"
             >
               Continue as Teacher
               <span aria-hidden="true">→</span>

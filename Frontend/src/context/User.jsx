@@ -72,6 +72,12 @@ export const UserProvider = ({ children }) => {
             }
         } catch (error) {
             // console.log(error);
+            //  toast.error(error.response?.data?.message || 'Unable to sign in. Please try again.');
+            const data = error.response?.data;
+           if (data?.retryAfterSeconds) {
+         const minutes = data.retryAfterMinutes;
+          toast.error(`Try again after ${minutes} minutes.`);
+           }
             setisAuth(false);
             setLoading(false);
         }

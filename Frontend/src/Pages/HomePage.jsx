@@ -616,6 +616,12 @@ const HomePage = () => {
             >
               Enquire Now
             </a>
+            {/* <a
+              href="/demo"
+              className="bg-[var(--cps-ink)] text-white font-bold text-sm px-4 py-1.5 rounded-full shadow hover:scale-105 transition-transform"
+            >
+              Explore live demo
+            </a> */}
             <a
               href={whatsappLink}
               target="_blank"

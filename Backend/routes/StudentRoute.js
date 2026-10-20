@@ -4,12 +4,13 @@ import { StudentisAuth } from "../middlewares/StudentisAuth.js";
 import { isAuth } from "../middlewares/isAuth.js";
 import { bookPriceDelete, bookPriceEdit, bookPriceForm, getBookPrice } from "../controllars/FeesSubmitControllars.js";
 import { StudentTestQuestion } from "../controllars/TeacherControllar.js";
+import { loginLimiter } from "../middlewares/loginRateLimit.js";
 
 const studentRouter = express.Router();
 
 // studentRouter.post("/student/register", StudentAccount);
 studentRouter.post("/create-student-account", isAuth, addStudent);
-studentRouter.post("/student/login", StudentLogin);
+studentRouter.post("/student/login", loginLimiter, StudentLogin);
 studentRouter.post("/student/profile", StudentisAuth, studentProfile);
 // studentRouter.delete("/student/delete/:id", StudentisAuth, StudentProfileDelete);
 studentRouter.post("/student/logout", StudentisAuth, studentLogout);

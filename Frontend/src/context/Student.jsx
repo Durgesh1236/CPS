@@ -30,6 +30,7 @@ export const StudentProvider  = ({ children }) => {
             }
         } catch (error) {
             // console.log(error);
+            toast.error(error.response?.data?.message || 'Unable to sign in. Please try again.');
             setStudentAuth(false);
             setLoading(false);
         }

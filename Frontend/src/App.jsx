@@ -40,7 +40,7 @@ import StudentQuesHistory from './TeacherPages/StuQuesHistory'
 import StudentTestResults from './TeacherPages/StudentTestResults'
 import StudentTest from './StudentPage/StudentTest'
 import SchoolPhotoUpload from './Pages/SchoolPhotoUpload'
-
+import DemoPage from './Pages/DemoPage'
 const App = () => {
   const { isAuth, loading } = UserData();
   const { StudentAuth, studentLoading } = StudentData();
@@ -58,6 +58,7 @@ const App = () => {
       ) :
         <BrowserRouter>
           <Routes>
+            <Route path= "/demo" element={<DemoPage />} />
             <Route path="/" element={<HomePage />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/teacher-login' element={<TeacherLoginPage />} />

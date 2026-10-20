@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { UserData } from '../context/User';
 import Layout from '../Components/Layout';
 import { useNavigate } from 'react-router-dom';
+import { useMathChallenge } from '../hooks/useMathChallenge';
+import { toast } from 'react-toastify';
 
 const TeacherLoginPage = () => {
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const [agree, setAgree] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const mathChallenge = useMathChallenge();
   const { loginTeacher } = UserData();
   const navigate = useNavigate();
 
@@ -15,6 +18,10 @@ const TeacherLoginPage = () => {
     e.preventDefault();
     if (!agree) {
       alert('You must agree to the terms and conditions.');
+      return;
+    }
+    if (!mathChallenge.verify()) {
+      toast.error('Incorrect verification code. Please try again.');
       return;
     }
     loginTeacher(email, password, navigate);
@@ -40,8 +47,8 @@ const TeacherLoginPage = () => {
         }
       `}</style>
 
-      <div className="font-body h-full w-full flex items-center justify-center bg-[#F3F1EC] px-4 overflow-y-auto">
-        <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(30,37,64,0.35)] bg-white my-4">
+      <div className="font-body flex h-full min-h-0 w-full items-center justify-center overflow-hidden bg-[#F3F1EC] px-3 sm:px-4">
+        <div className="my-0 grid max-h-full w-full max-w-4xl grid-cols-1 overflow-y-auto rounded-2xl bg-white shadow-[0_20px_60px_-15px_rgba(30,37,64,0.35)] sm:rounded-3xl lg:grid-cols-[0.85fr_1.15fr]">
 
           {/* Badge / branding panel */}
           <div className="relative bg-[#1E2540] px-6 py-6 lg:py-10 flex lg:flex-col items-center lg:items-start justify-between lg:justify-start gap-4 lg:gap-8">
@@ -75,8 +82,8 @@ const TeacherLoginPage = () => {
           </div>
 
           {/* Form panel */}
-          <div className="px-6 sm:px-10 py-8 sm:py-10 lg:py-12">
-            <div className="mb-6 sm:mb-8">
+          <div className="px-5 py-5 sm:px-8 sm:py-6 lg:px-10 lg:py-7">
+            <div className="mb-4 sm:mb-5">
               <h2 className="font-display font-700 text-2xl sm:text-3xl text-[#1E2540]">
                 Welcome, Faculty
               </h2>
@@ -85,7 +92,7 @@ const TeacherLoginPage = () => {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
               <div>
                 <label
                   htmlFor="email"
@@ -131,6 +138,46 @@ const TeacherLoginPage = () => {
                 </div>
               </div>
 
+              <div>
+                <label
+                  htmlFor="teacherCaptchaAnswer"
+                  className="block text-[11px] font-display font-600 tracking-wider uppercase text-slate-500 mb-1.5"
+                >
+                  Enter verification code
+                </label>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="rounded-lg border border-[#9BC9B5] bg-[#EAF5F0] px-3 py-2 font-semibold text-[#1E2540]" aria-live="polite">
+                    <span className="ml-1 font-mono tracking-widest">{mathChallenge.code}</span>
+                  </span>
+                  <input
+                    id="teacherCaptchaAnswer"
+                    type="text"
+                    autoComplete="off"
+                    spellCheck="false"
+                    maxLength={4}
+                    value={mathChallenge.answer}
+                    onChange={(e) => mathChallenge.updateAnswer(e.target.value)}
+                    aria-describedby={mathChallenge.error ? 'teacherCaptchaError' : undefined}
+                    aria-invalid={Boolean(mathChallenge.error)}
+                    placeholder="Enter code"
+                    className="w-32 rounded-lg border border-[#9BC9B5] bg-white px-3 py-2 font-mono uppercase tracking-widest text-[#1E2540] outline-none transition focus:border-[#2F6F5E] focus:ring-2 focus:ring-[#2F6F5E]/20"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={mathChallenge.refresh}
+                    className="text-sm font-semibold text-[#1E2540] underline underline-offset-2 hover:text-[#2F6F5E]"
+                  >
+                    New code
+                  </button>
+                </div>
+                {mathChallenge.error && (
+                  <p id="teacherCaptchaError" role="alert" className="mt-2 text-sm text-red-600">
+                    {mathChallenge.error}
+                  </p>
+                )}
+              </div>
+
               <div className="flex items-start gap-2 pt-1">
                 <input
                   id="terms"
@@ -157,11 +204,11 @@ const TeacherLoginPage = () => {
             </form>
 
             {/* barcode divider */}
-            <div className="my-6 sm:my-8 h-6 barcode-strip-teal rounded-sm" />
+            <div className="my-3 h-4 barcode-strip-teal rounded-sm sm:my-4" />
 
             <button
               onClick={() => navigate('/login')}
-              className="w-full cursor-pointer flex items-center justify-center gap-2 border-2 border-[#2F6F5E] text-[#1E2540] font-display font-600 text-sm py-2.5 rounded-lg hover:bg-[#2F6F5E]/10 transition-colors"
+              className="w-full cursor-pointer flex items-center justify-center gap-2 border-2 border-[#2F6F5E] text-[#1E2540] font-display font-600 text-sm py-2 rounded-lg hover:bg-[#2F6F5E]/10 transition-colors"
             >
               Continue as Student
               <span aria-hidden="true">→</span>
