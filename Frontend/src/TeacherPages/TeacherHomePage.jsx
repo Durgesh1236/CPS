@@ -17,6 +17,7 @@ import { FaBookReader } from "react-icons/fa";
 import { IoMdTime } from "react-icons/io";
 import { LuBookOpenCheck } from "react-icons/lu";
 import { FaPersonCircleQuestion } from "react-icons/fa6";
+import FestivalWish from '../Components/FestivalWish';
 
 const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in the conference hall.";
 
@@ -113,6 +114,8 @@ const TeacherHomePage = () => {
             />
           </div>
         </div>
+
+        <FestivalWish className="mx-4 mt-4" />
 
         {/* ── STATS ROW (admin only) ── */}
         {isAdmin && (
@@ -282,6 +285,8 @@ const TeacherHomePage = () => {
               </button>
             </div>
           </div>
+
+          <FestivalWish className="mb-6" />
 
           {/* Stats (admin only) */}
           {isAdmin && (

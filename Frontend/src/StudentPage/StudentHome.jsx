@@ -16,6 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import LayoutStu from '../Components/LayoutStu';
 import { StudentData } from '../context/Student';
+import FestivalWish from '../Components/FestivalWish';
 
 /* ---------- data ---------- */
 
@@ -89,16 +90,19 @@ const StudentHomePage = () => {
 
   return (
     <LayoutStu>
-      <main className="mt-15 bg-[#F1F4FA] pb-14 text-slate-900 antialiased">
+      <main className="mt-15 bg-[#F1F4FA] pb-14 text-slate-900 antialiased md:mt-[72px] md:h-[calc(100dvh-72px)] md:overflow-hidden md:pb-0">
         {/* =====================================================
             MOBILE  (below md): app-style, single column
         ===================================================== */}
         <div className="md:hidden">
           {/* profile header */}
-          
+
+          <section className="px-4 pt-4">
+            <FestivalWish />
+          </section>
 
           {/* floating ID card */}
-          <section className="mt-20 px-4">
+          <section className="mt-4 px-4">
             <div className="rounded-2xl bg-white p-4 shadow-[0_10px_30px_rgba(27,37,89,0.12)]">
               <div className="mb-3 rounded-xl bg-[#F5F7FF] p-3">
                 <p className="text-[10px] uppercase tracking-[0.14em] text-slate-500">Student name</p>
@@ -200,9 +204,9 @@ const StudentHomePage = () => {
         {/* =====================================================
             TABLET + LAPTOP (md and up): profile rail + service grid
         ===================================================== */}
-        <div className="mx-auto hidden w-full gap-6 px-6 pt-8 md:grid md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] lg:gap-8 lg:px-10">
+        <div className="mx-auto hidden h-full w-full gap-6 overflow-hidden px-6 pt-8 md:grid md:grid-cols-[250px_1fr] lg:grid-cols-[300px_1fr] lg:gap-8 lg:px-10">
           {/* left rail */}
-          <aside className="space-y-5 md:sticky md:top-24 md:self-start">
+          <aside className="space-y-5">
             <div className="overflow-hidden rounded-3xl bg-gradient-to-b from-[#1B2559] to-[#2B3490] text-white shadow-[0_20px_50px_rgba(27,37,89,0.25)]">
               <div className="relative p-6 text-center">
                 <div className="absolute inset-x-0 top-0 h-1.5 bg-[#FFC93C]" />
@@ -250,7 +254,9 @@ const StudentHomePage = () => {
           </aside>
 
           {/* main column */}
-          <div className="min-w-0 space-y-8">
+          <div className="min-w-0 space-y-8 overflow-y-auto overscroll-contain scroll-smooth pb-8 pr-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <FestivalWish />
+
             <header className="flex flex-col gap-1">
               <h1 className="text-3xl font-black tracking-tight lg:text-4xl">Welcome back, {firstName}</h1>
               <p className="text-slate-500">Everything for your school day, in one place.</p>

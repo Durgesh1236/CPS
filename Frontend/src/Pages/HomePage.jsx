@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../Components/Layout';
+import FestivalWish from '../Components/FestivalWish';
 import { assets } from '../assets/assets';
 import ContactUs from './ContactUs';
 import { FcReddit } from "react-icons/fc";
@@ -634,8 +635,12 @@ const HomePage = () => {
           </div>
         </div>
 
+        <div className="w-full mx-auto mt-4 px-4 sm:mt-6">
+          <FestivalWish />
+        </div>
+
         {/* ===================== Hero ===================== */}
-        <div className="relative w-full max-w-6xl mx-auto mt-6 px-4">
+        <div className="relative w-full mx-auto mt-6 px-4">
           <div className="relative rounded-2xl overflow-hidden shadow-xl">
             <img
               src={images[current]}
@@ -680,7 +685,7 @@ const HomePage = () => {
         </div>
 
         {/* ===================== Stats ===================== */}
-        <Reveal className="w-full max-w-6xl mx-auto px-4 my-6">
+        <Reveal className="w-full mx-auto px-4 my-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-white rounded-xl shadow p-5 flex flex-col items-center text-center border-t-4 border-[var(--cps-ink)]">
               <span className="cps-display text-3xl sm:text-4xl font-bold text-[var(--cps-ink)]">{studentCount}+</span>
@@ -702,7 +707,7 @@ const HomePage = () => {
         </Reveal>
 
         {/* ===================== About ===================== */}
-        <Reveal className="w-full max-w-6xl mx-auto my-8 px-4">
+        <Reveal className="w-full mx-auto my-8 px-4">
           <div className="flex flex-col md:flex-row items-stretch bg-white rounded-2xl shadow-lg overflow-hidden">
             <img src={assets.cps3} alt="Central Public School" className="w-full md:w-2/5 h-56 md:h-auto object-cover" />
             <div className="p-6 md:p-8">
@@ -720,7 +725,7 @@ const HomePage = () => {
         </Reveal>
 
         {/* ===================== Why Choose Us ===================== */}
-        <div className="w-full max-w-6xl mx-auto px-4 my-10">
+        <div className="w-full mx-auto px-4 my-10">
           <Reveal className="text-center mb-8">
             <span className="text-xs font-bold tracking-widest uppercase text-[var(--cps-coral)]">Why Families Choose Us</span>
             <h2 className="cps-display text-2xl sm:text-3xl font-bold text-[var(--cps-ink)] mt-1">
@@ -741,7 +746,7 @@ const HomePage = () => {
         </div>
 
         {/* ===================== Academic Journey ===================== */}
-        <div className="w-full max-w-6xl mx-auto px-4 my-10">
+        <div className="w-full mx-auto px-4 my-10">
           <Reveal className="text-center mb-10">
             <span className="text-xs font-bold tracking-widest uppercase text-[var(--cps-coral)]">Academic Journey</span>
             <h2 className="cps-display text-2xl sm:text-3xl font-bold text-[var(--cps-ink)] mt-1">
@@ -763,7 +768,7 @@ const HomePage = () => {
         </div>
 
         {/* ===================== Leadership ===================== */}
-        <div className="w-full max-w-6xl mx-auto px-4 my-10">
+        <div className="w-full mx-auto px-4 my-10">
           <Reveal className="text-center mb-8">
             <span className="text-xs font-bold tracking-widest uppercase text-[var(--cps-coral)]">Leadership</span>
             <h2 className="cps-display text-2xl sm:text-3xl font-bold text-[var(--cps-ink)] mt-1">
@@ -784,7 +789,7 @@ const HomePage = () => {
         </div>
 
         {/* ===================== Celebrations Carousel ===================== */}
-        <div className="w-full max-w-6xl mx-auto px-4 my-10">
+        <div className="w-full mx-auto px-4 my-10">
           <Reveal className="text-center mb-6">
             <span className="text-xs font-bold tracking-widest uppercase text-[var(--cps-coral)]">Life at CPS</span>
             <h2 className="cps-display text-2xl sm:text-3xl font-bold text-[var(--cps-ink)] mt-1">
@@ -796,7 +801,7 @@ const HomePage = () => {
               <img
                 src={images[current]}
                 alt={`School celebration ${current + 1}`}
-                className="w-full h-[460px] sm:h-[360px] md:h-[450px] object-cover transition-all duration-700"
+                className="w-full h-[460px] sm:h-[360px] md:h-[600px] object-cover transition-all duration-700"
                 onError={(event) => {
                   const failedImage = event.currentTarget.src;
                   setUnavailableCelebrationImages((failedImages) =>
