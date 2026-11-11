@@ -30,7 +30,7 @@ const generateAdmissionNumber = async () => {
             if (!counter) throw error;
         }
 
-        const admissionNumber = `CPS-${year}-${String(counter.sequence).padStart(4, '0')}`;
+        const admissionNumber = `${String(year).slice(-2)}CPS${String(counter.sequence).padStart(4, '0')}`;
         const alreadyExists = await Student.exists({ admissionNumber });
         if (!alreadyExists) return admissionNumber;
     }

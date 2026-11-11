@@ -52,7 +52,7 @@ const NavbarTeacher = ({ sidebarOpen = false, onToggleSidebar }) => {
           onClick={onToggleSidebar}
           aria-label={sidebarOpen ? 'Close dashboard sidebar' : 'Open dashboard sidebar'}
           aria-expanded={sidebarOpen}
-          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-2xl border border-indigo-100 bg-indigo-50 text-indigo-700 shadow-sm transition hover:border-indigo-200 hover:bg-indigo-100 focus:outline-none focus:ring-4 focus:ring-indigo-200 sm:h-11 sm:w-11"
+          className="hidden h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-2xl border border-indigo-100 bg-indigo-50 text-indigo-700 shadow-sm transition hover:border-indigo-200 hover:bg-indigo-100 focus:outline-none focus:ring-4 focus:ring-indigo-200 sm:h-11 sm:w-11 lg:flex"
         >
           {sidebarOpen ? <FaTimes aria-hidden="true" /> : <FaBars aria-hidden="true" />}
         </button>
@@ -67,8 +67,8 @@ const NavbarTeacher = ({ sidebarOpen = false, onToggleSidebar }) => {
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 via-indigo-600 to-violet-500 text-xs font-black tracking-wide text-white shadow-md shadow-indigo-600/25 transition group-hover:-rotate-3 group-hover:scale-105 sm:h-11 sm:w-11 sm:text-sm">
             CPS
           </span>
-          <span className="min-w-0 max-[360px]:hidden">
-            <span className="block whitespace-nowrap text-[clamp(0.78rem,3.8vw,1.35rem)] font-extrabold leading-tight tracking-tight sm:text-xl md:text-2xl">
+          <span className="min-w-0">
+            <span className="block whitespace-nowrap text-[clamp(0.85rem,4.8vw,1.35rem)] font-extrabold leading-tight tracking-tight sm:text-xl md:text-2xl">
               <span className="text-indigo-700">Central</span>{' '}
               <span className="text-amber-500">Public</span>{' '}
               <span className="text-slate-800">School</span>

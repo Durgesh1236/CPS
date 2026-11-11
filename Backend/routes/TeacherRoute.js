@@ -22,7 +22,7 @@ import {
 
 import uploadFile from "../middlewares/multer.js";
 import { loginLimiter } from "../middlewares/loginRateLimit.js";
-import { createQuestionPaper } from "../controllars/QuestionPaperController.js";
+import { createQuestionPaper, getQuestionPapers } from "../controllars/QuestionPaperController.js";
 
 const router = express.Router();
 
@@ -58,5 +58,6 @@ router.post('/student-attendance', isAuth, studentAttendence);
 router.get('/teacher-attendance', isAuth, getTeacherAttendance);
 router.post('/teacher-attendance', isAuth, teacherAttendance);
 router.post('/teacher-attendance/scan', isAuth, scanTeacherAttendance);
+router.get('/get-question-papers', isAuth, getQuestionPapers);
 
 export default router; 
