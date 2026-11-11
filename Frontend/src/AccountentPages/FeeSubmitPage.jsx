@@ -79,7 +79,7 @@ export const FeeSubmitPage = () => {
             </div>
           </header>
 
-          <form onSubmit={handleSubmit} className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5">
+          <form onSubmit={handleSubmit} autoComplete="off" className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5">
             <div className="space-y-8 p-5 sm:space-y-9 sm:p-8 lg:p-10">
               <section aria-labelledby="student-details-heading">
                 <div className="mb-5 flex items-center gap-3">

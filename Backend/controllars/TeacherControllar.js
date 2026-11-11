@@ -672,3 +672,14 @@ export const scanTeacherAttendance = TryCatch(async(req, res) => {
         message: "Attendance marked present successfully"
     });
 });
+
+export const teacherNotification = TryCatch(async(req, res) => {
+    const { teacherId, message } = req.body;
+    if(!teacherId || !message){
+        return res.status(400).json({
+            success: false,
+            message: "teacherId and message are required"
+        })
+    }
+    
+})

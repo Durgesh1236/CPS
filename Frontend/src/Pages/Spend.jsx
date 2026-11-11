@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserData } from '../context/User';
 import TeacherLayout from '../Components/TeacherLayout';
-
+import { FaArrowLeft, FaCalendarAlt, FaCheckCircle, FaCreditCard, FaRupeeSign, FaWallet } from 'react-icons/fa';
 
 const Spend = () => {
   const navigate = useNavigate();
@@ -20,62 +20,149 @@ const Spend = () => {
 
   return (
     <TeacherLayout>
-      <div className="h-full pt-10 px-2 sm:px-6 flex items-center justify-center">
-        <div className="w-full max-w-4xl mx-auto">
-          <div className="bg-white bg-opacity-90 rounded-3xl shadow-2xl p-6 sm:p-10 border border-indigo-100 ring-1 ring-indigo-50">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-500">Submit Total Spend (Daily)</h1>
-                <p className="text-sm text-gray-500">Record the day's total expense for accounting.</p>
-              </div>
-              <button onClick={() => navigate('/teacher-home')} className="text-xs cursor-pointer sm:text-sm px-3 py-2 bg-white border border-gray-200 rounded-lg shadow hover:scale-105 hover:bg-indigo-50 transition flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Back
-              </button>
-            </div>
+      <main className="min-h-[calc(100vh-4rem)] bg-slate-100 px-3 pb-24 pt-20 sm:px-6 sm:pb-24 md:pb-10">
+        <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5">
+          <div className="grid lg:grid-cols-[0.8fr_1.2fr]">
+            <section className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-indigo-900 to-slate-900 px-6 py-8 text-white sm:px-10 sm:py-10 lg:px-11 lg:py-12">
+              <div aria-hidden="true" className="absolute -right-20 -top-20 h-56 w-56 rounded-full border-[32px] border-white/5" />
+              <div aria-hidden="true" className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-indigo-400/10 blur-2xl" />
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-indigo-700 mb-1">Name</label>
-                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Name of person" className="mt-1 block w-full p-3 border-2 border-indigo-100 rounded-xl shadow focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 transition" />
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => navigate('/teacher-home')}
+                  className="mb-8 inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-white/20"
+                >
+                  <FaArrowLeft aria-hidden="true" />
+                  Back to dashboard
+                </button>
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-400/20 text-2xl text-indigo-200 ring-1 ring-inset ring-white/15">
+                  <FaWallet aria-hidden="true" />
+                </div>
+                <p className="mb-2 text-sm font-bold uppercase tracking-[0.18em] text-indigo-200">
+                  Daily accounting
+                </p>
+                <h1 className="max-w-md text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+                  Record your daily spend
+                </h1>
+                <p className="mt-4 max-w-md text-sm leading-6 text-indigo-100/75 sm:text-base">
+                  Log the day's expenses to keep school accounting clear and up to date.
+                </p>
+                <div className="mt-8 inline-flex items-center gap-3 rounded-xl border border-white/10 bg-white/10 px-4 py-3">
+                  <FaCheckCircle className="shrink-0 text-emerald-300" aria-hidden="true" />
+                  <span className="text-sm font-medium text-indigo-50/90">
+                    Add the total amount and payment details
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <section className="px-5 py-7 sm:px-9 sm:py-10 lg:px-11 lg:py-12">
+              <div className="mb-7">
+                <p className="text-sm font-bold text-indigo-600">EXPENSE ENTRY</p>
+                <h2 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+                  Submit total spend
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  Enter the daily total and choose how it was paid.
+                </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-semibold text-indigo-700 mb-1">Date</label>
-                  <input type="date" value={date} onChange={e => setDate(e.target.value)} className="mt-1 block w-full p-3 border-2 border-indigo-100 rounded-xl shadow focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 transition" required />
+                  <label htmlFor="spend-name" className="mb-2 block text-sm font-semibold text-slate-700">
+                    Name <span className="font-normal text-slate-400">(optional)</span>
+                  </label>
+                  <input
+                    id="spend-name"
+                    type="text"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Name of person"
+                    autoComplete="name"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100"
+                  />
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-indigo-700 mb-1">Total Spend (INR)</label>
-                  <input type="number" step="0.01" value={total} onChange={e => setTotal(e.target.value)} className="mt-1 block w-full p-3 border-2 border-indigo-100 rounded-xl shadow focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 transition" required />
+
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div className="min-w-0">
+                    <label htmlFor="spend-date" className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <FaCalendarAlt className="text-indigo-500" aria-hidden="true" />
+                      Date
+                    </label>
+                    <input
+                      id="spend-date"
+                      type="date"
+                      value={date}
+                      onChange={(event) => setDate(event.target.value)}
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-800 outline-none transition hover:border-slate-300 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100"
+                      required
+                    />
+                  </div>
+
+                  <div className="min-w-0">
+                    <label htmlFor="spend-total" className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <FaRupeeSign className="text-indigo-500" aria-hidden="true" />
+                      Total spend (INR)
+                    </label>
+                    <input
+                      id="spend-total"
+                      type="number"
+                      step="0.01"
+                      inputMode="decimal"
+                      value={total}
+                      onChange={(event) => setTotal(event.target.value)}
+                      placeholder="Enter amount"
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100"
+                      required
+                    />
+                  </div>
                 </div>
+
                 <div>
-                  <label className="block text-sm font-semibold text-indigo-700 mb-1">Payment Method</label>
-                  <select value={paymentMethod}
-                   onChange={e => setPaymentMethod(e.target.value)} 
-                   className="mt-1 block w-full p-3 border-2 border-indigo-100 rounded-xl shadow focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 transition"
-                   required >
+                  <label htmlFor="spend-method" className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <FaCreditCard className="text-indigo-500" aria-hidden="true" />
+                    Payment method
+                  </label>
+                  <select
+                    id="spend-method"
+                    value={paymentMethod}
+                    onChange={(event) => setPaymentMethod(event.target.value)}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-800 outline-none transition hover:border-slate-300 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100"
+                    required
+                  >
                     <option value="">Select payment method</option>
                     <option value="Cash">Cash</option>
                     <option value="Account">Account</option>
                   </select>
                 </div>
-              </div>
 
-              <div className="flex items-center justify-between mt-6">
-                <div className="flex gap-3">
-                  <button type="button" onClick={() => { setName(''); setTotal(''); setDate(new Date().toISOString().slice(0, 10)); setPaymentMethod('Cash'); }} className="px-4 py-2 cursor-pointer bg-gray-100 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-200 transition">Reset</button>
-                  <button type="submit" className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-pink-500 text-white rounded-xl cursor-pointer font-bold shadow-lg hover:from-indigo-600 hover:to-pink-600 transition">
-                    Submit
+                <div className="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setName('');
+                      setTotal('');
+                      setDate(new Date().toISOString().slice(0, 10));
+                      setPaymentMethod('Cash');
+                    }}
+                    className="min-h-12 cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-bold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-100 sm:min-w-28"
+                  >
+                    Reset
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-base font-bold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 active:translate-y-px sm:min-w-40"
+                  >
+                    <FaCheckCircle aria-hidden="true" />
+                    Submit spend
                   </button>
                 </div>
-              </div>
-            </form>
+              </form>
+            </section>
           </div>
         </div>
-      </div>
+      </main>
     </TeacherLayout>
   );
 };

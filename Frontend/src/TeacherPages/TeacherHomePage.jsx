@@ -3,7 +3,7 @@ import {
   FaMoneyCheckAlt, FaHistory, FaExclamationCircle, FaUserTie,
   FaClipboardList, FaUserGraduate, FaSearch, FaRupeeSign,
   FaBell, FaBook, FaImages, FaComments, FaPaperPlane, FaTimes,
-  FaHeadset, FaCopy, FaRobot
+  FaHeadset, FaCopy, FaRobot, FaCheckCircle
 } from 'react-icons/fa';
 import { FcBarChart } from "react-icons/fc";
 import TeacherLayout from '../Components/TeacherLayout';
@@ -30,9 +30,9 @@ const TeacherHomePage = () => {
 
   const getGreeting = () => {
     const h = new Date().getHours();
-    if (h < 12) return { text: 'Good Morning', emoji: '🌅' };
-    if (h < 17) return { text: 'Good Afternoon', emoji: '☀️' };
-    if (h < 21) return { text: 'Good Evening', emoji: '🌇' };
+    console.log(h);
+    if (h < 12 && h >= 6) return { text: 'Good Morning', emoji: '🌅' };
+    if (h < 18 && h >= 12) return { text: 'Good Afternoon', emoji: '☀️' };
     return { text: 'Good Night', emoji: '🌙' };
   };
 
@@ -54,7 +54,7 @@ const TeacherHomePage = () => {
   const isAccountent = user.role === 'accountent';
   const isAdminOrAcc = isAdmin || isAccountent;
   const greeting = getGreeting();
-
+  console.log(greeting)
   return (
     <TeacherLayout>
       {/* MOBILE  (< md)*/}
@@ -67,7 +67,7 @@ const TeacherHomePage = () => {
 
           <div className="flex items-center justify-between mb-4 relative z-10">
             <div className="flex-1 min-w-0">
-              <div className="text-xs text-white/50 font-bold tracking-wider uppercase mb-1">
+              <div className="text-xs py-2 text-white/50 font-bold tracking-wider uppercase mb-1">
                 {greeting.emoji} {greeting.text}
               </div>
               <div className="text-2xl font-extrabold text-white leading-tight tracking-tight">
@@ -112,7 +112,7 @@ const TeacherHomePage = () => {
               className="w-full py-3 pl-10 pr-3 rounded-xl border border-white/20 bg-white/10 text-white text-sm outline-none placeholder:text-white/40 focus:bg-white/20 transition-colors"
               placeholder="Search modules..."
             />
-          </div>
+              </div>
         </div>
 
         <FestivalWish className="mx-4 mt-4" />
@@ -169,7 +169,7 @@ const TeacherHomePage = () => {
           <div className="grid grid-cols-3 gap-2.5">
             {isAdminOrAcc && <MobileCard icon={FaMoneyCheckAlt} label="Fees Submit" bg="from-emerald-500 to-teal-700" delay={0} onClick={() => navigate('/student-fee-submit')} />}
             {isAdminOrAcc && <MobileCard icon={FaHistory} label="Fees History" bg="from-blue-500 to-indigo-700" delay={40} onClick={() => navigate('/student-fee-history')} />}
-            {isAdminOrAcc && <MobileCard icon={FaClipboardList} label="Attendance" bg="from-fuchsia-500 to-purple-700" delay={80} onClick={() => navigate('/student-attendence')} />}
+            {isAdminOrAcc && <MobileCard icon={FaClipboardList} label="Attendance" bg="from-fuchsia-500 to-purple-700" delay={80} onClick={() => navigate('/take-student-attendence')} />}
             {isAdminOrAcc && <MobileCard icon={FaUserGraduate} label="Student Data" bg="from-amber-500 to-yellow-700" delay={120} onClick={() => navigate('/student-data-input')} />}
             {isAdminOrAcc && <MobileCard icon={FaSearch} label="Search Student" bg="from-cyan-500 to-sky-700" delay={160} onClick={() => navigate('/student-data')} />}
             {isAdmin && <MobileCard icon={FaUserTie} label="Register" bg="from-lime-500 to-green-700" delay={200} onClick={() => navigate('/student-register')} />}
@@ -251,129 +251,81 @@ const TeacherHomePage = () => {
       {/* ════════════════════════════════
               DESKTOP  (>= md)
       ════════════════════════════════ */}
-      <div className="hidden md:block min-h-screen pt-20 bg-gradient-to-br from-slate-50 via-white to-indigo-50">
-        <div className="w-full mx-auto py-7 px-8 pb-16">
+      <div className="hidden md:block min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50">
+        <div className="mx-auto max-w-[1800px] px-4 pb-16 pt-24 sm:px-6 xl:px-8">
+          <div className="min-w-0 py-1">
 
-          {/* Profile bar */}
-          <div className="bg-gradient-to-r from-[#1e1b4b] via-[#3730a3] to-[#5b21b6] rounded-2xl py-5 px-8 flex items-center gap-5 mb-6 shadow-xl shadow-indigo-500/30 relative overflow-hidden">
-            <div className="absolute -right-12 -top-12 w-44 h-44 rounded-full bg-white/10 pointer-events-none" />
-            <div className="absolute right-20 -bottom-16 w-52 h-52 rounded-full bg-white/5 pointer-events-none" />
-            {user.thumbnails ? (
-              <img src={user.thumbnails.url} alt="Profile" className="w-14 h-14 rounded-full object-cover border-2 border-white/40 z-10" />
-            ) : (
-              <div className="w-14 h-14 rounded-full z-10 bg-gradient-to-br from-purple-300 to-purple-700 flex items-center justify-center text-xl font-black text-white border-2 border-white/30 ring-4 ring-purple-400/25">
-                {getInitials(user.name)}
+          <section
+            id="dashboard-overview"
+            className="relative mb-7 overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-900 px-6 py-7 shadow-xl shadow-indigo-950/15 sm:px-8 sm:py-8"
+          >
+            <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full bg-violet-400/15 blur-2xl" />
+            <div aria-hidden="true" className="pointer-events-none absolute -bottom-28 right-1/3 h-64 w-64 rounded-full bg-cyan-400/10 blur-2xl" />
+            <div className="relative z-10 flex flex-wrap items-center gap-5">
+              {user.thumbnails?.url ? (
+                <img
+                  src={user.thumbnails.url}
+                  alt={`${user.name}'s profile`}
+                  className="h-16 w-16 rounded-2xl border-2 border-white/30 object-cover shadow-lg ring-4 ring-white/10 sm:h-20 sm:w-20"
+                />
+              ) : (
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-white/30 bg-gradient-to-br from-violet-400 to-indigo-600 text-xl font-black text-white shadow-lg ring-4 ring-white/10 sm:h-20 sm:w-20 sm:text-2xl">
+                  {getInitials(user.name)}
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <div className="mb-1 text-xs font-bold uppercase tracking-[0.16em] text-indigo-200">
+                  {greeting.emoji} {greeting.text}
+                </div>
+                <h1 className="truncate text-2xl font-black tracking-tight text-white sm:text-3xl">
+                  Welcome, {user.name.split(' ')[0]}!
+                </h1>
+                <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold capitalize text-indigo-100">
+                  <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
+                  {user.role} workspace
+                </div>
               </div>
+              <div className="ml-auto flex items-center gap-3">
+                <button
+                  aria-label="View notifications"
+                  onClick={() => document.getElementById('dashboard-notifications')?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-amber-200 transition hover:scale-105 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60"
+                >
+                  <FaBell className="text-lg" />
+                </button>
+                <button
+                  onClick={() => navigate('/teacher-profile')}
+                  className="rounded-xl border border-white/20 bg-white px-4 py-2.5 text-sm font-bold text-indigo-950 shadow-md transition hover:-translate-y-0.5 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-white/60 sm:px-5"
+                >
+                  View profile
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <div className={`mb-7 grid gap-4 ${isAdmin ? 'lg:grid-cols-[minmax(0,1.7fr)_minmax(280px,0.8fr)]' : ''}`}>
+            <FestivalWish className="h-full" />
+            {isAdmin && (
+              <article className="relative isolate flex min-h-40 items-center gap-5 overflow-hidden rounded-2xl border border-indigo-100 bg-white p-5 shadow-sm sm:p-6">
+                <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-10 h-36 w-36 rounded-full bg-indigo-50" />
+                <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/20">
+                  <FaUserGraduate className="text-2xl" aria-hidden="true" />
+                </div>
+                <div className="relative min-w-0">
+                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-indigo-500">School community</p>
+                  <p className="mt-1 text-sm font-semibold text-slate-600">Total students</p>
+                  <p className="mt-1 text-4xl font-black tracking-tight text-slate-900">
+                    {totalStudents ?? '—'}
+                  </p>
+                  <p className="mt-1 text-xs text-slate-500">Enrolled this session</p>
+                </div>
+              </article>
             )}
-            <div className="z-10">
-              <div className="text-xs text-white/50 font-semibold tracking-wider uppercase mb-1">{greeting.emoji} {greeting.text}</div>
-              <div className="text-2xl font-black text-white tracking-tight leading-tight">{user.name.split(' ')[0]} Jii 👋</div>
-              <div className="text-xs text-white/40 mt-1 capitalize">{user.role} · Active session</div>
-            </div>
-            <div className="ml-auto flex gap-3 items-center z-10">
-              <button
-                onClick={() => alert('Notifications coming soon!')}
-                className="bg-white/15 border border-white/20 rounded-xl w-11 h-11 flex items-center justify-center cursor-pointer text-amber-200 hover:-rotate-12 hover:scale-110 transition-transform duration-200"
-              >
-                <FaBell className="text-lg" />
-              </button>
-              <button
-                onClick={() => navigate('/teacher-profile')}
-                className="text-sm font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full py-2.5 px-6 shadow-md shadow-indigo-500/40 hover:opacity-85 hover:scale-105 transition-all"
-              >
-                View Profile →
-              </button>
-            </div>
           </div>
 
-          <FestivalWish className="mb-6" />
+          <TeacherDashboardUpdates />
 
-          {/* Stats (admin only) */}
-          {isAdmin && (
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <DesktopStatCard icon={FaUserGraduate} gradient="from-cyan-500 to-indigo-600" label="Total students" value={totalStudents ?? '—'} sub="Enrolled this session" delay={0} />
-              <DesktopStatCard icon={FaMoneyCheckAlt} gradient="from-emerald-500 to-teal-600" label="Fees collected" value="₹1.4L" sub="This month" delay={90} />
-              <DesktopStatCard icon={FaClipboardList} gradient="from-amber-500 to-red-500" label="Today's attendance" value="91%" sub="221 of 248 present" delay={180} />
-            </div>
-          )}
-
-          {/* ── STUDENT DATA ── */}
-          <DesktopSection title="Student Data" emoji="🎓">
-            {isAdminOrAcc && <DesktopNavCard icon={FaMoneyCheckAlt} label="Fees Submit" sub="Record payments" gradient="from-emerald-400 to-teal-600" onClick={() => navigate('/student-fee-submit')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FaHistory} label="Fees History" sub="Past transactions" gradient="from-blue-400 to-indigo-600" onClick={() => navigate('/student-fee-history')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FaClipboardList} label="Attendance" sub="Mark & review" gradient="from-fuchsia-400 to-purple-600" onClick={() => navigate('/student-attendance')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FaUserGraduate} label="Student Data Input" sub="Add records" gradient="from-amber-400 to-yellow-600" onClick={() => navigate('/student-data-input')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FaSearch} label="Search Student" sub="Find by name/ID" gradient="from-cyan-400 to-sky-600" onClick={() => navigate('/student-data')} />}
-            {isAdmin && <DesktopNavCard icon={FaUserTie} label="Registration" sub="Enrol new student" gradient="from-lime-400 to-green-600" onClick={() => navigate('/student-register')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FaBookReader} label="Book Sale" sub="Sell & track" gradient="from-pink-400 to-fuchsia-600" onClick={() => navigate('/book-sale-data')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FaHistory} label="Book Sale History" sub="Past sales log" gradient="from-rose-400 to-red-600" onClick={() => navigate('/book-sale-history')} />}
-            {isAdmin && <DesktopNavCard icon={FaBook} label="Book Price Form" sub="Set pricing" gradient="from-violet-400 to-indigo-600" onClick={() => navigate('/book-form')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={GiRupee} label="Book Price" sub="View / update" gradient="from-orange-400 to-red-600" onClick={() => navigate('/book-price')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={IoMdTime} label="Timetable" sub="Schedule classes" gradient="from-teal-400 to-cyan-600" onClick={() => navigate('/set-timetable')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={LuBookOpenCheck} label="Student Test" sub="Coming soon" gradient="from-slate-400 to-gray-600" onClick={() => navigate('/set-student-test')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FcBarChart} label="Student Results" sub="Submit & view" gradient="from-green-400 to-emerald-600" onClick={() => navigate('/student-result-submission')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FcBarChart} label="Test Results" sub="Correct & wrong" gradient="from-cyan-400 to-blue-600" onClick={() => navigate('/student-test-results')} />}
-            { isAdminOrAcc && <DesktopNavCard icon={FaPersonCircleQuestion} label="Question View" sub="View & edit" gradient="from-indigo-400 to-violet-600" onClick={() => navigate('/question-history')} /> }
-            { isAdminOrAcc && <DesktopNavCard icon={FaImages} label="School Photos" sub="Upload gallery" gradient="from-sky-400 to-blue-600" onClick={() => navigate('/school-photo-upload')} /> }
-          </DesktopSection>
-
-          <RainbowDivider />
-
-          {/* ── TEACHER DATA ── */}
-          <DesktopSection title="Teacher Data" emoji="👩‍🏫">
-            {isAdminOrAcc && <DesktopNavCard icon={FaClipboardList} label="Teacher Attendance" sub="Daily roll" gradient="from-purple-400 to-violet-600" onClick={() => navigate('/teacher-attendance')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={MdOutlineManageHistory} label="Attendance History" sub="Date-wise records" gradient="from-cyan-400 to-blue-600" onClick={() => navigate('/teacher-attendance-history')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={GiTeacher} label="Teacher Payment" sub="Process salary" gradient="from-blue-400 to-cyan-600" onClick={() => navigate('/teacher-payment')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={MdOutlineManageHistory} label="Paid History" sub="Salary log" gradient="from-lime-400 to-emerald-600" onClick={() => alert('Paid History clicked')} />}
-            {isAdmin && <DesktopNavCard icon={FaUserTie} label="Teacher Registration" sub="Add new teacher" gradient="from-amber-400 to-orange-600" onClick={() => navigate('/teacher-registration')} />}
-            {isAdmin && <DesktopNavCard icon={FaUserTie} label="Teacher Data" sub="View & edit" gradient="from-cyan-400 to-teal-600" onClick={() => navigate('/teacher-data')} />}
-            {isAdminOrAcc && <DesktopNavCard icon={FaPersonCircleQuestion} label="Question Paper" sub="View & edit" gradient="from-emerald-400 to-green-700" onClick={() => navigate('/set-student-question-paper')} />}
-          </DesktopSection>
-
-          <RainbowDivider />
-
-          {/* ── SPEND DATA ── */}
-          {isAdminOrAcc && (
-            <>
-              <DesktopSection title="Spend Data" emoji="💰">
-                <DesktopNavCard icon={FaRupeeSign} label="Spend" sub="Log an expense" gradient="from-green-400 to-lime-600" onClick={() => navigate('/total-spend')} />
-                <DesktopNavCard icon={MdOutlineManageHistory} label="Spend History" sub="All expenses" gradient="from-teal-400 to-sky-600" onClick={() => navigate('/spend-history')} />
-              </DesktopSection>
-              <RainbowDivider />
-            </>
-          )}
-
-          {/* Bottom row */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_2fr] gap-4">
-            <div className="bg-gradient-to-br from-purple-600 to-fuchsia-700 rounded-xl p-4 flex items-center gap-3 border border-purple-400/20 cursor-pointer hover:shadow-xl hover:shadow-purple-500/30 hover:-translate-y-1 transition-all group">
-              <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <VscFeedback className="text-white text-xl" />
-              </div>
-              <div>
-                <div className="text-sm font-black text-white">Feedback</div>
-                <div className="text-xs text-white/70 mt-0.5">Share your thoughts</div>
-              </div>
-            </div>
-            <div className="bg-gradient-to-br from-blue-500 to-indigo-700 rounded-xl p-4 flex items-center gap-3 border border-blue-400/20 cursor-pointer hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-1 transition-all group">
-              <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <FaUserGraduate className="text-white text-xl" />
-              </div>
-              <div>
-                <div className="text-sm font-black text-white">Request Center</div>
-                <div className="text-xs text-white/70 mt-0.5">Raise or track requests</div>
-              </div>
-            </div>
-            <div className="bg-gradient-to-br from-rose-600 to-red-800 rounded-xl p-4 flex items-start gap-3 border-l-4 border-l-amber-400 border border-rose-400/20 cursor-pointer hover:shadow-xl hover:shadow-rose-500/30 hover:-translate-y-1 transition-all">
-              <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center animate-bounce shrink-0">
-                <FaExclamationCircle className="text-amber-300 text-xl" />
-              </div>
-              <div>
-                <div className="text-sm font-black text-white mb-1.5">📢 Important Message</div>
-                <div className="text-sm text-white/80 leading-relaxed">{importantMessage}</div>
-              </div>
-            </div>
           </div>
-
         </div>
       </div>
       <TeacherHelpAssistant />
@@ -646,10 +598,6 @@ const TeacherHelpAssistant = () => {
    Sub-components
 ───────────────────────────────────────── */
 
-const RainbowDivider = () => (
-  <div className="h-px rounded-full bg-gradient-to-r from-indigo-400 via-pink-400 to-emerald-400 my-6 opacity-30" />
-);
-
 const MobileSectionHeader = ({ emoji, title, accentFrom }) => (
   <div className="flex items-center gap-2 mt-7 mb-3 pl-0.5">
     <span className="text-xl">{emoji}</span>
@@ -658,18 +606,132 @@ const MobileSectionHeader = ({ emoji, title, accentFrom }) => (
   </div>
 );
 
-const DesktopSection = ({ title, emoji, children }) => (
-  <div className="mb-7">
-    <div className="flex items-center gap-2.5 mb-4">
-      <div className="w-8 h-8 rounded-xl bg-indigo-100 flex items-center justify-center text-lg border border-indigo-100">{emoji}</div>
-      <span className="text-base font-black text-gray-800 tracking-tight">{title}</span>
-      <div className="flex-1 h-px rounded-full bg-gradient-to-r from-indigo-300/40 to-transparent ml-1" />
-    </div>
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-3">
-      {children}
-    </div>
-  </div>
-);
+const TeacherDashboardUpdates = () => {
+  const [notifications, setNotifications] = React.useState([
+    { id: 1, title: 'Staff meeting', message: 'Staff meeting today at 2:00 PM in the conference hall.', time: 'Today · 9:15 AM' },
+    { id: 2, title: 'Homework reminder', message: 'Please remind students to bring their completed assignments.', time: 'Yesterday' }
+  ]);
+  const [title, setTitle] = React.useState('');
+  const [message, setMessage] = React.useState('');
+  const [audience, setAudience] = React.useState('All students');
+  const [status, setStatus] = React.useState('');
+  const today = new Date().toLocaleDateString(undefined, {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  const addPreviewNotification = (event) => {
+    event.preventDefault();
+    const trimmedTitle = title.trim();
+    const trimmedMessage = message.trim();
+    if (!trimmedTitle || !trimmedMessage) return;
+
+    setNotifications((current) => [
+      { id: Date.now(), title: trimmedTitle, message: `${audience}: ${trimmedMessage}`, time: 'Just now' },
+      ...current
+    ]);
+    setTitle('');
+    setMessage('');
+    setStatus('Preview added to this dashboard only. It was not sent to students.');
+  };
+
+  return (
+    <section aria-label="Today's updates" className="mb-7 grid gap-4 lg:grid-cols-3">
+      <article className="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Today · {today}</p>
+            <h2 className="mt-1 text-lg font-black text-slate-900">Teacher attendance</h2>
+          </div>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+            <FaCheckCircle aria-hidden="true" />
+          </div>
+        </div>
+        <div className="mt-5 flex items-center gap-3 rounded-xl bg-emerald-50 px-4 py-3">
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+          <div>
+            <p className="text-sm font-bold text-emerald-900">Present today</p>
+            <p className="mt-0.5 text-xs text-emerald-800/70">Sample status · not synced</p>
+          </div>
+        </div>
+        <p className="mt-3 text-xs leading-relaxed text-slate-500">This is a frontend preview; attendance is not recorded or submitted.</p>
+      </article>
+
+      <article id="dashboard-notifications" className="rounded-2xl border border-amber-100 bg-white p-5 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-amber-600">Updates</p>
+            <h2 className="mt-1 text-lg font-black text-slate-900">Notifications</h2>
+          </div>
+          <FaBell className="text-amber-500" aria-hidden="true" />
+        </div>
+        <div className="max-h-48 space-y-3 overflow-y-auto pr-1">
+          {notifications.map((notification) => (
+            <div key={notification.id} className="border-l-2 border-amber-300 pl-3">
+              <div className="flex items-baseline justify-between gap-2">
+                <p className="text-sm font-bold text-slate-800">{notification.title}</p>
+                <span className="shrink-0 text-[10px] text-slate-400">{notification.time}</span>
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-slate-600">{notification.message}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-[11px] text-slate-400">Demo notifications shown locally on this page.</p>
+      </article>
+
+      <article className="rounded-2xl border border-indigo-100 bg-white p-5 shadow-sm">
+        <div className="mb-4">
+          <p className="text-xs font-bold uppercase tracking-wider text-indigo-500">Frontend preview only</p>
+          <h2 className="mt-1 text-lg font-black text-slate-900">Send student notification</h2>
+        </div>
+        <form onSubmit={addPreviewNotification} className="space-y-3">
+          <label className="block">
+            <span className="mb-1 block text-xs font-semibold text-slate-600">Send to</span>
+            <select
+              value={audience}
+              onChange={(event) => setAudience(event.target.value)}
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            >
+              <option>All students</option>
+              <option>Nursery</option>
+              <option>Class 9</option>
+              <option>Class 8</option>
+            </select>
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-xs font-semibold text-slate-600">Title</span>
+            <input
+              required
+              maxLength={80}
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              placeholder="Notification title"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-xs font-semibold text-slate-600">Message</span>
+            <textarea
+              required
+              maxLength={300}
+              rows={2}
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              placeholder="Write a short message..."
+              className="w-full resize-y rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            />
+          </label>
+          <button type="submit" className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-indigo-800">
+            <FaPaperPlane aria-hidden="true" />
+            Add preview notification
+          </button>
+          {status && <p role="status" className="text-xs leading-relaxed text-emerald-700">{status}</p>}
+        </form>
+      </article>
+    </section>
+  );
+};
 
 const MobileCard = ({ icon: Icon, label, bg, onClick, delay = 0, badge }) => (
   <div
@@ -687,49 +749,6 @@ const MobileCard = ({ icon: Icon, label, bg, onClick, delay = 0, badge }) => (
         {badge}
       </div>
     )}
-  </div>
-);
-
-const DesktopNavCard = ({ icon: Icon, label, sub, gradient, onClick, disabled }) => (
-  <div
-    className={`
-      relative overflow-hidden rounded-2xl p-4 flex flex-col gap-3
-      bg-gradient-to-br ${gradient}
-      border border-white/10
-      ${disabled
-        ? 'opacity-35 cursor-not-allowed pointer-events-none'
-        : 'cursor-pointer hover:-translate-y-2 hover:scale-[1.04] active:scale-95 hover:shadow-2xl transition-all duration-300 group'
-      }
-    `}
-    onClick={disabled ? undefined : onClick}
-  >
-    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-white/20 to-transparent pointer-events-none rounded-2xl" />
-    <div className="absolute -top-5 -right-5 w-16 h-16 rounded-full bg-white/10 pointer-events-none" />
-
-    <div className="w-11 h-11 rounded-xl bg-white/20 flex items-center justify-center z-10 group-hover:scale-110 transition-transform duration-200 shadow-sm">
-      <Icon className="text-white text-lg" />
-    </div>
-    <div className="z-10">
-      <div className="text-sm font-bold text-white leading-tight">{label}</div>
-      {sub && <div className="text-[11px] text-white/65 mt-1">{sub}</div>}
-    </div>
-  </div>
-);
-
-const DesktopStatCard = ({ icon: Icon, gradient, label, value, sub, delay = 0 }) => (
-  <div
-    className={`bg-gradient-to-br ${gradient} rounded-2xl p-5 flex items-center gap-4 relative overflow-hidden shadow-lg`}
-    style={{ animationDelay: `${delay}ms` }}
-  >
-    <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full bg-white/10 pointer-events-none" />
-    <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center z-10 shadow-md">
-      <Icon className="text-white text-2xl" />
-    </div>
-    <div className="z-10">
-      <div className="text-[11px] text-white/70 font-semibold uppercase tracking-wide mb-0.5">{label}</div>
-      <div className="text-3xl font-black text-white leading-tight tracking-tight">{value}</div>
-      {sub && <div className="text-[11px] text-white/60 mt-1">{sub}</div>}
-    </div>
   </div>
 );
 

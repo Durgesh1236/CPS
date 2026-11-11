@@ -22,6 +22,7 @@ import {
 
 import uploadFile from "../middlewares/multer.js";
 import { loginLimiter } from "../middlewares/loginRateLimit.js";
+import { createQuestionPaper } from "../controllars/QuestionPaperController.js";
 
 const router = express.Router();
 
@@ -46,6 +47,7 @@ router.post('/teacher-profile-pic-upload/:id', isAuth, uploadFile, TeacherProfil
 router.post('/teacher-payment', isAuth, teacherPayment);
 router.get('/get-all-teacher-payment', isAuth, getTeacherPayment);
 router.post('/test-question-upload', isAuth, StudentTestQuestion);
+router.post('/question-paper-upload', isAuth, createQuestionPaper);
 router.post('/get-all-test-questions', isAuth, getTestQuestions);
 router.post('/test-submissions', isAuth, getStudentTestSubmissions);
 router.post('/school-photo-upload', isAuth, uploadFile, schoolPhotoUpload); 

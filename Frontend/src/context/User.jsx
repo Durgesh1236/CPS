@@ -56,14 +56,6 @@ export const UserProvider = ({ children }) => {
                 setUser(data.user);
                 setisAuth(true);
                 setLoading(false);
-                await fetchUser();
-                await getAllTeachers();
-                await getAllFeesSubmit();
-                await getAllStudents();
-                await spendRecord();
-                await allbookdata();
-                await getallbookprice();
-                await getSchoolPhotos();
                 navigate('/teacher-home');
             } else {
                 toast.error(data.message);
@@ -187,9 +179,9 @@ export const UserProvider = ({ children }) => {
                 toast.error(data.message || "Failed to save student");
                 return false;
             }
-            toast.success(data.message);
+            toast.success(`${data.message}. Admission number: ${data.student.admissionNumber}`);
             await getAllStudents();
-            return true;
+            return data.student;
         } catch (error) {
             toast.error(error.response?.data?.message || "Failed to save student");
             return false;

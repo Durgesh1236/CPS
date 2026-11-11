@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NavbarTeacher from './TeacherNavbar';
+import TeacherSidebar from './TeacherSidebar';
 import { useNavigate } from 'react-router-dom';
 
 const TeacherLayout = ({ children }) => {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
     const [activeTab, setActiveTab] = React.useState('home');
+    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const navigate = useNavigate();
   return (
     <div className="min-h-screen flex flex-col">
-      <NavbarTeacher/>
+      <NavbarTeacher
+        sidebarOpen={isSidebarOpen}
+        onToggleSidebar={() => setIsSidebarOpen((open) => !open)}
+      />
+      {isSidebarOpen && <TeacherSidebar onClose={() => setIsSidebarOpen(false)} />}
       <div className="flex flex-1">
         {/* <Sidebar sidebarOpen = {sidebarOpen} /> */}
         <main className="flex-1 p-2 bg-gray-200 overflow-auto mb-10 lg:mb-0">

@@ -8,6 +8,14 @@ const monthsOrder = [
   'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March'
 ];
 
+const formatDate = (value) => {
+  if (!value) return "-";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "-"
+    : date.toLocaleDateString(undefined, { timeZone: "UTC" });
+};
+
 export default function StudentDataSearch() {
 
   const [ledgerId, setLedgerId] = useState('');
@@ -161,12 +169,12 @@ export default function StudentDataSearch() {
 
   return (
     <TeacherLayout>
-      <div className="min-h-screen w-full bg-[#f4f7fb] px-3 py-5 pb-24 sm:px-6 sm:py-8 lg:px-8">
+      <div className="h-full w-full bg-[#f4f7fb] px-3 py-15 pb-24 sm:px-6 sm:py-8 lg:px-8">
 
         {/* Search Section */}
         <form
           onSubmit={e => { e.preventDefault(); search(); }}
-          className="mb-6 overflow-hidden rounded-3xl border border-slate-200 bg-[#132238] shadow-xl shadow-slate-200/60"
+          className="mb-6 mt-15 overflow-hidden rounded-3xl border border-slate-200 bg-[#132238] shadow-xl shadow-slate-200/60"
         >
           <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-5 sm:px-6 sm:py-6">
             <div>
@@ -476,27 +484,38 @@ export default function StudentDataSearch() {
                       <div className="text-sm text-gray-700 break-words">
                         <strong>Ledger:</strong> {selected.ledgerId}
                       </div>
-                      {selected.admissionNumber && (
-                        <div className="text-sm text-gray-700 break-words">
-                          <strong>Admission:</strong> {selected.admissionNumber}
-                        </div>
-                      )}
-                      <div className="text-sm text-gray-700 break-words">
-                        <strong>Class:</strong> {selected.studentClass}
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>Admission Number:</strong> {selected.admissionNumber || "Not assigned"}
                       </div>
-                      <div className="text-sm text-gray-700 break-words">
-                        <strong>Mobile:</strong> {selected.mobileNo}
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>Class:</strong> {selected.studentClass || "-"}
                       </div>
-                      { selected.additionalMobileNo && (
-                        <div className="text-sm text-gray-700 break-words">
-                          <strong>Additional Mobile:</strong> {selected.additionalMobileNo}
-                        </div>
-                      )}
-                      <div className="text-sm text-gray-700 break-words">
-                        <strong>Parents:</strong> {selected.fatherName} / {selected.motherName}
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>Date of Birth:</strong> {formatDate(selected.dateofBirth)}
                       </div>
-                      <div className="text-sm text-gray-700 break-words">
-                        <strong>Address:</strong> {selected.address}
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>Mobile:</strong> {selected.mobileNo || "-"}
+                      </div>
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>Additional Mobile:</strong> {selected.additionalMobileNo || "-"}
+                      </div>
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>Father:</strong> {selected.fatherName || "-"}
+                      </div>
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>Mother:</strong> {selected.motherName || "-"}
+                      </div>
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>Aadhaar:</strong> {selected.aadhar || "-"}
+                      </div>
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>APAAR:</strong> {selected.aapar || "-"}
+                      </div>
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>Address:</strong> {selected.address || "-"}
+                      </div>
+                      <div className="break-words text-sm text-gray-700">
+                        <strong>Transport:</strong> {selected.transport ? "Yes" : "No"}
                       </div>
 
                       <div className="mt-4">

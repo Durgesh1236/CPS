@@ -7,6 +7,34 @@ import TryCatch from "../utils/TryCatch.js";
 import bcrypt from 'bcrypt';
 import { StudentAttendance } from "../models/StudentAttendanceModel.js";
 import { StudentTestSubmission } from "../models/StudentTestSubmissionModel.js";
+import { StudentCounter } from "../models/StudentCounterModel.js";
+
+const generateAdmissionNumber = async () => {
+    const year = new Date().getUTCFullYear();
+
+    while (true) {
+        let counter;
+        try {
+            counter = await StudentCounter.findOneAndUpdate(
+                { _id: `admission-${year}` },
+                { $inc: { sequence: 1 } },
+                { new: true, upsert: true, setDefaultsOnInsert: true }
+            );
+        } catch (error) {
+            if (error?.code !== 11000) throw error;
+            counter = await StudentCounter.findOneAndUpdate(
+                { _id: `admission-${year}` },
+                { $inc: { sequence: 1 } },
+                { new: true }
+            );
+            if (!counter) throw error;
+        }
+
+        const admissionNumber = `CPS-${year}-${String(counter.sequence).padStart(4, '0')}`;
+        const alreadyExists = await Student.exists({ admissionNumber });
+        if (!alreadyExists) return admissionNumber;
+    }
+};
 
 export const addStudent = TryCatch(async (req, res) => {
     const { ledgerId, admissionNumber, password, studentName, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails } = req.body;
@@ -24,11 +52,10 @@ export const addStudent = TryCatch(async (req, res) => {
     }
     let student = await Student.findOne({ ledgerId });
     const normalizedAdmissionNumber = typeof admissionNumber === 'string' ? admissionNumber.trim() : '';
-    if (!student && !normalizedAdmissionNumber) {
-        return res.status(400).json({ success: false, message: 'Admission number is required' });
-    }
-    if (normalizedAdmissionNumber) {
-        const existingAdmission = await Student.findOne({ admissionNumber: normalizedAdmissionNumber });
+    const resolvedAdmissionNumber = normalizedAdmissionNumber ||
+        (!student || !student.admissionNumber ? await generateAdmissionNumber() : student.admissionNumber);
+    if (resolvedAdmissionNumber) {
+        const existingAdmission = await Student.findOne({ admissionNumber: resolvedAdmissionNumber });
         if (existingAdmission && String(existingAdmission._id) !== String(student?._id)) {
             return res.status(409).json({ success: false, message: 'Admission number is already in use' });
         }
@@ -36,9 +63,9 @@ export const addStudent = TryCatch(async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     if (!student) {
-        student = new Student({ ledgerId, admissionNumber: normalizedAdmissionNumber, studentName, password: hashedPassword, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport });
+        student = new Student({ ledgerId, admissionNumber: resolvedAdmissionNumber, studentName, password: hashedPassword, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport });
     } else {
-        student.admissionNumber = normalizedAdmissionNumber || student.admissionNumber;
+        student.admissionNumber = resolvedAdmissionNumber;
         student.studentName = studentName || student.studentName;
         student.studentClass = studentClass || student.studentClass;
         student.dateofBirth = dateofBirth || student.dateofBirth;

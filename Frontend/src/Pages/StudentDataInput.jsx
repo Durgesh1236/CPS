@@ -101,7 +101,7 @@ const StudentDataInput = () => {
               <button type="button" onClick={() => navigate('/teacher-home')} className="min-h-11 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm transition hover:bg-gray-50 sm:min-h-0 sm:px-3">Back</button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} autoComplete="off" className="space-y-6">
               <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Ledger ID</label>
@@ -109,7 +109,8 @@ const StudentDataInput = () => {
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Admission Number</label>
-                  <input name="admissionNumber" value={form.admissionNumber} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 placeholder-gray-400 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Enter admission number" />
+                  <input name="admissionNumber" value={form.admissionNumber} readOnly aria-describedby="admission-number-help" onClick={() => window.alert('Admission number is generated automatically when you save the student.')} className="mt-1 w-full min-w-0 cursor-pointer rounded-lg border border-gray-200 bg-gray-100 p-3 text-gray-600" placeholder="Generated automatically when saved" />
+                  <p id="admission-number-help" className="mt-1 text-xs text-gray-500">Admission number is assigned automatically when you save the student.</p>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Student Name</label>

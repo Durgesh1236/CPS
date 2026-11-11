@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import { useState } from "react";
+import axios from "axios";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import {
   FaPlus,
   FaTrash,
@@ -9,7 +9,7 @@ import {
 import TeacherLayout from "../Components/TeacherLayout";
 
 const StudentQuesPaper = () => {
-  const pdfRef = useRef();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [paper, setPaper] = useState({
     schoolName: "",
@@ -72,77 +72,73 @@ const StudentQuesPaper = () => {
     setQuestions(updated);
   };
 
-  // Generate PDF
-  const generatePDF = async () => {
-    const input = pdfRef.current;
-
-    const canvas = await html2canvas(input, {
-      scale: 2,
-      useCORS: true,
-    });
-
-    const imgData =
-      canvas.toDataURL("image/png");
-
+  // Build a text-based PDF so generation does not depend on browser CSS rendering.
+  const generatePDF = () => {
     const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 18;
+    const contentWidth = pageWidth - margin * 2;
+    const lineHeight = 6;
+    let y = margin;
 
-    const pdfWidth =
-      pdf.internal.pageSize.getWidth();
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(18);
+    const schoolLines = pdf.splitTextToSize(paper.schoolName, contentWidth);
+    pdf.text(schoolLines, pageWidth / 2, y, { align: "center" });
+    y += schoolLines.length * 8 + 4;
 
-    const pdfHeight =
-      pdf.internal.pageSize.getHeight();
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(12);
+    pdf.text(`Class: ${paper.className}`, margin, y);
+    pdf.text(`Subject: ${paper.subject}`, margin, y + 7);
+    pdf.text(`Time: ${paper.examTime}`, pageWidth - margin, y, { align: "right" });
+    pdf.text(`Total Marks: ${paper.totalMarks}`, pageWidth - margin, y + 7, { align: "right" });
+    y += 14;
+    pdf.line(margin, y, pageWidth - margin, y);
+    y += 10;
 
-    const imgWidth = pdfWidth;
-
-    const imgHeight =
-      (canvas.height * imgWidth) /
-      canvas.width;
-
-    let heightLeft = imgHeight;
-    let position = 0;
-
-    pdf.addImage(
-      imgData,
-      "PNG",
-      0,
-      position,
-      imgWidth,
-      imgHeight
-    );
-
-    heightLeft -= pdfHeight;
-
-    while (heightLeft > 0) {
-      position =
-        heightLeft - imgHeight;
-
-      pdf.addPage();
-
-      pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        position,
-        imgWidth,
-        imgHeight
+    pdf.setFontSize(11);
+    questions.forEach((question, index) => {
+      const questionLines = pdf.splitTextToSize(
+        `Q${index + 1}. ${question.question}`,
+        contentWidth
       );
 
-      heightLeft -= pdfHeight;
-    }
+      questionLines.forEach((line) => {
+        if (y + lineHeight > pageHeight - margin) {
+          pdf.addPage();
+          y = margin;
+        }
 
-    // Auto Download PDF
-    pdf.save("question-paper.pdf");
+        pdf.text(line, margin, y);
+        y += lineHeight;
+      });
+
+      if (y + 8 > pageHeight - margin) {
+        pdf.addPage();
+        y = margin;
+      }
+
+      pdf.text(`[${question.marks} Marks]`, pageWidth - margin, y, { align: "right" });
+      y += 12;
+    });
+
+    return pdf;
   };
 
   // Submit Function
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+
     // Validation
     if (
       !paper.schoolName ||
       !paper.className ||
       !paper.subject ||
       !paper.examTime ||
-      !paper.totalMarks
+      !paper.totalMarks ||
+      Number(paper.totalMarks) <= 0
     ) {
       alert(
         "Please fill all paper details"
@@ -154,7 +150,8 @@ const StudentQuesPaper = () => {
       questions.some(
         (q) =>
           !q.question.trim() ||
-          !q.marks
+          !q.marks ||
+          Number(q.marks) <= 0
       );
 
     if (emptyQuestion) {
@@ -165,11 +162,24 @@ const StudentQuesPaper = () => {
     }
 
     try {
-      // Generate & Download PDF
-      await generatePDF();
+      setIsSubmitting(true);
+      const pdf = generatePDF();
+      const { data } = await axios.post("/api/user/question-paper-upload", {
+        ...paper,
+        totalMarks: Number(paper.totalMarks),
+        questions: questions.map((question) => ({
+          ...question,
+          marks: Number(question.marks),
+        })),
+      });
 
+      if (!data.success) {
+        throw new Error(data.message || "Unable to save question paper");
+      }
+
+      pdf.save("question-paper.pdf");
       alert(
-        "Question Paper PDF Downloaded Successfully!"
+        "Question paper saved and PDF downloaded successfully!"
       );
 
       // Reset Form
@@ -191,8 +201,12 @@ const StudentQuesPaper = () => {
       console.log(error);
 
       alert(
-        "Something went wrong while generating PDF"
+        error.response?.data?.message ||
+          error.message ||
+          "Unable to save question paper or generate PDF"
       );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -328,16 +342,16 @@ const StudentQuesPaper = () => {
             {/* Submit Button */}
             <button
               onClick={handleSubmit}
+              disabled={isSubmitting}
               className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-4 rounded-2xl text-lg font-bold shadow-xl hover:scale-105 transition-all flex justify-center items-center gap-3"
             >
               <FaFilePdf />
-              Submit & Download PDF
+              {isSubmitting ? "Submitting..." : "Submit & Download PDF"}
             </button>
           </div>
 
           {/* Right Preview */}
           <div
-            ref={pdfRef}
             className="bg-white rounded-3xl shadow-2xl p-8"
           >
             <div className="border-b-2 border-gray-300 pb-5 text-center">

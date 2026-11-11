@@ -72,7 +72,7 @@ const App = () => {
             <Route path='/spend-history' element={isAuth ? <SpendHistory/> : <TeacherLoginPage/>}/>
             <Route path='/student-data-input' element={isAuth ? <StudentDataInput/> : <TeacherLoginPage/>}/>
             <Route path='/student-data' element={isAuth ? <StudentDataSearch/> : <TeacherLoginPage/>}/> 
-            <Route path='/student-attendence' element={isAuth ? <TakeStudentAttendence/> : <TeacherLoginPage/>}/>
+            <Route path='/take-student-attendence' element={isAuth ? <TakeStudentAttendence/> : <TeacherLoginPage/>}/>
             <Route path='/teacher-payment' element={isAuth ? <TeacherPayment/> : <TeacherLoginPage/>}/>
             {/* <Route path='/student-register' element={ isAuth ? <StudentRegister/> : <TeacherLoginPage/> }/> */}
             <Route path='/book-sale-data' element={ isAuth ? <BookSaleSubmit/> : <TeacherLoginPage/> }/>

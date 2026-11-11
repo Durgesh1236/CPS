@@ -63,7 +63,7 @@ const TakeStudentAttendence = () => {
     return (
         <TeacherLayout>
             <main className="min-h-screen bg-slate-50 px-3 pb-10 pt-24 sm:px-6">
-                <div className="mx-auto max-w-6xl">
+                <div className="mx-auto">
                     <header className="mb-6 rounded-2xl bg-slate-900 p-5 text-white shadow-lg sm:p-7">
                         <div className="flex items-start gap-4">
                             <span className="rounded-xl bg-emerald-400/20 p-3 text-emerald-300"><FaChalkboardTeacher /></span>
