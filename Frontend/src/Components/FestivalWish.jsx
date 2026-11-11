@@ -9,7 +9,7 @@ const FestivalWish = ({ className = '' }) => {
       className={`festival-wish relative isolate overflow-hidden rounded-2xl border border-orange-200/20 bg-gradient-to-br from-[#35121b] via-[#70251f] to-[#b84b22] p-4 text-white shadow-lg shadow-orange-950/20 sm:p-6 ${className}`}
     >
       <div aria-hidden="true" className="festival-wish-scene pointer-events-none absolute inset-y-0 right-0 w-2/5 overflow-hidden sm:w-1/2">
-        <div className="festival-sun absolute right-[18%] top-1/2 h-20 w-20 -translate-y-1/2 rounded-full bg-gradient-to-br from-amber-100 via-amber-300 to-orange-400 shadow-[0_0_48px_16px_rgba(251,146,60,0.28)] sm:right-[24%] sm:h-28 sm:w-28" />
+        <div className="festival-sun absolute right-[18%] top-1/2 h-20 w-20 rounded-full bg-gradient-to-br from-amber-100 via-amber-300 to-orange-400 shadow-[0_0_48px_16px_rgba(251,146,60,0.28)] sm:right-[24%] sm:h-28 sm:w-28" />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#381a26]/90 via-[#6b2a2a]/55 to-transparent" />
         <div className="festival-water absolute inset-x-0 bottom-0 h-1/3">
           <span className="festival-water-line absolute left-[8%] top-1/4 h-px w-3/4 rounded-full bg-amber-100/60" />
