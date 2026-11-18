@@ -1,47 +1,19 @@
 import mongoose from "mongoose";
 
-const QuestionSchema = new mongoose.Schema({
-  question: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  marks: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-});
-
 const QuestionPaperSchema = new mongoose.Schema(
   {
-    schoolName: {
+    academicYear: {
       type: String,
       required: true,
-      trim: true,
+      match: /^\d{4}-\d{4}$/,
     },
-    className: {
+    examTerm: {
       type: String,
       required: true,
-      trim: true,
+      enum: ["firstTerm", "secondTerm", "finalTerm"],
     },
-    subject: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    examTime: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    totalMarks: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    questions: {
-      type: [QuestionSchema],
+    pdf: {
+      type: Buffer,
       required: true,
     },
     teacherId: {

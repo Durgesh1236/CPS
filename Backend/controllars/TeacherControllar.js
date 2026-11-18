@@ -12,6 +12,7 @@ import { Student } from "../models/StudentModel.js";
 import { StudentAttendance } from "../models/StudentAttendanceModel.js";
 import { TeacherAttendance } from "../models/TeacherAttendence.js";
 import { StudentTestSubmission } from "../models/StudentTestSubmissionModel.js";
+import mongoose from "mongoose";
 
 export const registerUser = TryCatch(async(req, res) => {
     const {name, email, password, mobileNo, role} = req.body;
@@ -52,14 +53,16 @@ export const registerUser = TryCatch(async(req, res) => {
 })
  
 export const loginUser = TryCatch(async(req, res) => {
-    const {email, password} = req.body;
-    if(!email || !password) {
+    const {emailOrMobile, password} = req.body;
+    if(!emailOrMobile || !password) {
         return res.json({ 
             success: false,
             message: "All fields are required"
         })
     }
-    const user = await User.findOne({email});
+    const user = await User.findOne({
+        $or: [{ email: emailOrMobile }, { mobileNo: emailOrMobile }]
+    });
     if(!user) {
         return res.json({
             success: false,
@@ -82,7 +85,7 @@ export const loginUser = TryCatch(async(req, res) => {
 })
 
 export const MyProfile = TryCatch(async(req,res) => {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id).populate("teacherPayment");
     return res.json(user);
 })
 
@@ -95,7 +98,7 @@ export const logoutUser = TryCatch(async(req, res) => {
 })
 
 export const getAllTeachers = TryCatch(async(req, res) => {
-    const user = await User.find();
+    const user = await User.find().populate("teacherPayment");
     return res.json(user);
 })
 
@@ -218,30 +221,65 @@ export const deleteTeacherProfileImage = TryCatch(async(req, res) => {
 })
 
 export const teacherPayment = TryCatch(async(req, res) => {
-    const { teacherName, teacherBackdues, teacherPaid, teacherDues, submitedDate } = req.body;
-    if(!teacherName || !teacherBackdues || !teacherPaid || !teacherDues || !submitedDate){
+    const { teacherId, submitMonth, teacherPaid, submitedDate, paymentMethod } = req.body;
+    if(!teacherId || !submitMonth || teacherPaid == null || !submitedDate || !paymentMethod){
         return res.status(400).json({
             success: false,
             message: "All fields are required"
         })
     }
-    const TeacherPayment = await TeacherPayment.create({
-        teacherName,
-        teacherBackdues,
-        teacherPaid,
-        teacherDues,
-        submitedDate,
+    if(!mongoose.isValidObjectId(teacherId)){
+        return res.status(400).json({
+            success: false,
+            message: "A valid teacher is required"
+        })
+    }
+    const paidAmount = Number(teacherPaid);
+    if(!Number.isFinite(paidAmount) || paidAmount < 0){
+        return res.status(400).json({
+            success: false,
+            message: "Payment amount must be a non-negative number"
+        })
+    }
+    const paymentDate = new Date(submitedDate);
+    if(Number.isNaN(paymentDate.getTime())){
+        return res.status(400).json({
+            success: false,
+            message: "A valid payment date is required"
+        })
+    }
+
+    const teacher = await User.findById(teacherId);
+    if(!teacher){
+        return res.status(404).json({
+            success: false,
+            message: "Teacher not found"
+        })
+    }
+
+    const payment = await TeacherPayment.create({
+        teacherId,
+        teacherName: teacher.name,
+        mobileNumber: teacher.mobileNo,
+        submitMonth,
+        teacherPaid: paidAmount,
+        submitedDate: paymentDate,
+        paymentMethod,
         submitedBy: req.user._id
     })
 
     return res.status(201).json({
         success: true,
+        payment,
         message: "Teacher payment created successfully",
     })
 })
 
 export const getTeacherPayment = TryCatch(async(req, res) => {
-    const teacherPayment = await TeacherPayment.find().populate("submitedBy", "name");
+    const teacherPayment = await TeacherPayment.find()
+        .sort({ submitedDate: -1, createdAt: -1 })
+        .populate("teacherId", "name email mobileNo")
+        .populate("submitedBy", "name");
     return res.status(200).json(teacherPayment);
 })
 
@@ -681,5 +719,33 @@ export const teacherNotification = TryCatch(async(req, res) => {
             message: "teacherId and message are required"
         })
     }
-    
+})
+
+export const TeacherAttendenceUpdate = TryCatch(async(req, res) => {
+    const { teacherId } = req.params;
+    const { date, status } = req.body;
+    if(!teacherId || !date || !status) {
+        return res.status(400).json({
+            success: false,
+            message: "teacherId, date, and status are required"
+        })
+    }
+    const teacherAttendanceFetch = await TeacherAttendance.findOne({
+        teacherId,
+        date
+    })
+
+    if(!teacherAttendanceFetch){
+        return res.status(404).json({
+            success: false,
+            message: "Teacher attendance record not found"
+        })
+    }
+    teacherAttendanceFetch.status = status || teacherAttendanceFetch.status;
+    await teacherAttendanceFetch.save();
+
+    return res.status(200).json({
+        success: true,
+        message: "Teacher attendance updated successfully"
+    })
 })

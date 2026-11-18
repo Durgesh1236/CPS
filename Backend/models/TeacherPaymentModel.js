@@ -1,21 +1,32 @@
 import mongoose from "mongoose";
 
 const TeacherPaymentSchema = new mongoose.Schema({
+    teacherId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     teacherName: {
         type: String,
         required: true
     },
-    teacherBackdues: {
-        type: Number,
+    mobileNumber: {
+        type: String,
+        required: true
+    },
+    submitMonth:{
+        type: String,
         required: true
     },
     teacherPaid: {
         type: Number,
+        min: 0,
         required: true
     },
-    teacherDues: {
-        type: Number,
-        required: true 
+    paymentMethod: {
+        type: String,
+        enum: ['Account', 'Cash'],
+        required: true
     },
     submitedDate: {
         type: Date,

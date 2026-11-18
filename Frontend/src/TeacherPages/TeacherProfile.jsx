@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaUserTie, FaIdBadge, FaEnvelope, FaPhone, FaArrowLeft, FaCamera } from "react-icons/fa";
 import TeacherLayout from "../Components/TeacherLayout";
 import { useNavigate } from "react-router-dom";
@@ -6,10 +6,67 @@ import { UserData } from "../context/User";
 
 const TeacherProfile = () => {
   const navigate = useNavigate();
-  const { user, TeacherImage } = UserData();
+  const {
+    user,
+    TeacherImage,
+    submitTeacherProfileUpdateRequest,
+    getMyTeacherProfileUpdateRequests,
+    refreshUser,
+  } = UserData();
   const [image, setImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
+  const [profileChanges, setProfileChanges] = useState({
+    name: user?.name || "",
+    email: user?.email || "",
+    mobileNo: user?.mobileNo || "",
+  });
+  const [profileRequests, setProfileRequests] = useState([]);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    setProfileChanges({
+      name: user?.name || "",
+      email: user?.email || "",
+      mobileNo: user?.mobileNo || "",
+    });
+  }, [user?._id, user?.name, user?.email, user?.mobileNo]);
+
+  useEffect(() => {
+    refreshUser();
+    let active = true;
+    getMyTeacherProfileUpdateRequests().then((requests) => {
+      if (active) setProfileRequests(requests);
+    });
+    return () => {
+      active = false;
+    };
+  }, [getMyTeacherProfileUpdateRequests, refreshUser]);
+
+  const latestRequest = profileRequests[0];
+  const canRequestProfileUpdate = Boolean(user?._id) && user?.role?.toLowerCase() !== "admin";
+  const isRequestAwaitingReview = latestRequest?.status === "pending";
+  const handleProfileChange = (event) => {
+    setProfileChanges((changes) => ({ ...changes, [event.target.name]: event.target.value }));
+  };
+
+  const handleProfileRequest = async (event) => {
+    event.preventDefault();
+    const request = await submitTeacherProfileUpdateRequest(profileChanges);
+    if (request) {
+      setProfileRequests((requests) => [request, ...requests]);
+      setIsEditingProfile(false);
+    }
+  };
+
+  const handleCancelProfileEdit = () => {
+    setProfileChanges({
+      name: user?.name || "",
+      email: user?.email || "",
+      mobileNo: user?.mobileNo || "",
+    });
+    setIsEditingProfile(false);
+  };
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -150,12 +207,40 @@ const TeacherProfile = () => {
 
             {/* Detail fields panel */}
             <div className="px-6 sm:px-10 py-8 sm:py-10 lg:py-12">
-              <h2 className="font-display font-700 text-2xl sm:text-3xl text-[#1E2540] mb-1">
-                Profile Details
-              </h2>
-              <p className="text-slate-500 text-sm mb-6 sm:mb-8">
-                Your credential information on file.
-              </p>
+              <div className="mb-6 flex flex-wrap items-start justify-between gap-3 sm:mb-8">
+                <div>
+                  <h2 className="font-display font-700 text-2xl sm:text-3xl text-[#1E2540] mb-1">
+                    Profile Details
+                  </h2>
+                  <p className="text-slate-500 text-sm">
+                    Your credential information on file.
+                  </p>
+                </div>
+                {canRequestProfileUpdate && (
+                  <button
+                    type="button"
+                    onClick={() => setIsEditingProfile(true)}
+                    disabled={isRequestAwaitingReview}
+                    className="rounded-lg bg-[#2F6F5E] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#275c4d] disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isRequestAwaitingReview ? "Request pending" : "Edit profile"}
+                  </button>
+                )}
+              </div>
+
+              {latestRequest && (
+                <p className={`mb-5 rounded-lg px-3 py-2 text-sm font-medium ${
+                  latestRequest.status === "pending"
+                    ? "bg-amber-50 text-amber-800"
+                    : latestRequest.status === "accepted"
+                      ? "bg-emerald-50 text-emerald-800"
+                      : "bg-rose-50 text-rose-800"
+                }`} role="status">
+                  {latestRequest.status === "pending"
+                    ? "Your request is awaiting admin review."
+                    : `Your latest request was ${latestRequest.status}.`}
+                </p>
+              )}
 
               <div className="space-y-5">
                 {fields.map((f, i) => (
@@ -180,6 +265,53 @@ const TeacherProfile = () => {
               <p className="text-center text-xs text-slate-400">
                 Issued for internal campus use only
               </p>
+
+              {canRequestProfileUpdate && isEditingProfile && (
+                <section className="mt-8 border-t border-slate-100 pt-6">
+                  <h3 className="font-display font-700 text-lg text-[#1E2540]">
+                    Request a profile update
+                  </h3>
+                  <p className="mt-1 text-sm text-slate-500">
+                    Changes are applied after an admin reviews your request.
+                  </p>
+
+                  <form onSubmit={handleProfileRequest} className="mt-4 space-y-3">
+                    {[
+                      ["name", "Name", "text"],
+                      ["email", "Email", "email"],
+                      ["mobileNo", "Mobile", "tel"],
+                    ].map(([field, label, type]) => (
+                      <label key={field} className="block text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        {label}
+                        <input
+                          type={type}
+                          name={field}
+                          value={profileChanges[field]}
+                          onChange={handleProfileChange}
+                          required
+                          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-normal normal-case text-slate-800 outline-none focus:border-[#2F6F5E] focus:ring-2 focus:ring-[#2F6F5E]/15"
+                        />
+                      </label>
+                    ))}
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="submit"
+                        disabled={isRequestAwaitingReview}
+                        className="flex-1 rounded-lg bg-[#2F6F5E] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#275c4d] disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        Send update request
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCancelProfileEdit}
+                        className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                </section>
+              )}
             </div>
           </div>
         </div>

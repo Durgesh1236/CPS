@@ -9,7 +9,8 @@ import {
     getSchoolPhotos, schoolPhotoUpload, 
     deleteSchoolPhoto, getstudentAttendence, 
     studentAttendence, teacherAttendance, 
-    scanTeacherAttendance, getTeacherAttendance 
+    scanTeacherAttendance, getTeacherAttendance, 
+    TeacherAttendenceUpdate
 } from "../controllars/TeacherControllar.js";
 import { isAuth } from "../middlewares/isAuth.js";
 import { 
@@ -20,9 +21,18 @@ import {
     SpendHistoryEdit,
     deleteSpendRecord} from "../controllars/FeesSubmitControllars.js";
 
-import uploadFile from "../middlewares/multer.js";
+import uploadFile, { uploadQuestionPaperPdf } from "../middlewares/multer.js";
 import { loginLimiter } from "../middlewares/loginRateLimit.js";
-import { createQuestionPaper, getQuestionPapers } from "../controllars/QuestionPaperController.js";
+import {
+    createQuestionPaper, deleteQuestionPaper, getQuestionPaperPdf, getQuestionPapers
+} from "../controllars/QuestionPaperController.js";
+import {
+    getMyTeacherProfileUpdateRequests,
+    getTeacherProfileUpdateRequests,
+    reviewTeacherProfileUpdateRequest,
+    submitTeacherProfileUpdateRequest
+} from "../controllars/TeacherProfileUpdateController.js";
+import { requireAdmin } from "../middlewares/requireAdmin.js";
 
 const router = express.Router();
 
@@ -30,6 +40,10 @@ router.post("/register", registerUser);
 router.post("/login", loginLimiter, loginUser);
 router.get("/logout", isAuth, logoutUser);
 router.get("/me", isAuth, MyProfile);
+router.post("/teacher-profile-update-requests", isAuth, submitTeacherProfileUpdateRequest);
+router.get("/teacher-profile-update-requests/mine", isAuth, getMyTeacherProfileUpdateRequests);
+router.get("/teacher-profile-update-requests", isAuth, requireAdmin, getTeacherProfileUpdateRequests);
+router.patch("/teacher-profile-update-requests/:id", isAuth, requireAdmin, reviewTeacherProfileUpdateRequest);
 router.get("/all-teachers", isAuth, getAllTeachers);
 router.post("/fee-submit", isAuth, uploadFile, FeesSubmit);
 router.get("/get-all-fees-submits", isAuth, getAllFeesSubmit);
@@ -47,7 +61,7 @@ router.post('/teacher-profile-pic-upload/:id', isAuth, uploadFile, TeacherProfil
 router.post('/teacher-payment', isAuth, teacherPayment);
 router.get('/get-all-teacher-payment', isAuth, getTeacherPayment);
 router.post('/test-question-upload', isAuth, StudentTestQuestion);
-router.post('/question-paper-upload', isAuth, createQuestionPaper);
+router.post('/question-paper-upload', isAuth, uploadQuestionPaperPdf, createQuestionPaper);
 router.post('/get-all-test-questions', isAuth, getTestQuestions);
 router.post('/test-submissions', isAuth, getStudentTestSubmissions);
 router.post('/school-photo-upload', isAuth, uploadFile, schoolPhotoUpload); 
@@ -58,6 +72,9 @@ router.post('/student-attendance', isAuth, studentAttendence);
 router.get('/teacher-attendance', isAuth, getTeacherAttendance);
 router.post('/teacher-attendance', isAuth, teacherAttendance);
 router.post('/teacher-attendance/scan', isAuth, scanTeacherAttendance);
+router.delete('/question-paper/:id', isAuth, deleteQuestionPaper);
+router.get('/question-paper/:id/pdf', isAuth, getQuestionPaperPdf);
 router.get('/get-question-papers', isAuth, getQuestionPapers);
+router.post('/teacher-attendance-update/:teacherId', isAuth, TeacherAttendenceUpdate);
 
 export default router; 

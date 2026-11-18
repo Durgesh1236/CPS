@@ -295,7 +295,7 @@ const TeacherHomePage = () => {
                 </button>
                 <button
                   onClick={() => navigate('/teacher-profile')}
-                  className="rounded-xl border border-white/20 bg-white px-4 py-2.5 text-sm font-bold text-indigo-950 shadow-md transition hover:-translate-y-0.5 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-white/60 sm:px-5"
+                  className="rounded-xl border cursor-pointer border-white/20 bg-white px-4 py-2.5 text-sm font-bold text-indigo-950 shadow-md transition hover:-translate-y-0.5 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-white/60 sm:px-5"
                 >
                   View profile
                 </button>

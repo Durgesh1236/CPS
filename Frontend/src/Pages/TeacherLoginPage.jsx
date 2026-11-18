@@ -6,7 +6,7 @@ import { useMathChallenge } from '../hooks/useMathChallenge';
 import { toast } from 'react-toastify';
 
 const TeacherLoginPage = () => {
-  const [email, setemail] = useState('');
+  const [emailOrMobile, setEmailOrMobile] = useState('');
   const [password, setPassword] = useState('');
   const [agree, setAgree] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +24,7 @@ const TeacherLoginPage = () => {
       toast.error('Incorrect verification code. Please try again.');
       return;
     }
-    loginTeacher(email, password, navigate);
+    loginTeacher(emailOrMobile, password, navigate);
   };
 
   return (
@@ -101,11 +101,11 @@ const TeacherLoginPage = () => {
                   Teacher ID
                 </label>
                 <input
-                  id="email"
+                  id="emailOrMobile"
                   type="text"
-                  value={email}
-                  onChange={(e) => setemail(e.target.value.toLowerCase())}
-                  placeholder="e.g. faculty@school.edu"
+                  value={emailOrMobile}
+                  onChange={(e) => setEmailOrMobile(e.target.value.toLowerCase())}
+                  placeholder="email or mobile number"
                   className="w-full px-0 py-2.5 bg-transparent border-0 border-b-2 border-slate-200 text-[#1E2540] placeholder:text-slate-300 focus:outline-none focus:border-[#2F6F5E] transition-colors"
                   required
                 />

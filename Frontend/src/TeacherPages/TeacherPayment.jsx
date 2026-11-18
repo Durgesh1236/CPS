@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
-import { FaCalendarAlt, FaCheckCircle, FaCreditCard, FaRupeeSign, FaUserTie } from 'react-icons/fa';
+import { useState } from 'react';
+import { FaCalendarAlt, FaCheckCircle, FaCreditCard, FaMobileAlt, FaRupeeSign, FaUserTie } from 'react-icons/fa';
 import TeacherLayout from '../Components/TeacherLayout';
+import { UserData } from '../context/User';
 
 const fieldClassName =
   'w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-800 outline-none transition hover:border-slate-300 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100';
 
 const TeacherPayment = () => {
+  const { teacherList, TeacherPayment: submitPayment, teacherPaymentList, getTeacherPaymentList, loading } = UserData();
   const [formData, setFormData] = useState({
-    teacherName: '',
+    teacherId: '',
+    mobileNumber: '',
     month: '',
     paymentDate: '',
     amount: '',
     paymentMethod: '',
   });
-
+  
   const handleChange = (event) => {
     setFormData((previousForm) => ({
       ...previousForm,
@@ -21,16 +24,32 @@ const TeacherPayment = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
-    alert('Payment submitted successfully!');
+    const success = await submitPayment({
+      teacherId: formData.teacherId,
+      mobileNumber: formData.mobileNumber,
+      submitMonth: formData.month,
+      submitedDate: formData.paymentDate,
+      teacherPaid: Number(formData.amount),
+      paymentMethod: formData.paymentMethod,
+    });
+    if (success) {
+      setFormData({
+        teacherId: '',
+        mobileNumber: '',
+        month: '',
+        paymentDate: '',
+        amount: '',
+        paymentMethod: '',
+      });
+    }
   };
 
   return (
     <TeacherLayout>
-      <main className="min-h-[calc(100vh-4rem)] bg-slate-100 px-3 pb-24 pt-20 sm:px-6 sm:pb-24 md:pb-10">
-        <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5">
+      <main className="h-full bg-slate-100 px-3 pb-24 pt-20 sm:px-6 sm:pb-24 md:pb-10">
+        <div className="mx-auto w-full overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5">
           <div className="grid lg:grid-cols-[0.8fr_1.2fr]">
             <section className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-indigo-900 to-slate-900 px-6 py-8 text-white sm:px-10 sm:py-10 lg:px-11 lg:py-12">
               <div aria-hidden="true" className="absolute -right-20 -top-20 h-56 w-56 rounded-full border-[32px] border-white/5" />
@@ -71,19 +90,40 @@ const TeacherPayment = () => {
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid gap-5 sm:grid-cols-2">
-                  <div className="min-w-0 sm:col-span-2">
-                    <label htmlFor="teacherName" className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
+                  <div className="min-w-0">
+                    <label htmlFor="teacherId" className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
                       <FaUserTie className="text-indigo-500" aria-hidden="true" />
-                      Teacher name
+                      Teacher
+                    </label>
+                    <select
+                      id="teacherId"
+                      name="teacherId"
+                      value={formData.teacherId}
+                      onChange={handleChange}
+                      className={fieldClassName}
+                      required
+                    >
+                      <option value="">Select a teacher</option>
+                      {teacherList.map((teacher) => (
+                        <option key={teacher._id} value={teacher._id}>
+                          {teacher.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="min-w-0">
+                    <label htmlFor="mobileNumber" className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <FaMobileAlt className="text-indigo-500" aria-hidden="true" />
+                      Mobile number
                     </label>
                     <input
-                      id="teacherName"
-                      type="text"
-                      name="teacherName"
-                      value={formData.teacherName}
+                      id="mobileNumber"
+                      type="tel"
+                      name="mobileNumber"
+                      value={formData.mobileNumber}
                       onChange={handleChange}
-                      placeholder="Enter teacher name"
-                      autoComplete="name"
+                      maxLength="10"
+                      placeholder="Enter mobile number"
                       className={fieldClassName}
                       required
                     />
@@ -168,10 +208,11 @@ const TeacherPayment = () => {
 
                 <button
                   type="submit"
+                  disabled={loading || teacherList.length === 0}
                   className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-base font-bold text-white shadow-lg shadow-indigo-600/20 transition hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 active:translate-y-px"
                 >
                   <FaCreditCard aria-hidden="true" />
-                  Submit payment
+                  {loading ? 'Saving…' : 'Submit payment'}
                 </button>
               </form>
             </section>

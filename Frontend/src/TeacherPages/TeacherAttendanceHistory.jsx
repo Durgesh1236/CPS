@@ -27,12 +27,13 @@ const statusStyles = {
 
 const TeacherAttendanceHistory = () => {
   const navigate = useNavigate();
-  const { user, teacherAttendanceRecords, getTeacherAttendance, teacherAttendanceLoading } = UserData();
+  const { user, teacherAttendanceRecords, getTeacherAttendance, teacherAttendanceLoading, TeacherAttendenceUpdate } = UserData();
   const isAdmin = user?.role === "admin";
   const records = teacherAttendanceRecords;
   const [selectedDate, setSelectedDate] = useState(getToday());
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
   const loading = teacherAttendanceLoading;
 
   const loadAttendance = async (date = selectedDate) => {
@@ -204,6 +205,7 @@ const TeacherAttendanceHistory = () => {
                         <th className="px-6 py-4">Date</th>
                         <th className="px-6 py-4">Marked at</th>
                         <th className="px-6 py-4">Status</th>
+                        <th className="px-6 py-4">Update</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -216,6 +218,15 @@ const TeacherAttendanceHistory = () => {
                           <td className="px-6 py-4 text-sm text-slate-600">{formatDate(record.date)}</td>
                           <td className="px-6 py-4 text-sm text-slate-600">{formatTime(record.markedAt || record.updatedAt)}</td>
                           <td className="px-6 py-4"><span className={`inline-flex rounded-full px-3 py-1 text-xs font-black capitalize ring-1 ${statusStyles[record.status] || "bg-slate-100 text-slate-600 ring-slate-200"}`}>{record.status}</span></td>
+                          <td className="px-6 py-4 text-sm text-slate-600">
+                            {
+                              isUpdating ? (
+                                <button>save</button> 
+                              ) : (
+                                <button className="rounded-2xl border w-20 h-10 cursor-pointer" onClick={() => setIsUpdating(true)}>update</button>
+                              )
+                            }
+                          </td>
                         </tr>
                       ))}
                     </tbody>

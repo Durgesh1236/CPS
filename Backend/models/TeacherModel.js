@@ -32,13 +32,6 @@ const userSchema = new mongoose.Schema(
       url: String,
     },
 
-    teacherPayment: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
-
     // Attendance Section
     attendance: [
       {
@@ -57,7 +50,15 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+
+userSchema.virtual("teacherPayment", {
+  ref: "TeacherPayment",
+  localField: "_id",
+  foreignField: "teacherId",
+});
 
 export const User = mongoose.model("User", userSchema);

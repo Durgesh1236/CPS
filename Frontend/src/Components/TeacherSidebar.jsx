@@ -38,9 +38,12 @@ const TeacherSidebar = ({ onClose }) => {
         ['Teacher Attendance', '/teacher-attendance'],
         ['Attendance History', '/teacher-attendance-history'],
         ['Teacher Payment', '/teacher-payment'],
+        ['Teacher Payment History', '/teacher-payment-history'],
         ['Teacher Registration', '/teacher-registration', isAdmin],
         ['Teacher Data', '/teacher-data', isAdmin],
-        ['Question Paper', '/set-student-question-paper']
+        ['Profile Update Requests', '/teacher-profile-update-requests', isAdmin],
+        ['Question Paper', '/set-student-question-paper'],
+        ['Question Paper History', '/question-paper-history']
       ]
     },
     {

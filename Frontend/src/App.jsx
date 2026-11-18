@@ -37,12 +37,15 @@ import StuResultSub from './TeacherPages/StuResultSub'
 import StudentQuesPaper from './TeacherPages/StudentQuesPaper'
 import SetStudentTest from './TeacherPages/SetStudentTest'
 import StudentQuesHistory from './TeacherPages/StuQuesHistory'
+import QuestionPaper from './TeacherPages/QuestionPaper'
+import TeacherPaymentHistory from './TeacherPages/TeacherPaymentHistory'
 import StudentTestResults from './TeacherPages/StudentTestResults'
 import StudentTest from './StudentPage/StudentTest'
 import SchoolPhotoUpload from './Pages/SchoolPhotoUpload'
 import DemoPage from './Pages/DemoPage'
+import TeacherProfileUpdateRequests from './TeacherPages/TeacherProfileUpdateRequests'
 const App = () => {
-  const { isAuth, loading } = UserData();
+  const { isAuth, loading, user } = UserData();
   const { StudentAuth, studentLoading } = StudentData();
   return (
     <>
@@ -67,6 +70,7 @@ const App = () => {
             <Route path='/teacher-home' element={isAuth ? <TeacherHomePage /> : <TeacherLoginPage />} />
             <Route path='/teacher-registration' element={isAuth ? <TeacherRegistrationPage /> : <TeacherLoginPage />} />
             <Route path='/teacher-profile' element={isAuth ? <TeacherProfile /> : <TeacherLoginPage />}/>
+            <Route path='/teacher-profile-update-requests' element={isAuth && user?.role === 'admin' ? <TeacherProfileUpdateRequests /> : <TeacherLoginPage />}/>
             <Route path='/teacher-data' element = {isAuth ? <TeacherData /> : <TeacherLoginPage/>}/>
             <Route path='/total-spend' element={isAuth ? <Spend/> : <TeacherLoginPage/>}/>
             <Route path='/spend-history' element={isAuth ? <SpendHistory/> : <TeacherLoginPage/>}/>
@@ -74,6 +78,7 @@ const App = () => {
             <Route path='/student-data' element={isAuth ? <StudentDataSearch/> : <TeacherLoginPage/>}/> 
             <Route path='/take-student-attendence' element={isAuth ? <TakeStudentAttendence/> : <TeacherLoginPage/>}/>
             <Route path='/teacher-payment' element={isAuth ? <TeacherPayment/> : <TeacherLoginPage/>}/>
+            <Route path='/teacher-payment-history' element={isAuth ? <TeacherPaymentHistory/> : <TeacherLoginPage/>}/>
             {/* <Route path='/student-register' element={ isAuth ? <StudentRegister/> : <TeacherLoginPage/> }/> */}
             <Route path='/book-sale-data' element={ isAuth ? <BookSaleSubmit/> : <TeacherLoginPage/> }/>
             <Route path='/book-sale-history' element= {isAuth ? <BookSaleHistory/> : <TeacherLoginPage/> } />
@@ -86,6 +91,7 @@ const App = () => {
             <Route path='/set-student-question-paper' element={isAuth ? <StudentQuesPaper/> : <TeacherLoginPage/>}/>
             <Route path='/set-student-test' element={isAuth ? <SetStudentTest/> : <TeacherLoginPage/>}/>
             <Route path='/question-history' element={isAuth ? <StudentQuesHistory/> : <TeacherLoginPage/>}/>
+            <Route path='/question-paper-history' element={isAuth ? <QuestionPaper/> : <TeacherLoginPage/>}/>
             <Route path='/student-test-results' element={isAuth ? <StudentTestResults/> : <TeacherLoginPage/>}/>
             <Route path='/school-photo-upload' element={isAuth ? <SchoolPhotoUpload/> : <TeacherLoginPage/>}/>
             {/* student routes */}

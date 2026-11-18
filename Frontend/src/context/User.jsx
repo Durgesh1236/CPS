@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useContext } from "react";
 import { createContext } from "react";
 import { toast } from "react-toastify";
@@ -47,10 +47,10 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function loginTeacher(email, password, navigate) {
+    async function loginTeacher(emailOrMobile, password, navigate) {
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/user/login", { email, password });
+            const { data } = await axios.post("/api/user/login", { emailOrMobile, password });
             if (data.success) {
                 toast.success(data.message);
                 setUser(data.user);
@@ -393,6 +393,57 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    const submitTeacherProfileUpdateRequest = useCallback(async (updates) => {
+        try {
+            const { data } = await axios.post("/api/user/teacher-profile-update-requests", updates);
+            toast.success(data.message);
+            return data.request;
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Unable to send profile update request");
+            return null;
+        }
+    }, []);
+
+    const getMyTeacherProfileUpdateRequests = useCallback(async () => {
+        try {
+            const { data } = await axios.get("/api/user/teacher-profile-update-requests/mine");
+            return data;
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Unable to load your profile update requests");
+            return [];
+        }
+    }, []);
+
+    const refreshUser = useCallback(async () => {
+        try {
+            const { data } = await axios.get("/api/user/me");
+            setUser(data);
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Unable to refresh your profile");
+        }
+    }, []);
+
+    const getTeacherProfileUpdateRequests = useCallback(async () => {
+        try {
+            const { data } = await axios.get("/api/user/teacher-profile-update-requests");
+            return data;
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Unable to load profile update requests");
+            return [];
+        }
+    }, []);
+
+    const reviewTeacherProfileUpdateRequest = useCallback(async (id, decision) => {
+        try {
+            const { data } = await axios.patch(`/api/user/teacher-profile-update-requests/${id}`, { decision });
+            toast.success(data.message);
+            return true;
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Unable to review profile update request");
+            return false;
+        }
+    }, []);
+
     async function StudentAccountDelete(id) {
         setLoading(true);
         try {
@@ -536,19 +587,36 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function TeacherPayment(teacherId, amount, date, paymentMethod) {
+    async function getTeacherPaymentList() {
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/user/teacher-payment", { teacherId, amount, date, paymentMethod });
+            const { data } = await axios.get("/api/user/get-all-teacher-payment");
+            if (!Array.isArray(data)) {
+                throw new Error("Unexpected teacher payment response");
+            }
+            setTeacherPaymentList(data);
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Unable to load teacher payments");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function TeacherPayment(paymentDetails) {
+        setLoading(true);
+        try {
+            const { data } = await axios.post("/api/user/teacher-payment", paymentDetails);
             if (data.success) {
                 toast.success(data.message);
-                setLoading(false);
                 await getTeacherPaymentList();
+                return true;
             } else {
                 toast.error(data.message);
+                return false;
             }
         } catch (error) {
-            toast.error("Error occurred while processing payment");
+            toast.error(error.response?.data?.message || "Error occurred while processing payment");
+            return false;
         } finally {
             setLoading(false);
         }
@@ -727,6 +795,55 @@ export const UserProvider = ({ children }) => {
             setLoading(false);
         }
     }
+
+    async function QuestionPaperSubmit(formData){
+        setLoading(true);
+        try{
+            const { data } = await axios.post("/api/user/question-paper-upload", formData);
+            if(data.success){
+                toast.success(data.message);
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error){
+            toast.error("Error occurred while uploading question paper");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function getQuestionPapers(academicYear, examTerm) {
+        const { data } = await axios.get("/api/user/get-question-papers", {
+            params: { academicYear, examTerm },
+        });
+        return data;
+    }
+
+    async function deleteQuestionPaper(paperId) {
+        const { data } = await axios.delete(`/api/user/question-paper/${paperId}`);
+        return data;
+    }
+
+    function getQuestionPaperPdfUrl(paperId) {
+        return `/api/user/question-paper/${paperId}/pdf`;
+    }
+
+    async function TeacherAttendenceUpdate(teacherId, date, status) {
+        setLoading(true);
+       try {
+        const { data } = await axios.post(`/api/user/teacher-attendance-update/${teacherId}`, {date, status});
+        if(data.success){
+            toast.success(data.message);
+            await getTeacherAttendance(date);
+        } else {
+            toast.error(data.message);
+        }
+       } catch (error) {
+        console.log(error);
+       } finally {
+        setLoading(false);
+       }
+    }
     // console.log("schoolPhotos", schoolPhotos);
     useEffect(() => {
         fetchUser();
@@ -737,6 +854,7 @@ export const UserProvider = ({ children }) => {
         allbookdata();
         getallbookprice();
         getSchoolPhotos();
+        getTeacherPaymentList();
     }, []);
 
     return <UserContext.Provider value={{
@@ -748,6 +866,9 @@ export const UserProvider = ({ children }) => {
         registerTeacher,
         teacherList,
         getAllTeachers,
+        TeacherPayment,
+        teacherPaymentList,
+        // getTeacherPaymentList,
         FeesSubmit,
         FeesSubmitList,
         getAllFeesSubmit,
@@ -772,6 +893,11 @@ export const UserProvider = ({ children }) => {
         deleteTeacher,
         editTeacherProfile,
         TeacherImage,
+        submitTeacherProfileUpdateRequest,
+        getMyTeacherProfileUpdateRequests,
+        refreshUser,
+        getTeacherProfileUpdateRequests,
+        reviewTeacherProfileUpdateRequest,
         StudentAccountDelete,
         bookSale,
         BookSaleData,
@@ -782,6 +908,10 @@ export const UserProvider = ({ children }) => {
         deleteBookPrice,
         bookPrice,
         studentTestQuestion,
+        QuestionPaperSubmit,
+        getQuestionPapers,
+        deleteQuestionPaper,
+        getQuestionPaperPdfUrl,
         getallquestions,
         getStudentTestSubmissions,
         questionList,
@@ -796,7 +926,8 @@ export const UserProvider = ({ children }) => {
         getTeacherAttendance,
         teacherAttendanceRecords,
         teacherAttendanceLoading,
-        submissions
+        submissions,
+        TeacherAttendenceUpdate
     }}>{children}</UserContext.Provider>;
 }
 
