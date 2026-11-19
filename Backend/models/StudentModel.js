@@ -12,8 +12,9 @@ const FeeRecordSchema = new mongoose.Schema({
 const StudentSchema = new mongoose.Schema({
   ledgerId: { type: String, required: true, index: true },
   admissionNumber: { type: String, trim: true },
+  admissionYear: { type: Number },
   studentName: { type: String, required: true },
-  password: { type: String , required: true},
+  password: { type: String , default: "1234567"},
   studentClass: { type: String, required: true },
   mobileNo: { type: String, required: true},
   dateofBirth: { type: Date, required: true },

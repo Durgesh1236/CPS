@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { RingLoader } from 'react-spinners';
 import TeacherLayout from '../Components/TeacherLayout';
 import { UserData } from '../context/User';
+import { GiTeacher } from 'react-icons/gi';
 
 const initialForm = {
   name: '',
@@ -45,8 +46,8 @@ const TeacherRegistrationPage = () => {
 
   return (
     <TeacherLayout>
-      <div className="min-h-[calc(100vh-4rem)] bg-slate-100 px-3 pb-24 pt-20 sm:px-6 sm:pb-24 md:pb-10">
-        <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5">
+      <div className="h-full bg-slate-100 px-3 pb-24 pt-20 sm:px-6 sm:pb-24 md:pb-10">
+        <div className="mx-auto overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5">
           <div className="grid lg:grid-cols-[0.85fr_1.15fr]">
             <section className="relative overflow-hidden bg-gradient-to-br from-indigo-950 via-indigo-900 to-slate-900 px-6 py-8 text-white sm:px-10 sm:py-10 lg:px-11 lg:py-12">
               <div aria-hidden="true" className="absolute -right-20 -top-20 h-56 w-56 rounded-full border-[32px] border-white/5" />
@@ -55,11 +56,11 @@ const TeacherRegistrationPage = () => {
               <div className="relative">
                 <button
                   type="button"
-                  onClick={() => navigate('/teacher-home')}
-                  className="mb-9 inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-white/20"
+                  onClick={() => navigate('/teacher-data')}
+                  className="mb-9 cursor-pointer inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-white/20"
                 >
-                  <FaArrowLeft aria-hidden="true" />
-                  Back to dashboard
+                  <GiTeacher aria-hidden="true" />
+                  Teachers Data
                 </button>
 
                 <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-400/20 text-2xl text-indigo-200 ring-1 ring-inset ring-white/15">

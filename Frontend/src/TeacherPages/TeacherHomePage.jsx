@@ -54,7 +54,7 @@ const TeacherHomePage = () => {
   const isAccountent = user.role === 'accountent';
   const isAdminOrAcc = isAdmin || isAccountent;
   const greeting = getGreeting();
-  console.log(greeting)
+  
   return (
     <TeacherLayout>
       {/* MOBILE  (< md)*/}
@@ -115,7 +115,7 @@ const TeacherHomePage = () => {
               </div>
         </div>
 
-        <FestivalWish className="mx-4 mt-4" />
+        {/* <FestivalWish className="mx-4 mt-4" /> */}
 
         {/* ── STATS ROW (admin only) ── */}
         {isAdmin && (
@@ -304,7 +304,7 @@ const TeacherHomePage = () => {
           </section>
 
           <div className={`mb-7 grid gap-4 ${isAdmin ? 'lg:grid-cols-[minmax(0,1.7fr)_minmax(280px,0.8fr)]' : ''}`}>
-            <FestivalWish className="h-full" />
+            {/* <FestivalWish className="h-full" /> */}
             {isAdmin && (
               <article className="relative isolate flex min-h-40 items-center gap-5 overflow-hidden rounded-2xl border border-indigo-100 bg-white p-5 shadow-sm sm:p-6">
                 <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-10 h-36 w-36 rounded-full bg-indigo-50" />

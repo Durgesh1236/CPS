@@ -9,8 +9,9 @@ import { StudentAttendance } from "../models/StudentAttendanceModel.js";
 import { StudentTestSubmission } from "../models/StudentTestSubmissionModel.js";
 import { StudentCounter } from "../models/StudentCounterModel.js";
 
-const generateAdmissionNumber = async () => {
-    const year = new Date().getUTCFullYear();
+const generateAdmissionNumber = async (admissionYear) => {
+    const year = Number(admissionYear);
+    // || new Date().getUTCFullYear();
 
     while (true) {
         let counter;
@@ -37,9 +38,14 @@ const generateAdmissionNumber = async () => {
 };
 
 export const addStudent = TryCatch(async (req, res) => {
-    const { ledgerId, admissionNumber, password, studentName, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails } = req.body;
-    if (!ledgerId || !password || !studentName || !studentClass || !dateofBirth || !mobileNo || !fatherName || !motherName || !address) {
+    const { ledgerId, admissionNumber, admissionYear, studentName, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails } = req.body;
+    const password = req.body.password || "1234567";
+    if (!ledgerId || !admissionYear || !studentName || !studentClass || !dateofBirth || !mobileNo || !fatherName || !motherName || !address) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+    const normalizedAdmissionYear = Number(admissionYear);
+    if (!Number.isInteger(normalizedAdmissionYear) || normalizedAdmissionYear < 2020 || normalizedAdmissionYear > 2027) {
+        return res.status(400).json({ success: false, message: 'Admission year must be between 2020 and 2027' });
     }
     if (Number.isNaN(new Date(dateofBirth).getTime())) {
         return res.status(400).json({ success: false, message: 'Enter a valid date of birth' });
@@ -53,7 +59,7 @@ export const addStudent = TryCatch(async (req, res) => {
     let student = await Student.findOne({ ledgerId });
     const normalizedAdmissionNumber = typeof admissionNumber === 'string' ? admissionNumber.trim() : '';
     const resolvedAdmissionNumber = normalizedAdmissionNumber ||
-        (!student || !student.admissionNumber ? await generateAdmissionNumber() : student.admissionNumber);
+        (!student || !student.admissionNumber ? await generateAdmissionNumber(admissionYear) : student.admissionNumber);
     if (resolvedAdmissionNumber) {
         const existingAdmission = await Student.findOne({ admissionNumber: resolvedAdmissionNumber });
         if (existingAdmission && String(existingAdmission._id) !== String(student?._id)) {
@@ -63,9 +69,10 @@ export const addStudent = TryCatch(async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     if (!student) {
-        student = new Student({ ledgerId, admissionNumber: resolvedAdmissionNumber, studentName, password: hashedPassword, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport });
+        student = new Student({ ledgerId, admissionNumber: resolvedAdmissionNumber, admissionYear: normalizedAdmissionYear, studentName, password: hashedPassword, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport });
     } else {
         student.admissionNumber = resolvedAdmissionNumber;
+        student.admissionYear = normalizedAdmissionYear;
         student.studentName = studentName || student.studentName;
         student.studentClass = studentClass || student.studentClass;
         student.dateofBirth = dateofBirth || student.dateofBirth;

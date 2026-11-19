@@ -8,6 +8,7 @@ import { UserData } from '../context/User';
 const months = ['April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March'];
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 4 }, (_, i) => `${currentYear - 2 + i}`); // e.g., currentYear-2 .. currentYear+1
+const admissionYears = Array.from({ length: 8 }, (_, i) => `${2020 + i}`);
 const classes = [
   "P.Nur",
   "Nur",
@@ -25,9 +26,9 @@ const classes = [
 const initialFormState = {
   ledgerId: '',
   admissionNumber: '',
+  admissionYear: '',
   year: '',
   studentName: '',
-  password: '',
   studentClass: '',
   dateofBirth: '',
   mobileNo: '',
@@ -84,7 +85,7 @@ const StudentDataInput = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const saved = await StudentDataInput(form.ledgerId, form.admissionNumber, form.studentName, form.password, form.studentClass, form.dateofBirth, form.mobileNo, form.additionalMobileNo, form.fatherName, form.motherName, form.aadhar, form.aapar, form.address, form.transport, form.monthDetails);
+    const saved = await StudentDataInput(form.ledgerId, form.admissionNumber, form.admissionYear, form.studentName, form.studentClass, form.dateofBirth, form.mobileNo, form.additionalMobileNo, form.fatherName, form.motherName, form.aadhar, form.aapar, form.address, form.transport, form.monthDetails);
     if (saved) setForm({ ...initialFormState });
   }
 
@@ -117,11 +118,6 @@ const StudentDataInput = () => {
                   <input name="studentName" value={form.studentName} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 placeholder-gray-400 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="Full name" />
                 </div>
 
-                <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Password</label>
-                  <input name="password" type="password" value={form.password} onChange={handleChange} required minLength={6} className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 placeholder-gray-400 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="At least 6 characters" />
-                </div>
-
                 {/* <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">AAdhar Number</label>
                   <input name="aadhar" value={form.aadhar} onChange={handleChange} className="mt-1 p-3 w-full border border-gray-200 rounded-lg bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 transition" placeholder="12 Digit Number" />
@@ -132,6 +128,13 @@ const StudentDataInput = () => {
                   <select name="studentClass" value={form.studentClass} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 transition focus:outline-none focus:ring-2 focus:ring-indigo-200">
                     <option value="">-- Select class --</option>
                     {classes.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Admission Year</label>
+                  <select name="admissionYear" value={form.admissionYear} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 transition focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                    <option value="">-- Select admission year --</option>
+                    {admissionYears.map(year => <option key={year} value={year}>{year}</option>)}
                   </select>
                 </div>
                 <div>

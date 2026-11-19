@@ -21,7 +21,7 @@ const TeacherSidebar = ({ onClose }) => {
       links: [
         ['Fees Submit', '/student-fee-submit'], ['Fees History', '/student-fee-history'],
         ['Attendance', '/take-student-attendence'], ['Student Data Input', '/student-data-input'],
-        ['Search Student', '/student-data'], ['Registration', '/student-register', isAdmin],
+        ['Search Student', '/student-data'],
         ['Book Sale', '/book-sale-data'], ['Book Sale History', '/book-sale-history'],
         ['Book Price Form', '/book-form', isAdmin], ['Book Price', '/book-price'],
         ['Timetable', '/set-timetable'], ['Student Test', '/set-student-test'],
