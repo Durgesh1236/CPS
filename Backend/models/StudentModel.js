@@ -17,7 +17,7 @@ const StudentSchema = new mongoose.Schema({
   password: { type: String , default: "1234567"},
   studentClass: { type: String, required: true },
   mobileNo: { type: String, required: true},
-  dateofBirth: { type: Date, required: true },
+  dateofBirth: { type: Date },
   additionalMobileNo: { type: String, default: "No MobileNo" },
   fatherName: { type: String, required: true },
   motherName: { type: String, required: true },

@@ -37,17 +37,43 @@ const generateAdmissionNumber = async (admissionYear) => {
     }
 };
 
+const generateLedgerId = async () => {
+    while (true) {
+        let counter;
+        try {
+            counter = await StudentCounter.findOneAndUpdate(
+                { _id: 'ledger' },
+                { $inc: { sequence: 1 } },
+                { new: true, upsert: true, setDefaultsOnInsert: true }
+            );
+        } catch (error) {
+            if (error?.code !== 11000) throw error;
+            counter = await StudentCounter.findOneAndUpdate(
+                { _id: 'ledger' },
+                { $inc: { sequence: 1 } },
+                { new: true }
+            );
+            if (!counter) throw error;
+        }
+
+        const ledgerId = String(counter.sequence + 104);
+        const alreadyExists = await Student.exists({ ledgerId });
+        if (!alreadyExists) return ledgerId;
+    }
+};
+
 export const addStudent = TryCatch(async (req, res) => {
     const { ledgerId, admissionNumber, admissionYear, studentName, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails } = req.body;
     const password = req.body.password || "1234567";
-    if (!ledgerId || !admissionYear || !studentName || !studentClass || !dateofBirth || !mobileNo || !fatherName || !motherName || !address) {
+    if (!admissionYear || !studentName || !studentClass || !mobileNo || !fatherName || !motherName || !address) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
     }
     const normalizedAdmissionYear = Number(admissionYear);
     if (!Number.isInteger(normalizedAdmissionYear) || normalizedAdmissionYear < 2020 || normalizedAdmissionYear > 2027) {
         return res.status(400).json({ success: false, message: 'Admission year must be between 2020 and 2027' });
     }
-    if (Number.isNaN(new Date(dateofBirth).getTime())) {
+    const hasDateOfBirth = dateofBirth !== undefined && dateofBirth !== null && dateofBirth !== '';
+    if (hasDateOfBirth && Number.isNaN(new Date(dateofBirth).getTime())) {
         return res.status(400).json({ success: false, message: 'Enter a valid date of birth' });
     }
     if (password.length < 6) {
@@ -56,7 +82,9 @@ export const addStudent = TryCatch(async (req, res) => {
             message: "Password must be at least 6 characters"
         })
     }
-    let student = await Student.findOne({ ledgerId });
+    const requestedLedgerId = typeof ledgerId === 'string' ? ledgerId.trim() : '';
+    let student = requestedLedgerId ? await Student.findOne({ ledgerId: requestedLedgerId }) : null;
+    const resolvedLedgerId = student?.ledgerId || await generateLedgerId();
     const normalizedAdmissionNumber = typeof admissionNumber === 'string' ? admissionNumber.trim() : '';
     const resolvedAdmissionNumber = normalizedAdmissionNumber ||
         (!student || !student.admissionNumber ? await generateAdmissionNumber(admissionYear) : student.admissionNumber);
@@ -69,13 +97,13 @@ export const addStudent = TryCatch(async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     if (!student) {
-        student = new Student({ ledgerId, admissionNumber: resolvedAdmissionNumber, admissionYear: normalizedAdmissionYear, studentName, password: hashedPassword, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, submittedBy: req.user._id });
+        student = new Student({ ledgerId: resolvedLedgerId, admissionNumber: resolvedAdmissionNumber, admissionYear: normalizedAdmissionYear, studentName, password: hashedPassword, studentClass, ...(hasDateOfBirth && { dateofBirth }), mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, submittedBy: req.user._id });
     } else {
         student.admissionNumber = resolvedAdmissionNumber;
         student.admissionYear = normalizedAdmissionYear;
         student.studentName = studentName || student.studentName;
         student.studentClass = studentClass || student.studentClass;
-        student.dateofBirth = dateofBirth || student.dateofBirth;
+        if (hasDateOfBirth) student.dateofBirth = dateofBirth;
         student.mobileNo = mobileNo || student.mobileNo;
         student.additionalMobileNo = additionalMobileNo || student.additionalMobileNo;
         student.fatherName = fatherName || student.fatherName;

@@ -79,7 +79,7 @@ export const StudentProvider  = ({ children }) => {
             }
         } catch (error) {
             setFeesHistory([]);
-        }
+        } 
     }
 
     async function getStudentAttendance(ledgerId, date){

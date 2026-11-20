@@ -24,7 +24,6 @@ const classes = [
   "8",
 ];
 const initialFormState = {
-  ledgerId: '',
   admissionNumber: '',
   admissionYear: '',
   year: '',
@@ -85,7 +84,7 @@ const StudentDataInput = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const saved = await StudentDataInput(form.ledgerId, form.admissionNumber, form.admissionYear, form.studentName, form.studentClass, form.dateofBirth, form.mobileNo, form.additionalMobileNo, form.fatherName, form.motherName, form.aadhar, form.aapar, form.address, form.transport, form.monthDetails);
+    const saved = await StudentDataInput(form.admissionNumber, form.admissionYear, form.studentName, form.studentClass, form.dateofBirth, form.mobileNo, form.additionalMobileNo, form.fatherName, form.motherName, form.aadhar, form.aapar, form.address, form.transport, form.monthDetails);
     if (saved) setForm({ ...initialFormState });
   }
 
@@ -106,7 +105,8 @@ const StudentDataInput = () => {
               <div className="grid min-w-0 grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Ledger ID</label>
-                  <input name="ledgerId" value={form.ledgerId} onChange={handleChange} required className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 placeholder-gray-400 transition focus:outline-none focus:ring-2 focus:ring-indigo-200" placeholder="e.g., LDR-001" />
+                  <input value="" readOnly aria-describedby="ledger-id-help" className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-100 p-3 text-gray-600" placeholder="Generated automatically when saved" />
+                  <p id="ledger-id-help" className="mt-1 text-xs text-gray-500">Ledger ID is assigned automatically starting from 105.</p>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Admission Number</label>
@@ -138,13 +138,12 @@ const StudentDataInput = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Date of Birth</label>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Date of Birth (optional)</label>
                   <input
                     type="date"
                     name="dateofBirth"
                     value={form.dateofBirth}
                     onChange={handleChange}
-                    required
                     className="mt-1 w-full min-w-0 rounded-lg border border-gray-200 bg-gray-50 p-3 transition focus:outline-none focus:ring-2 focus:ring-indigo-200"
                   />
                 </div>

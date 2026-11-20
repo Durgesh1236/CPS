@@ -171,15 +171,15 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    async function StudentDataInput(ledgerId, admissionNumber, admissionYear, studentName, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails) {
+    async function StudentDataInput(admissionNumber, admissionYear, studentName, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails) {
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/student-data/create-student-account", { ledgerId, admissionNumber, admissionYear, studentName, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails });
+            const { data } = await axios.post("/api/student-data/create-student-account", { admissionNumber, admissionYear, studentName, studentClass, ...(dateofBirth ? { dateofBirth } : {}), mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, monthDetails });
             if (!data.success) {
                 toast.error(data.message || "Failed to save student");
                 return false;
             }
-            toast.success(`${data.message}. Admission number: ${data.student.admissionNumber}`);
+            toast.success(`${data.message}. Ledger ID: ${data.student.ledgerId}. Admission number: ${data.student.admissionNumber}`);
             await getAllStudents();
             return data.student;
         } catch (error) {
