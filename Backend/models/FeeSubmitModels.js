@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const feeSubmitSchema = mongoose.Schema({
+    studentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Student',
+        default: null,
+    },
     ledgerId: {
         type: String,
         required: true,

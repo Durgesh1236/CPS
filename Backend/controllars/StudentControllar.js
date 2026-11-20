@@ -69,7 +69,7 @@ export const addStudent = TryCatch(async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     if (!student) {
-        student = new Student({ ledgerId, admissionNumber: resolvedAdmissionNumber, admissionYear: normalizedAdmissionYear, studentName, password: hashedPassword, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport });
+        student = new Student({ ledgerId, admissionNumber: resolvedAdmissionNumber, admissionYear: normalizedAdmissionYear, studentName, password: hashedPassword, studentClass, dateofBirth, mobileNo, additionalMobileNo, fatherName, motherName, aadhar, aapar, address, transport, submittedBy: req.user._id });
     } else {
         student.admissionNumber = resolvedAdmissionNumber;
         student.admissionYear = normalizedAdmissionYear;
@@ -199,28 +199,6 @@ export const studentLogout = TryCatch(async (req, res) => {
         message: "Logout Successfully"
     })
 })
-
-// export const studentFeeHistory = TryCatch(async(req, res) => {
-//     const { ledgerId } = req.params;
-//     const { studentclass } = req.body;
-
-//     const feeHistory = await FeeSubmit.find({
-//         ledgerId,
-//         studentClass: studentclass
-//     })
-//     if(!feeHistory){
-//         return res.json({
-//             success: false,
-//             message: "No fee history found for this student"
-//         })
-//     }
-
-//     return res.status(200).json({
-//         feeHistory,
-//         success: true,
-//         message: "Fee history retrieved successfully"
-//     })
-// })
 
 export const studentFeeHistory = TryCatch(async (req, res) => {
     const { ledgerId } = req.params;

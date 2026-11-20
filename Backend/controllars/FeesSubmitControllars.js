@@ -26,6 +26,8 @@ export const FeesSubmit = TryCatch(async (req, res) => {
             message: "All fields are required"
         })
     }
+    const student = await Student.findOne({ ledgerId });
+
     const compressedImage = await sharp(file.buffer)
         .resize({
             width: 800,
@@ -43,6 +45,7 @@ export const FeesSubmit = TryCatch(async (req, res) => {
     });
 
     const feeSubmit = await FeeSubmit.create({
+        studentId: student?._id,
         ledgerId,
         studentName,
         studentClass,
@@ -89,7 +92,9 @@ export const FeesSubmit = TryCatch(async (req, res) => {
 })
 
 export const getAllFeesSubmit = TryCatch(async (req, res) => {
-    const feeSubmit = await FeeSubmit.find().populate('submittedBy', 'name');
+    const feeSubmit = await FeeSubmit.find()
+        .populate('studentId', 'ledgerId studentName studentClass')
+        .populate('submittedBy', 'name');
     return res.json(feeSubmit);
 })
 

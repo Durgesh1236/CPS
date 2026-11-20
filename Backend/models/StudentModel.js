@@ -27,6 +27,7 @@ const StudentSchema = new mongoose.Schema({
   transport: { type: Boolean, default: false, required: true },
   feeRecords: { type: [FeeRecordSchema], default: [] },
   attendanceId: { type: String, default: "" },
+  submittedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, {
   timestamps: true,
 });

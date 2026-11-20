@@ -69,9 +69,9 @@ export const StudentProvider  = ({ children }) => {
         }
     }
 
-    async function feesHistory(ledgerId, studentclass){
+    async function feesHistory(studentId, ledgerId, studentclass){
         try {
-            const { data } = await axios.post(`/api/student-data/student/fee-history/${ledgerId}`, { studentclass });
+            const { data } = await axios.post(`/api/student-data/student/fee-history/${ledgerId}`, { studentId, studentclass });
             if(data.success){
                 setFeesHistory(data.feeHistory);
             } else {
@@ -115,10 +115,10 @@ export const StudentProvider  = ({ children }) => {
         }
     }
     useEffect(() => {
-    if (ledgerId) {
-        feesHistory(ledgerId, studentclass, studentData?.studentName);
+    if (studentData?._id && ledgerId) {
+        feesHistory(studentData._id, ledgerId, studentclass);
     }
-   }, [ledgerId, studentclass]);
+   }, [studentData?._id, ledgerId, studentclass]);
 
     useEffect(() => {
         fetchStudentData();

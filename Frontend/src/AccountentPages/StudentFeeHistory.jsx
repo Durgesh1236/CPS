@@ -9,6 +9,7 @@ const StudentFeeHistory = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const { getAllFeesSubmit, FeesSubmitList, deleteStudentFee, editFeeDetails, user } = UserData();
   const navigate = useNavigate();
+  console.log(FeesSubmitList.filter(item => item.ledgerId === "101"));
 
   const getTodayInputDate = () => {
     const today = new Date();
