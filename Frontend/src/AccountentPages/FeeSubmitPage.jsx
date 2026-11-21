@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaRupeeSign, FaUser, FaIdBadge, FaBook, FaFileUpload } from 'react-icons/fa';
 import TeacherLayout from '../Components/TeacherLayout';
 import { UserData } from '../context/User';
@@ -13,15 +13,40 @@ export const FeeSubmitPage = () => {
   const [backDues, setBackDues] = useState('');
   const [submitFees, setSubmitFees] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreviewError, setImagePreviewError] = useState('');
   const [dues, setDues] = useState(0);
   const [file, setFile] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('');
   const { FeesSubmit } = UserData();
+  const previewReader = useRef(null);
 
   const fileChangeHandler = (e) => {
     const selectedFile = e.target.files?.[0] ?? null;
+    previewReader.current?.abort();
+    previewReader.current = null;
     setFile(selectedFile);
-    setImagePreview(selectedFile ? URL.createObjectURL(selectedFile) : null);
+    setImagePreview(null);
+    setImagePreviewError('');
+
+    if (!selectedFile) return;
+
+    const reader = new FileReader();
+    previewReader.current = reader;
+    reader.onload = () => {
+      if (previewReader.current !== reader) return;
+      previewReader.current = null;
+      if (typeof reader.result === 'string') {
+        setImagePreview(reader.result);
+      } else {
+        setImagePreviewError('Unable to read this photo. Please choose another image.');
+      }
+    };
+    reader.onerror = () => {
+      if (previewReader.current !== reader) return;
+      previewReader.current = null;
+      setImagePreviewError('Unable to read this photo. Please choose another image.');
+    };
+    reader.readAsDataURL(selectedFile);
   };
 
   useEffect(() => {
@@ -30,12 +55,8 @@ export const FeeSubmitPage = () => {
     setDues(Math.max(back - submit, 0));
   }, [backDues, submitFees]);
 
-  useEffect(() => {
-    return () => {
-      if (imagePreview) URL.revokeObjectURL(imagePreview);
-    };
-  }, [imagePreview]);
- console.log(imagePreview)
+  useEffect(() => () => previewReader.current?.abort(), []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const today = new Date();
@@ -255,11 +276,16 @@ export const FeeSubmitPage = () => {
                   />
                 </label>
                 {file && <p className="mt-2 break-all text-center text-xs text-slate-500">{file.name}</p>}
+                {imagePreviewError && <p role="alert" className="mt-2 text-center text-sm text-rose-600">{imagePreviewError}</p>}
                 {imagePreview && (
                   <div className="mt-5 flex flex-col items-center">
                     <img
                       src={imagePreview}
                       alt="Fee receipt preview"
+                      onError={() => {
+                        setImagePreview(null);
+                        setImagePreviewError('This photo format cannot be previewed. Please choose a JPEG or PNG image.');
+                      }}
                       className="max-h-80 w-full max-w-md rounded-xl border border-slate-200 bg-slate-50 object-contain shadow-sm"
                     />
                     <span className="mt-2 text-xs font-medium text-slate-500">Receipt preview</span>
