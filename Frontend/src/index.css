@@ -35,6 +35,24 @@
 	animation-delay: 1.2s;
 }
 
+.devotional-card {
+	animation: devotional-card-enter 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both, devotional-card-glow 5s ease-in-out 0.7s infinite;
+	transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.devotional-card:nth-child(2) {
+	animation-delay: 0.18s, 0.88s;
+}
+.devotional-card:hover {
+	transform: translateY(-3px);
+	border-color: rgba(253, 230, 138, 0.75);
+}
+.devotional-photo {
+	animation: devotional-photo-float 4.5s ease-in-out infinite;
+}
+.devotional-card:nth-child(2) .devotional-photo {
+	animation-delay: 0.8s;
+}
+
 @keyframes festival-sun-glow {
 	0%, 100% { opacity: 0.82; transform: translateY(-50%) scale(0.96); }
 	50% { opacity: 1; transform: translateY(-50%) scale(1.04); }
@@ -43,10 +61,27 @@
 	0%, 100% { opacity: 0.35; transform: scaleX(0.8); }
 	50% { opacity: 0.9; transform: scaleX(1); }
 }
+@keyframes devotional-card-enter {
+	from { opacity: 0; filter: blur(4px); }
+	to { opacity: 1; filter: blur(0); }
+}
+@keyframes devotional-card-glow {
+	0%, 100% { box-shadow: 0 0 0 rgba(253, 230, 138, 0); }
+	50% { box-shadow: 0 0 16px rgba(253, 230, 138, 0.16); }
+}
+@keyframes devotional-photo-float {
+	0%, 100% { transform: scale(1); }
+	50% { transform: scale(1.045); }
+}
 
 @media (prefers-reduced-motion: reduce) {
 	.festival-sun,
-	.festival-water-line {
+	.festival-water-line,
+	.devotional-card,
+	.devotional-photo {
 		animation: none;
+	}
+	.devotional-card {
+		transition: none;
 	}
 }

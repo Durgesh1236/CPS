@@ -17,9 +17,40 @@ import { FaBookReader } from "react-icons/fa";
 import { IoMdTime } from "react-icons/io";
 import { LuBookOpenCheck } from "react-icons/lu";
 import { FaPersonCircleQuestion } from "react-icons/fa6";
-import FestivalWish from '../Components/FestivalWish';
+// import FestivalWish from '../Components/FestivalWish';
 
 const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in the conference hall.";
+const devotionalImages = [
+  // { src: '/images/shri-krishna.jpg', alt: 'Shri Krishna', label: 'श्री कृष्णाय नमः' },
+  { src: 'assets/images/ganeshabhagwan.jpg', alt: 'Lord Ganesha', label: 'श्री गणेशाय नमः' },
+];
+
+const DevotionalBanner = () => (
+  <div className="relative z-10 mb-4">
+    <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+      {devotionalImages.map(({ src, alt, label }) => (
+        <div key={src} className="devotional-card flex min-w-0 items-center gap-2 rounded-xl border border-amber-200/30 bg-gradient-to-br from-white/15 to-white/5 p-2 backdrop-blur-sm sm:gap-3 sm:p-2.5">
+          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-white/15 sm:h-14 sm:w-14">
+            <div className="flex h-full flex-col items-center justify-center gap-0.5 text-[9px] font-semibold text-white/75">
+              <FaImages aria-hidden="true" />
+              <span>Add photo</span>
+            </div>
+            <img
+              src={src}
+              alt={alt}
+              onError={(event) => { event.currentTarget.style.display = 'none'; }}
+              className="devotional-photo absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
+          <span className="min-w-0 text-xs font-bold leading-snug text-amber-100 sm:text-sm">{label}</span>
+        </div>
+      ))}
+    </div>
+    {/* <p className="mt-1.5 text-[10px] text-white/60 sm:text-xs">
+      <img src="https://i.pinimg.com/236x/14/19/ca/1419caf8cf4972aca14883d8a9bc001a.jpg" alt="image" srcset="" />
+    </p> */}
+  </div>
+);
 
 /* ─────────────────────────────────────────────────────────── */
 const TeacherHomePage = () => {
@@ -64,6 +95,8 @@ const TeacherHomePage = () => {
         <div className="bg-gradient-to-br from-[#1a0533] via-[#2d1b69] to-[#1e3a5f] pt-16 pb-6 px-5 relative overflow-hidden">
           <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-purple-500/20 pointer-events-none" />
           <div className="absolute -bottom-8 -left-8 w-40 h-40 rounded-full bg-blue-500/20 pointer-events-none" />
+
+          <DevotionalBanner />
 
           <div className="flex items-center justify-between mb-4 relative z-10">
             <div className="flex-1 min-w-0">
@@ -261,6 +294,7 @@ const TeacherHomePage = () => {
           >
             <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full bg-violet-400/15 blur-2xl" />
             <div aria-hidden="true" className="pointer-events-none absolute -bottom-28 right-1/3 h-64 w-64 rounded-full bg-cyan-400/10 blur-2xl" />
+            <DevotionalBanner />
             <div className="relative z-10 flex flex-wrap items-center gap-5">
               {user.thumbnails?.url ? (
                 <img

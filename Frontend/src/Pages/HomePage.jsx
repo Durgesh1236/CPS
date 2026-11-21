@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Layout from '../Components/Layout';
-import FestivalWish from '../Components/FestivalWish';
+// import FestivalWish from '../Components/FestivalWish';
 import { assets } from '../assets/assets';
 import ContactUs from './ContactUs';
 import { FcReddit } from "react-icons/fc";
@@ -635,9 +635,9 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="w-full mx-auto mt-4 px-4 sm:mt-6">
+        {/* <div className="w-full mx-auto mt-4 px-4 sm:mt-6">
           <FestivalWish />
-        </div>
+        </div> */}
 
         {/* ===================== Hero ===================== */}
         <div className="relative w-full mx-auto mt-6 px-4">
