@@ -35,7 +35,7 @@ export const FeeSubmitPage = () => {
       if (imagePreview) URL.revokeObjectURL(imagePreview);
     };
   }, [imagePreview]);
-
+ console.log(imagePreview)
   const handleSubmit = (e) => {
     e.preventDefault();
     const today = new Date();
@@ -240,7 +240,7 @@ export const FeeSubmitPage = () => {
                     <p className="text-sm text-slate-500">Attach a photo of the fee receipt (optional).</p>
                   </div>
                 </div>
-                <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-4 py-7 text-center transition hover:border-indigo-300 hover:bg-indigo-50/50">
+                <label className="relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-4 py-7 text-center transition hover:border-indigo-300 hover:bg-indigo-50/50 focus-within:ring-4 focus-within:ring-indigo-100">
                   <FaFileUpload aria-hidden="true" className="mb-3 text-2xl text-indigo-500" />
                   <span className="text-sm font-semibold text-slate-700">Choose a receipt image</span>
                   <span className="mt-1 text-xs text-slate-500">Image files only · Use your camera on mobile</span>
@@ -250,7 +250,8 @@ export const FeeSubmitPage = () => {
                     accept="image/*"
                     capture="environment"
                     onChange={fileChangeHandler}
-                    className="sr-only"
+                    aria-label="Choose a receipt image"
+                    className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
                   />
                 </label>
                 {file && <p className="mt-2 break-all text-center text-xs text-slate-500">{file.name}</p>}
@@ -259,7 +260,7 @@ export const FeeSubmitPage = () => {
                     <img
                       src={imagePreview}
                       alt="Fee receipt preview"
-                      className="max-h-64 max-w-full rounded-xl border border-slate-200 object-contain shadow-sm"
+                      className="max-h-80 w-full max-w-md rounded-xl border border-slate-200 bg-slate-50 object-contain shadow-sm"
                     />
                     <span className="mt-2 text-xs font-medium text-slate-500">Receipt preview</span>
                   </div>

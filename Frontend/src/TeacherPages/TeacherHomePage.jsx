@@ -18,20 +18,20 @@ import { IoMdTime } from "react-icons/io";
 import { LuBookOpenCheck } from "react-icons/lu";
 import { FaPersonCircleQuestion } from "react-icons/fa6";
 // import FestivalWish from '../Components/FestivalWish';
+import ganeshaImage from '../assets/ganeshbhagwan.jpg';
 
 const importantMessage = "Staff meeting scheduled for 28th August at 2:00 PM in the conference hall.";
 const devotionalImages = [
-  // { src: '/images/shri-krishna.jpg', alt: 'Shri Krishna', label: 'श्री कृष्णाय नमः' },
-  { src: 'assets/images/ganeshabhagwan.jpg', alt: 'Lord Ganesha', label: 'श्री गणेशाय नमः' },
+  { src: ganeshaImage, alt: 'Lord Ganesha', label: 'श्री गणेशाय नमः' },
 ];
 
 const DevotionalBanner = () => (
-  <div className="relative z-10 mb-4">
-    <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+  <div className={`mb-2 mt-2 lg:mt-0 h-full w-full rounded-2xl bg-gradient-to-br from-amber-50 to-orange-400 p-2 sm:p-2 `}>
+    <div className="flex flex-col gap-2">
       {devotionalImages.map(({ src, alt, label }) => (
-        <div key={src} className="devotional-card flex min-w-0 items-center gap-2 rounded-xl border border-amber-200/30 bg-gradient-to-br from-white/15 to-white/5 p-2 backdrop-blur-sm sm:gap-3 sm:p-2.5">
-          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-white/15 sm:h-14 sm:w-14">
-            <div className="flex h-full flex-col items-center justify-center gap-0.5 text-[9px] font-semibold text-white/75">
+        <div key={src} className="devotional-card flex w-full items-center gap-2 p-2 shadow-sm sm:gap-3 sm:p-3">
+          <div className="relative h-16 w-16 lg:h-28 lg:w-28 shrink-0 overflow-hidden rounded-lg sm:h-14 sm:w-14">
+            <div className="flex h-full flex-col items-center justify-center gap-0.5 text-[9px] font-semibold text-amber-900/75">
               <FaImages aria-hidden="true" />
               <span>Add photo</span>
             </div>
@@ -42,7 +42,7 @@ const DevotionalBanner = () => (
               className="devotional-photo absolute inset-0 h-full w-full object-cover"
             />
           </div>
-          <span className="min-w-0 text-xs font-bold leading-snug text-amber-100 sm:text-sm">{label}</span>
+          <span className="min-w-0 flex-1 text-3xl font-bold leading-snug text-amber-950 sm:text-2xl">{label}</span>
         </div>
       ))}
     </div>
@@ -96,8 +96,6 @@ const TeacherHomePage = () => {
           <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-purple-500/20 pointer-events-none" />
           <div className="absolute -bottom-8 -left-8 w-40 h-40 rounded-full bg-blue-500/20 pointer-events-none" />
 
-          <DevotionalBanner />
-
           <div className="flex items-center justify-between mb-4 relative z-10">
             <div className="flex-1 min-w-0">
               <div className="text-xs py-2 text-white/50 font-bold tracking-wider uppercase mb-1">
@@ -149,7 +147,7 @@ const TeacherHomePage = () => {
         </div>
 
         {/* <FestivalWish className="mx-4 mt-4" /> */}
-
+        <DevotionalBanner className="mx-4 mt-4"/>
         {/* ── STATS ROW (admin only) ── */}
         {isAdmin && (
           <div className="px-4 pt-4">
@@ -294,7 +292,6 @@ const TeacherHomePage = () => {
           >
             <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full bg-violet-400/15 blur-2xl" />
             <div aria-hidden="true" className="pointer-events-none absolute -bottom-28 right-1/3 h-64 w-64 rounded-full bg-cyan-400/10 blur-2xl" />
-            <DevotionalBanner />
             <div className="relative z-10 flex flex-wrap items-center gap-5">
               {user.thumbnails?.url ? (
                 <img
@@ -339,6 +336,7 @@ const TeacherHomePage = () => {
 
           <div className={`mb-7 grid gap-4 ${isAdmin ? 'lg:grid-cols-[minmax(0,1.7fr)_minmax(280px,0.8fr)]' : ''}`}>
             {/* <FestivalWish className="h-full" /> */}
+            <DevotionalBanner className="h-full" />
             {isAdmin && (
               <article className="relative isolate flex min-h-40 items-center gap-5 overflow-hidden rounded-2xl border border-indigo-100 bg-white p-5 shadow-sm sm:p-6">
                 <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-10 h-36 w-36 rounded-full bg-indigo-50" />
