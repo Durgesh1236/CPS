@@ -235,6 +235,39 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    async function searchStudents(ledgerId, name) {
+        const params = {};
+        if (ledgerId) params.ledgerId = ledgerId;
+        if (name) params.name = name;
+
+        try {
+            const { data } = await axios.get('/api/student/fee/search-student-account', { params });
+            if (!Array.isArray(data?.students)) {
+                throw new Error('Invalid student search response');
+            }
+            setResults(data.students);
+            return data.students;
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to search students');
+            throw error;
+        }
+    }
+
+    async function loadStudentByLedger(ledgerId) {
+        try {
+            const { data } = await axios.get(
+                `/api/student/fee/student/${encodeURIComponent(ledgerId)}`
+            );
+            const student = data?.student || null;
+            setSelected(student);
+            setEditing([]);
+            return student;
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to load student');
+            throw error;
+        }
+    }
+
     async function deleteStudentFee(ledgerId) {
         setLoading(true);
         try {
@@ -254,20 +287,24 @@ export const UserProvider = ({ children }) => {
     }
 
     async function studentEditDetail(ledgerId, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport) {
-
         setLoading(true);
         try {
             const { data } = await axios.post(`/api/student/fee/student-profile-edit/${ledgerId}`, { studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport });
-            if (data.success) {
+            if (data?.success) {
                 toast.success(data.message);
-                setLoading(false);
+                setSelected((current) => current?.ledgerId === ledgerId
+                    ? { ...current, studentName, studentClass, mobileNo, fatherName, motherName, aadhar, address, transport }
+                    : current);
                 await getAllStudents();
+                return true;
             } else {
-                toast.error(data.message);
-                setLoading(false);
+                toast.error(data?.message || 'Failed to update student details');
+                return false;
             }
         } catch (error) {
-            // console.log(error);
+            toast.error(error.response?.data?.message || 'Failed to update student details');
+            return false;
+        } finally {
             setLoading(false);
         }
     }
@@ -880,6 +917,8 @@ export const UserProvider = ({ children }) => {
         editing,
         SaveEdit,
         getStudentCount,
+        searchStudents,
+        loadStudentByLedger,
         results,
         setResults,
         deleteStudentFee,

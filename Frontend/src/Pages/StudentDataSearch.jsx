@@ -29,7 +29,8 @@ export default function StudentDataSearch() {
     editing, setEditing,
     SaveEdit,
     results, setResults,
-    studentEditDetail, StudentAccountDelete
+    studentEditDetail, StudentAccountDelete,
+    searchStudents, loadStudentByLedger
   } = UserData();
 
   const [editStudent, setEditStudent] = useState(false);
@@ -47,12 +48,7 @@ export default function StudentDataSearch() {
   const search = async () => {
     setLoading(true);
     try {
-      const q = new URLSearchParams();
-      if (ledgerId) q.set('ledgerId', ledgerId);
-      if (name) q.set('name', name);
-      const res = await fetch('/api/student/fee/student?' + q.toString());
-      const body = await res.json();
-      setResults(body.students || []);
+      await searchStudents(ledgerId, name);
     } catch (err) {
       console.error('Search failed', err);
     } finally {
@@ -70,10 +66,7 @@ export default function StudentDataSearch() {
   const loadStudent = async (ledger) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/student/fee/student/${encodeURIComponent(ledger)}`);
-      const body = await res.json();
-      setSelected(body.student || null);
-      setEditing([]);
+      await loadStudentByLedger(ledger);
       setEditStudent(false);
     } catch (err) {
       console.error("Load failed", err);
@@ -108,7 +101,7 @@ export default function StudentDataSearch() {
 
   const saveStudentDetails = async (e) => {
     e.preventDefault();
-    studentEditDetail(
+    const saved = await studentEditDetail(
       selected.ledgerId,
       studentForm.studentName,
       studentForm.studentClass,
@@ -117,9 +110,9 @@ export default function StudentDataSearch() {
       studentForm.motherName,
       selected.aadhar,
       studentForm.address,
-      studentForm.transport
-    )
-    setEditStudent(false);
+      studentForm.transport === "Yes"
+    );
+    if (saved) setEditStudent(false);
   };
 
   const cancelStudentEdit = () => {
